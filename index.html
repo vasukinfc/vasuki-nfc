@@ -512,6 +512,13 @@ const flipper = document.getElementById("flipper");
 const scene = document.getElementById("scene");
 let flipped = false;
 
+// Set default loading
+const nameEl = document.getElementById("name");
+const avatarEl = document.getElementById("avatarInitial");
+const scanEl = document.getElementById("scanText");
+nameEl.innerText = "Loading…";
+avatarEl.innerText = "?";
+
 // Firebase reference
 const customerId = new URLSearchParams(window.location.search).get('id') || "1";
 const dbRef = firebase.database().ref('customers/' + customerId);
@@ -520,24 +527,24 @@ dbRef.get().then(snapshot => {
   if(snapshot.exists()){
     const userData = snapshot.val();
 
-    // Fill front face
-    const nameEl = document.getElementById("name");
-    const avatarEl = document.getElementById("avatarInitial");
-    const scanEl = document.getElementById("scanText");
-
+    // Update front face
     nameEl.innerText = userData.name;
     avatarEl.innerText = userData.name.charAt(0).toUpperCase();
     scanEl.innerText = "Scans: " + (userData.scans || 0);
 
-    // Increment scans
+    // Update scans
     dbRef.update({scans: (userData.scans || 0) + 1});
 
-    // Enable flip after load
+    // Now enable flip
+    function updateFlipDots() {
+      document.getElementById("dot0").classList.toggle("active", !flipped);
+      document.getElementById("dot1").classList.toggle("active", flipped);
+    }
+
     function flipCard() {
       flipped = !flipped;
       flipper.style.transform = flipped ? "rotateY(180deg)" : "rotateY(0deg)";
-      document.getElementById("dot0").classList.toggle("active", !flipped);
-      document.getElementById("dot1").classList.toggle("active", flipped);
+      updateFlipDots();
     }
 
     scene.addEventListener("click", flipCard);
@@ -550,16 +557,17 @@ dbRef.get().then(snapshot => {
       if(endX - startX > 50) flipped = false;
       else if(startX - endX > 50) flipped = true;
       flipper.style.transform = flipped ? "rotateY(180deg)" : "rotateY(0deg)";
-      document.getElementById("dot0").classList.toggle("active", !flipped);
-      document.getElementById("dot1").classList.toggle("active", flipped);
+      updateFlipDots();
     });
 
   } else {
-    document.getElementById("name").innerText = "Card Not Found";
+    nameEl.innerText = "Card Not Found";
+    avatarEl.innerText = "X";
   }
 }).catch(err => {
   console.error("Error loading card:", err);
-  document.getElementById("name").innerText = "Error Loading Card";
+  nameEl.innerText = "Error Loading Card";
+  avatarEl.innerText = "!";
 });
 </script>
 </body>
