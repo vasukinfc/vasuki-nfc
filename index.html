@@ -579,8 +579,13 @@ updateFlipDots();
 
 }
 
-scene.addEventListener("click",flipCard);
+scene.addEventListener("click",(e)=>{
 
+if(e.target.closest(".btn")) return;
+
+flipCard();
+
+});
 </script>
 </body>
 </html>
