@@ -507,46 +507,60 @@ body {
     <button class="btn-close" onclick="closeModal()">Done</button>
   </div>
 </div>
-<script>
+  <script>
 const flipper = document.getElementById("flipper");
 const scene = document.getElementById("scene");
 let flipped = false;
 
-// Loading initial
-document.getElementById("name").innerText = "Loading…";
-
-// Firebase config
-const dbRef = firebase.database().ref('customers/' + new URLSearchParams(window.location.search).get('id'));
+// Firebase reference
+const customerId = new URLSearchParams(window.location.search).get('id') || "1";
+const dbRef = firebase.database().ref('customers/' + customerId);
 
 dbRef.get().then(snapshot => {
   if(snapshot.exists()){
     const userData = snapshot.val();
-    document.getElementById("name").innerText = userData.name;
-    document.getElementById("avatarInitial").innerText = userData.name.charAt(0).toUpperCase();
-    document.getElementById("scanText").innerText = "Scans: " + (userData.scans || 0);
 
-    // Update scans
-    dbRef.update({scans: (userData.scans||0)+1});
+    // Fill front face
+    const nameEl = document.getElementById("name");
+    const avatarEl = document.getElementById("avatarInitial");
+    const scanEl = document.getElementById("scanText");
 
-    // Enable flip only after data loaded
-    scene.addEventListener("click", () => {
+    nameEl.innerText = userData.name;
+    avatarEl.innerText = userData.name.charAt(0).toUpperCase();
+    scanEl.innerText = "Scans: " + (userData.scans || 0);
+
+    // Increment scans
+    dbRef.update({scans: (userData.scans || 0) + 1});
+
+    // Enable flip after load
+    function flipCard() {
       flipped = !flipped;
       flipper.style.transform = flipped ? "rotateY(180deg)" : "rotateY(0deg)";
-    });
+      document.getElementById("dot0").classList.toggle("active", !flipped);
+      document.getElementById("dot1").classList.toggle("active", flipped);
+    }
 
+    scene.addEventListener("click", flipCard);
+
+    // Touch swipe support
     let startX = 0;
     scene.addEventListener("touchstart", e => startX = e.touches[0].clientX);
     scene.addEventListener("touchend", e => {
       const endX = e.changedTouches[0].clientX;
-      if (endX - startX > 50) flipped = false;
-      else if (startX - endX > 50) flipped = true;
+      if(endX - startX > 50) flipped = false;
+      else if(startX - endX > 50) flipped = true;
       flipper.style.transform = flipped ? "rotateY(180deg)" : "rotateY(0deg)";
+      document.getElementById("dot0").classList.toggle("active", !flipped);
+      document.getElementById("dot1").classList.toggle("active", flipped);
     });
 
   } else {
     document.getElementById("name").innerText = "Card Not Found";
   }
-}).catch(err => alert("Error loading card: " + err));
+}).catch(err => {
+  console.error("Error loading card:", err);
+  document.getElementById("name").innerText = "Error Loading Card";
+});
 </script>
 </body>
 </html>
