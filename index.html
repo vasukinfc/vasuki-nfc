@@ -508,46 +508,31 @@ body {
   </div>
 </div>
 
-<script type="module">
+<script>
+const flipper = document.getElementById("flipper");
+const scene = document.getElementById("scene");
+let flipped = false;
 
-import { db, ref, get, update } from "./firebase.js";
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
-
-if(!id){
-document.getElementById("name").innerText = "Invalid Card";
-throw new Error("No ID provided");
-}
-
-let userData = null;
-
-async function loadUser(){
-
-const snapshot = await get(ref(db,'customers/'+id));
-
-if(snapshot.exists()){
-
-userData = snapshot.val();
-
-document.getElementById("name").innerText = userData.name;
-document.getElementById("avatarInitial").innerText =
-userData.name.charAt(0).toUpperCase();
-
-document.getElementById("scanText").innerText =
-"Scans: " + (userData.scans || 0);
-
-update(ref(db,'customers/'+id),{
-scans:(userData.scans || 0) + 1
+// For desktop click
+scene.addEventListener("click", () => {
+  flipped = !flipped;
+  flipper.style.transform = flipped ? "rotateY(180deg)" : "rotateY(0deg)";
 });
 
-window.userData = userData;
-
-}
-
-}
-
-loadUser();
+// Optional: swipe for mobile
+let startX = 0;
+scene.addEventListener("touchstart", e => {
+  startX = e.touches[0].clientX;
+});
+scene.addEventListener("touchend", e => {
+  const endX = e.changedTouches[0].clientX;
+  if (endX - startX > 50) { // swipe right
+    flipped = false;
+  } else if (startX - endX > 50) { // swipe left
+    flipped = true;
+  }
+  flipper.style.transform = flipped ? "rotateY(180deg)" : "rotateY(0deg)";
+});
 </script>
-
 </body>
 </html>
