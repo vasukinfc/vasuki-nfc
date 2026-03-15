@@ -530,7 +530,8 @@ body {
 import { db, ref, get, update } from "./firebase.js";
 
 let userData = null;
-const userId = "vasuki-card";
+const params = new URLSearchParams(window.location.search);
+const userId = params.get("id");
 
 // LOAD USER
 async function loadUser(){
@@ -538,7 +539,6 @@ async function loadUser(){
 try{
 
 const snapshot = await get(ref(db,"cards/"+userId));
-
 if(snapshot.exists()){
 
 userData = snapshot.val();
