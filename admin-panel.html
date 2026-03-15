@@ -29,7 +29,7 @@ button:hover { opacity:0.9; }
 
 <script type="module">
 import { db, ref, set } from "./firebase.js";
-window.addCustomer = function(){
+  window.addCustomer = function(){
     const id = Date.now();
     const name = document.getElementById("name").value;
     const phone = document.getElementById("phone").value;
