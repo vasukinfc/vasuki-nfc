@@ -521,71 +521,40 @@ body {
   </div>
 </div>
 
-  <script type="module">
+ <script type="module">
 
 import { db, ref, get, update } from "./firebase.js";
 
 let userData = null;
-
-// card id (firebase path)
 const userId = "vasuki-card";
 
-
-// LOAD USER DATA
+// LOAD USER
 async function loadUser(){
 
 try{
 
-const snapshot = await get(ref(db,"cards/" + userId));
+const snapshot = await get(ref(db,"cards/"+userId));
 
 if(snapshot.exists()){
 
 userData = snapshot.val();
 
-// name
-document.getElementById("name").innerText = userData.name;
+document.getElementById("name").innerText = userData.name || "No Name";
 
-// avatar initial
 document.getElementById("avatarInitial").innerText =
-userData.name.charAt(0).toUpperCase();
+(userData.name || "V").charAt(0).toUpperCase();
 
-// scans
 document.getElementById("scanText").innerText =
 "Scans: " + (userData.scans || 0);
 
-// activate buttons
 setupButtons();
-
-// increase scan
 incrementScan();
 
-}
+}else{
 
-}catch(e){
-
-console.log("firebase error",e);
+document.getElementById("name").innerText = "Card Not Found";
 
 }
-
-}
-
-loadUser();
-
-
-
-// INCREMENT SCAN COUNTER
-async function incrementScan(){
-
-try{
-
-const newCount = (userData.scans || 0) + 1;
-
-await update(ref(db,"cards/" + userId),{
-scans:newCount
-});
-
-document.getElementById("scanText").innerText =
-"Scans: " + newCount;
 
 }catch(e){
 
@@ -595,38 +564,54 @@ console.log(e);
 
 }
 
+loadUser();
 
 
-// BUTTON ACTIONS
+// SCAN COUNTER
+async function incrementScan(){
+
+try{
+
+const newCount = (userData.scans || 0) + 1;
+
+await update(ref(db,"cards/"+userId),{
+scans:newCount
+});
+
+document.getElementById("scanText").innerText =
+"Scans: " + newCount;
+
+}catch(e){
+console.log(e);
+}
+
+}
+
+
+// BUTTONS
 function setupButtons(){
 
-// call
-document.getElementById("callBtn").onclick = () => {
-window.location.href = "tel:" + userData.phone;
+document.getElementById("callBtn").onclick = ()=>{
+window.location.href = "tel:"+userData.phone;
 };
 
-// whatsapp
-document.getElementById("whatsappBtn").onclick = () => {
-window.open("https://wa.me/" + userData.phone);
+document.getElementById("whatsappBtn").onclick = ()=>{
+window.open("https://wa.me/"+userData.phone);
 };
 
-// website
-document.getElementById("websiteBtn").onclick = () => {
+document.getElementById("websiteBtn").onclick = ()=>{
 openWebsiteModal(userData.website);
 };
 
-// instagram
-document.getElementById("instagramBtn").onclick = () => {
+document.getElementById("instagramBtn").onclick = ()=>{
 window.open(userData.instagram);
 };
 
-// location
-document.getElementById("locationBtn").onclick = () => {
+document.getElementById("locationBtn").onclick = ()=>{
 window.open(userData.location);
 };
 
 }
-
 
 
 // SAVE CONTACT
@@ -654,7 +639,6 @@ URL.revokeObjectURL(url);
 }
 
 
-
 // WEBSITE MODAL
 window.openWebsiteModal = function(url){
 
@@ -676,7 +660,6 @@ closeModal();
 }
 
 }
-
 
 
 // STAR RATING
