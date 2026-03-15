@@ -520,107 +520,68 @@ body {
     <button class="btn-close" onclick="closeModal()">Done</button>
   </div>
 </div>
- <script type="module">
+<script>
 
-import { db, ref, get, update } from "./firebase.js";
+function saveContact(){
 
-const flipper = document.getElementById("flipper");
-const scene = document.getElementById("scene");
+if(!userData) return;
 
-let flipped = false;
-let userData = null;
+const vCard =
+`BEGIN:VCARD
+VERSION:3.0
+FN:${userData.name}
+TEL:${userData.phone}
+END:VCARD`;
 
-const nameEl = document.getElementById("name");
-const avatarEl = document.getElementById("avatarInitial");
-const scanEl = document.getElementById("scanText");
+const blob = new Blob([vCard],{type:"text/vcard"});
+const url = URL.createObjectURL(blob);
 
-const callBtn = document.getElementById("callBtn");
-const whatsappBtn = document.getElementById("whatsappBtn");
-const websiteBtn = document.getElementById("websiteBtn");
-const instagramBtn = document.getElementById("instagramBtn");
-const locationBtn = document.getElementById("locationBtn");
+const a = document.createElement("a");
+a.href = url;
+a.download = "contact.vcf";
+a.click();
 
-const params = new URLSearchParams(window.location.search);
-const customerId = params.get("id");
+URL.revokeObjectURL(url);
 
-if(!customerId){
-nameEl.innerText="Invalid Card";
-avatarEl.innerText="X";
-throw new Error("No ID in URL");
 }
 
-const customerRef = ref(db,"customers/"+customerId);
+function openWebsiteModal(url){
 
-get(customerRef).then((snapshot)=>{
+document.getElementById("websiteModal").classList.add("open");
+document.getElementById("websiteLink").href = url;
 
-if(snapshot.exists()){
+}
 
-const user = snapshot.val();
-userData = user;
+function closeModal(){
 
-nameEl.innerText = user.name || "No Name";
-avatarEl.innerText = (user.name || "U").charAt(0).toUpperCase();
-scanEl.innerText = "Scans: " + (user.scans || 0);
+document.getElementById("websiteModal").classList.remove("open");
 
-callBtn.onclick = () => {
-window.location.href = "tel:"+user.phone;
-};
+}
 
-whatsappBtn.onclick = () => {
-window.open("https://wa.me/"+user.phone.replace("+",""));
-};
+function handleOverlayClick(e){
 
-websiteBtn.onclick = () => {
-window.open(user.website);
-};
+if(e.target.id === "websiteModal"){
+closeModal();
+}
 
-instagramBtn.onclick = () => {
-window.open("https://instagram.com/"+user.instagram);
-};
+}
 
-locationBtn.onclick = () => {
-window.open("https://maps.google.com/?q="+user.location);
-};
+function rate(num){
 
-update(customerRef,{
-scans:(user.scans||0)+1
+const stars = document.querySelectorAll(".star");
+const feedback = document.getElementById("starFeedback");
+
+stars.forEach((s,i)=>{
+s.classList.toggle("selected", i < num);
 });
 
-}else{
-
-nameEl.innerText="Card Not Found";
-avatarEl.innerText="X";
-
-}
-
-}).catch((err)=>{
-console.log(err);
-nameEl.innerText="Loading Error";
-});
-
-function updateFlipDots(){
-
-document.getElementById("dot0").classList.toggle("active",!flipped);
-document.getElementById("dot1").classList.toggle("active",flipped);
+if(num === 5) feedback.innerText = "Excellent ⭐";
+else if(num === 4) feedback.innerText = "Very Good 👍";
+else if(num === 3) feedback.innerText = "Good 🙂";
+else if(num === 2) feedback.innerText = "Could be better";
+else feedback.innerText = "We'll improve 🙏";
 
 }
-
-function flipCard(){
-
-flipped=!flipped;
-
-flipper.style.transform = flipped
-? "rotateY(180deg)"
-: "rotateY(0deg)";
-
-updateFlipDots();
-
-}
-
-scene.addEventListener("click",(e)=>{
-if(e.target.closest(".btn")) return;
-flipCard();
-});
 
 </script>
 </body>
