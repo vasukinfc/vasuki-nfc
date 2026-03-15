@@ -513,28 +513,44 @@ import { db, ref, get, update } from "./firebase.js";
 const flipper = document.getElementById("flipper");
 const scene = document.getElementById("scene");
 
-let flipped = false;
+let flipped=false;
 
-const nameEl = document.getElementById("name");
-const avatarEl = document.getElementById("avatarInitial");
-const scanEl = document.getElementById("scanText");
+const nameEl=document.getElementById("name");
+const avatarEl=document.getElementById("avatarInitial");
+const scanEl=document.getElementById("scanText");
 
-const customerId = new URLSearchParams(window.location.search).get("id");
+const callBtn=document.getElementById("callBtn");
+const whatsappBtn=document.getElementById("whatsappBtn");
+const websiteBtn=document.getElementById("websiteBtn");
+const instagramBtn=document.getElementById("instagramBtn");
+const locationBtn=document.getElementById("locationBtn");
 
-const customerRef = ref(db, "customers/" + customerId);
+const customerId=new URLSearchParams(window.location.search).get("id");
 
-get(customerRef).then((snapshot) => {
+const customerRef=ref(db,"customers/"+customerId);
+
+get(customerRef).then((snapshot)=>{
 
 if(snapshot.exists()){
 
-const userData = snapshot.val();
+const user=snapshot.val();
 
-nameEl.innerText = userData.name;
-avatarEl.innerText = userData.name.charAt(0).toUpperCase();
-scanEl.innerText = "Scans: " + (userData.scans || 0);
+nameEl.innerText=user.name;
+avatarEl.innerText=user.name.charAt(0).toUpperCase();
+scanEl.innerText="Scans: "+(user.scans||0);
+
+callBtn.onclick=()=>window.location.href="tel:"+user.phone;
+
+whatsappBtn.onclick=()=>window.open("https://wa.me/"+user.phone.replace("+",""));
+
+websiteBtn.onclick=()=>window.open(user.website);
+
+instagramBtn.onclick=()=>window.open("https://instagram.com/"+user.instagram);
+
+locationBtn.onclick=()=>window.open("https://maps.google.com/?q="+user.location);
 
 update(customerRef,{
-scans:(userData.scans || 0) + 1
+scans:(user.scans||0)+1
 });
 
 }else{
@@ -544,18 +560,12 @@ avatarEl.innerText="X";
 
 }
 
-}).catch((error)=>{
-
-console.log(error);
-nameEl.innerText="Error Loading Card";
-avatarEl.innerText="!";
-
 });
 
 function updateFlipDots(){
 
-document.getElementById("dot0").classList.toggle("active", !flipped);
-document.getElementById("dot1").classList.toggle("active", flipped);
+document.getElementById("dot0").classList.toggle("active",!flipped);
+document.getElementById("dot1").classList.toggle("active",flipped);
 
 }
 
@@ -563,7 +573,7 @@ function flipCard(){
 
 flipped=!flipped;
 
-flipper.style.transform = flipped ? "rotateY(180deg)" : "rotateY(0deg)";
+flipper.style.transform=flipped?"rotateY(180deg)":"rotateY(0deg)";
 
 updateFlipDots();
 
