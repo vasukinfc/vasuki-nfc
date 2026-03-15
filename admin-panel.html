@@ -3,115 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VASUKI Admin Panel</title>
+<title>VASUKI Admin Login</title>
 <style>
 body {
     font-family: Arial; 
-    background: #f5f5f5; 
+    background: linear-gradient(135deg,#ff416c,#ff4b2b);
+    height: 100vh; 
     display: flex; 
-    justify-content: center; 
-    padding: 40px;
+    align-items: center; 
+    justify-content: center;
 }
-.panel {
-    background: white; 
-    padding: 30px; 
-    border-radius: 12px; 
-    width: 400px; 
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+.login-card {
+    background:white; 
+    padding:30px; 
+    border-radius:12px; 
+    width:320px; 
+    box-shadow:0 6px 20px rgba(0,0,0,0.15);
 }
-.panel h2 { 
-    text-align: center; 
-    margin-bottom: 25px; 
-    color: #ff416c; 
-}
+.login-card h2 { text-align:center; margin-bottom:20px; }
 input {
-    width: 100%; 
-    padding: 12px; 
-    margin: 8px 0; 
-    border-radius: 6px; 
-    border: 1px solid #ccc;
+    width:100%; 
+    padding:12px; 
+    margin:10px 0; 
+    border-radius:6px; 
+    border:1px solid #ccc;
 }
 button {
-    width: 100%; 
-    padding: 12px; 
-    margin-top: 12px; 
-    background: #ff416c; 
-    color: white; 
-    border: none; 
-    border-radius: 6px;
-    cursor: pointer; 
-    font-weight: bold;
+    width:100%; 
+    padding:12px; 
+    background:#ff416c; 
+    color:white; 
+    border:none; 
+    border-radius:6px;
+    cursor:pointer; 
+    font-weight:bold;
 }
-button:hover { opacity: 0.9; }
-.success-msg { color: green; font-weight: bold; margin-top: 10px; text-align: center; }
+button:hover { opacity:0.9; }
 </style>
 </head>
 <body>
 
-<div class="panel">
-  <h2>Add Customer</h2>
-  <input id="name" placeholder="Name">
-  <input id="phone" placeholder="Phone">
-  <input id="instagram" placeholder="Instagram">
-  <input id="website" placeholder="Website">
-  <input id="location" placeholder="Location">
-  <button onclick="addCustomer()">Add Customer</button>
-  <div class="success-msg" id="successMsg"></div>
+<div class="login-card">
+  <h2>Admin Login</h2>
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="login()">Login</button>
 </div>
 
-<!-- Firebase CDN -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
-
 <script>
-  // Firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyBGHfGSGZsdiIrAUmJxPkXJmCLuAk4ctYE",
-    authDomain: "vasuki-nfc-d93db.firebaseapp.com",
-    databaseURL: "https://vasuki-nfc-d93db-default-rtdb.firebaseio.com",
-    projectId: "vasuki-nfc-d93db",
-    storageBucket: "vasuki-nfc-d93db.firebasestorage.app",
-    messagingSenderId: "159152694151",
-    appId: "1:159152694151:web:e5b306ac03edb60f8de922",
-    measurementId: "G-YR12LK0NB4"
-  };
+function login(){
+    const user = document.getElementById("username").value;
+    const pass = document.getElementById("password").value;
 
-  // Initialize Firebase
-  const app = firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-
-  // Add customer function
-  function addCustomer() {
-    const id = Date.now();
-    const name = document.getElementById("name").value;
-    const phone = document.getElementById("phone").value;
-    const instagram = document.getElementById("instagram").value;
-    const website = document.getElementById("website").value;
-    const location = document.getElementById("location").value;
-
-    if(!name || !phone){
-      alert("Name and Phone are required");
-      return;
+    // admin credentials
+    if(user === "admin" && pass === "1234"){
+        // store session
+        localStorage.setItem("adminLoggedIn", "true");
+        window.location.href = "admin-panel.html";
+    } else {
+        alert("Invalid username or password!");
     }
-
-    db.ref('customers/' + id).set({
-      name: name,
-      phone: phone,
-      instagram: instagram,
-      website: website,
-      location: location,
-      scans: 0
-    })
-    .then(() => {
-      document.getElementById("successMsg").innerText = "Customer added successfully!";
-      document.getElementById("name").value = "";
-      document.getElementById("phone").value = "";
-      document.getElementById("instagram").value = "";
-      document.getElementById("website").value = "";
-      document.getElementById("location").value = "";
-    })
-    .catch(err => alert("Error: " + err));
-  }
+}
 </script>
 
 </body>
