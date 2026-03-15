@@ -684,5 +684,45 @@ else feedback.innerText = "We'll improve 🙏";
 }
 
 </script>
+  <script>
+
+const scene = document.getElementById("scene");
+const flipper = document.getElementById("flipper");
+
+let startX = 0;
+let flipped = false;
+
+scene.addEventListener("touchstart",function(e){
+startX = e.touches[0].clientX;
+});
+
+scene.addEventListener("touchend",function(e){
+
+let endX = e.changedTouches[0].clientX;
+let diff = startX - endX;
+
+if(diff > 50 && !flipped){
+
+flipper.style.transform = "rotateY(180deg)";
+document.getElementById("dot0").classList.remove("active");
+document.getElementById("dot1").classList.add("active");
+
+flipped = true;
+
+}
+
+if(diff < -50 && flipped){
+
+flipper.style.transform = "rotateY(0deg)";
+document.getElementById("dot0").classList.add("active");
+document.getElementById("dot1").classList.remove("active");
+
+flipped = false;
+
+}
+
+});
+
+</script>
 </body>
 </html>
