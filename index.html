@@ -376,21 +376,35 @@ body {
       </div>
       <div class="divider"></div>
       <div class="buttons">
-        <button class="btn btn-call"  onclick="callUser()">
-          <div class="btn-icon">📞</div><span class="btn-label">Call</span><span class="btn-arrow">›</span>
-        </button>
-        <button class="btn btn-wp" onclick="whatsappUser()">
-          <div class="btn-icon">💬</div><span class="btn-label">WhatsApp</span><span class="btn-arrow">›</span>
-        </button>
-        <button class="btn btn-web" onclick="openWebsiteModal()">
-          <div class="btn-icon">🌐</div><span class="btn-label">Website</span><span class="btn-arrow">›</span>
-        </button>
-        <button class="btn btn-insta" onclick="visitInstagram()">
-          <div class="btn-icon">📸</div><span class="btn-label">Instagram</span><span class="btn-arrow">›</span>
-        </button>
-        <button class="btn btn-loc" onclick="openLocation()">
-          <div class="btn-icon">📍</div><span class="btn-label">Location</span><span class="btn-arrow">›</span>
-        </button>
+        <button id="callBtn" class="btn btn-call">
+  <div class="btn-icon">📞</div>
+  <span class="btn-label">Call</span> <span class="btn-arrow">›</span>
+</button>
+        
+<button id="whatsappBtn" class="btn btn-wp">
+  <div class="btn-icon">💬</div><span class="btn-label">WhatsApp</span>
+  <span class="btn-arrow">›</span>
+</button>
+        
+       <button id="websiteBtn" class="btn btn-web">
+  <div class="btn-icon">🌐</div>
+  <span class="btn-label">Website</span>
+  <span class="btn-arrow">›</span>
+</button>
+        
+        <button id="instagramBtn" class="btn btn-insta">
+  <div class="btn-icon">📸</div>
+  <span class="btn-label">Instagram</span>
+  <span class="btn-arrow">›</span>
+</button>
+        
+       
+        <button id="locationBtn" class="btn btn-loc">
+  <div class="btn-icon">📍</div>
+  <span class="btn-label">Location</span>
+  <span class="btn-arrow">›</span>
+</button>
+        
         <button class="btn btn-save" onclick="saveContact()">
           <div class="btn-icon">💾</div><span class="btn-label">Save Contact</span><span class="btn-arrow">›</span>
         </button>
@@ -514,7 +528,7 @@ const flipper = document.getElementById("flipper");
 const scene = document.getElementById("scene");
 
 let flipped=false;
-
+let userData = null;
 const nameEl=document.getElementById("name");
 const avatarEl=document.getElementById("avatarInitial");
 const scanEl=document.getElementById("scanText");
@@ -534,7 +548,7 @@ get(customerRef).then((snapshot)=>{
 if(snapshot.exists()){
 
 const user=snapshot.val();
-
+userData = user;
 nameEl.innerText=user.name;
 avatarEl.innerText=user.name.charAt(0).toUpperCase();
 scanEl.innerText="Scans: "+(user.scans||0);
@@ -580,7 +594,25 @@ updateFlipDots();
 }
 
 scene.addEventListener("click",(e)=>{
+callBtn.onclick = () => {
+  if(userData) window.location.href = "tel:"+userData.phone;
+};
 
+whatsappBtn.onclick = () => {
+  if(userData) window.open("https://wa.me/"+userData.phone.replace("+",""));
+};
+
+websiteBtn.onclick = () => {
+  if(userData) window.open(userData.website);
+};
+
+instagramBtn.onclick = () => {
+  if(userData) window.open("https://instagram.com/"+userData.instagram);
+};
+
+locationBtn.onclick = () => {
+  if(userData) window.open("https://maps.google.com/?q="+userData.location);
+};
 if(e.target.closest(".btn")) return;
 
 flipCard();
