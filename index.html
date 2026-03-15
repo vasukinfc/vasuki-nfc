@@ -538,8 +538,8 @@ async function loadUser(){
 
 try{
 
-const snapshot = await get(ref(db,"cards/"+userId));
-if(snapshot.exists()){
+const snapshot = await get(ref(db,"customers/"+userId));
+  if(snapshot.exists()){
 
 userData = snapshot.val();
 
