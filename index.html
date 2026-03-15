@@ -507,32 +507,46 @@ body {
     <button class="btn-close" onclick="closeModal()">Done</button>
   </div>
 </div>
-
 <script>
 const flipper = document.getElementById("flipper");
 const scene = document.getElementById("scene");
 let flipped = false;
 
-// For desktop click
-scene.addEventListener("click", () => {
-  flipped = !flipped;
-  flipper.style.transform = flipped ? "rotateY(180deg)" : "rotateY(0deg)";
-});
+// Loading initial
+document.getElementById("name").innerText = "Loading…";
 
-// Optional: swipe for mobile
-let startX = 0;
-scene.addEventListener("touchstart", e => {
-  startX = e.touches[0].clientX;
-});
-scene.addEventListener("touchend", e => {
-  const endX = e.changedTouches[0].clientX;
-  if (endX - startX > 50) { // swipe right
-    flipped = false;
-  } else if (startX - endX > 50) { // swipe left
-    flipped = true;
+// Firebase config
+const dbRef = firebase.database().ref('customers/' + new URLSearchParams(window.location.search).get('id'));
+
+dbRef.get().then(snapshot => {
+  if(snapshot.exists()){
+    const userData = snapshot.val();
+    document.getElementById("name").innerText = userData.name;
+    document.getElementById("avatarInitial").innerText = userData.name.charAt(0).toUpperCase();
+    document.getElementById("scanText").innerText = "Scans: " + (userData.scans || 0);
+
+    // Update scans
+    dbRef.update({scans: (userData.scans||0)+1});
+
+    // Enable flip only after data loaded
+    scene.addEventListener("click", () => {
+      flipped = !flipped;
+      flipper.style.transform = flipped ? "rotateY(180deg)" : "rotateY(0deg)";
+    });
+
+    let startX = 0;
+    scene.addEventListener("touchstart", e => startX = e.touches[0].clientX);
+    scene.addEventListener("touchend", e => {
+      const endX = e.changedTouches[0].clientX;
+      if (endX - startX > 50) flipped = false;
+      else if (startX - endX > 50) flipped = true;
+      flipper.style.transform = flipped ? "rotateY(180deg)" : "rotateY(0deg)";
+    });
+
+  } else {
+    document.getElementById("name").innerText = "Card Not Found";
   }
-  flipper.style.transform = flipped ? "rotateY(180deg)" : "rotateY(0deg)";
-});
+}).catch(err => alert("Error loading card: " + err));
 </script>
 </body>
 </html>
