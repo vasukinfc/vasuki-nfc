@@ -520,48 +520,67 @@ body {
     <button class="btn-close" onclick="closeModal()">Done</button>
   </div>
 </div>
-  <script type="module">
+ <script type="module">
 
 import { db, ref, get, update } from "./firebase.js";
 
 const flipper = document.getElementById("flipper");
 const scene = document.getElementById("scene");
 
-let flipped=false;
+let flipped = false;
 let userData = null;
-const nameEl=document.getElementById("name");
-const avatarEl=document.getElementById("avatarInitial");
-const scanEl=document.getElementById("scanText");
 
-const callBtn=document.getElementById("callBtn");
-const whatsappBtn=document.getElementById("whatsappBtn");
-const websiteBtn=document.getElementById("websiteBtn");
-const instagramBtn=document.getElementById("instagramBtn");
-const locationBtn=document.getElementById("locationBtn");
+const nameEl = document.getElementById("name");
+const avatarEl = document.getElementById("avatarInitial");
+const scanEl = document.getElementById("scanText");
 
-const customerId=new URLSearchParams(window.location.search).get("id");
+const callBtn = document.getElementById("callBtn");
+const whatsappBtn = document.getElementById("whatsappBtn");
+const websiteBtn = document.getElementById("websiteBtn");
+const instagramBtn = document.getElementById("instagramBtn");
+const locationBtn = document.getElementById("locationBtn");
 
-const customerRef=ref(db,"customers/"+customerId);
+const params = new URLSearchParams(window.location.search);
+const customerId = params.get("id");
+
+if(!customerId){
+nameEl.innerText="Invalid Card";
+avatarEl.innerText="X";
+throw new Error("No ID in URL");
+}
+
+const customerRef = ref(db,"customers/"+customerId);
 
 get(customerRef).then((snapshot)=>{
 
 if(snapshot.exists()){
 
-const user=snapshot.val();
+const user = snapshot.val();
 userData = user;
-nameEl.innerText=user.name;
-avatarEl.innerText=user.name.charAt(0).toUpperCase();
-scanEl.innerText="Scans: "+(user.scans||0);
 
-callBtn.onclick=()=>window.location.href="tel:"+user.phone;
+nameEl.innerText = user.name || "No Name";
+avatarEl.innerText = (user.name || "U").charAt(0).toUpperCase();
+scanEl.innerText = "Scans: " + (user.scans || 0);
 
-whatsappBtn.onclick=()=>window.open("https://wa.me/"+user.phone.replace("+",""));
+callBtn.onclick = () => {
+window.location.href = "tel:"+user.phone;
+};
 
-websiteBtn.onclick=()=>window.open(user.website);
+whatsappBtn.onclick = () => {
+window.open("https://wa.me/"+user.phone.replace("+",""));
+};
 
-instagramBtn.onclick=()=>window.open("https://instagram.com/"+user.instagram);
+websiteBtn.onclick = () => {
+window.open(user.website);
+};
 
-locationBtn.onclick=()=>window.open("https://maps.google.com/?q="+user.location);
+instagramBtn.onclick = () => {
+window.open("https://instagram.com/"+user.instagram);
+};
+
+locationBtn.onclick = () => {
+window.open("https://maps.google.com/?q="+user.location);
+};
 
 update(customerRef,{
 scans:(user.scans||0)+1
@@ -574,6 +593,9 @@ avatarEl.innerText="X";
 
 }
 
+}).catch((err)=>{
+console.log(err);
+nameEl.innerText="Loading Error";
 });
 
 function updateFlipDots(){
@@ -587,37 +609,19 @@ function flipCard(){
 
 flipped=!flipped;
 
-flipper.style.transform=flipped?"rotateY(180deg)":"rotateY(0deg)";
+flipper.style.transform = flipped
+? "rotateY(180deg)"
+: "rotateY(0deg)";
 
 updateFlipDots();
 
 }
 
 scene.addEventListener("click",(e)=>{
-callBtn.onclick = () => {
-  if(userData) window.location.href = "tel:"+userData.phone;
-};
-
-whatsappBtn.onclick = () => {
-  if(userData) window.open("https://wa.me/"+userData.phone.replace("+",""));
-};
-
-websiteBtn.onclick = () => {
-  if(userData) window.open(userData.website);
-};
-
-instagramBtn.onclick = () => {
-  if(userData) window.open("https://instagram.com/"+userData.instagram);
-};
-
-locationBtn.onclick = () => {
-  if(userData) window.open("https://maps.google.com/?q="+userData.location);
-};
 if(e.target.closest(".btn")) return;
-
 flipCard();
-
 });
+
 </script>
 </body>
 </html>
