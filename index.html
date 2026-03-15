@@ -520,9 +520,117 @@ body {
     <button class="btn-close" onclick="closeModal()">Done</button>
   </div>
 </div>
-<script>
 
-function saveContact(){
+  <script type="module">
+
+import { db, ref, get, update } from "./firebase.js";
+
+let userData = null;
+
+// card id (firebase path)
+const userId = "vasuki-card";
+
+
+// LOAD USER DATA
+async function loadUser(){
+
+try{
+
+const snapshot = await get(ref(db,"cards/" + userId));
+
+if(snapshot.exists()){
+
+userData = snapshot.val();
+
+// name
+document.getElementById("name").innerText = userData.name;
+
+// avatar initial
+document.getElementById("avatarInitial").innerText =
+userData.name.charAt(0).toUpperCase();
+
+// scans
+document.getElementById("scanText").innerText =
+"Scans: " + (userData.scans || 0);
+
+// activate buttons
+setupButtons();
+
+// increase scan
+incrementScan();
+
+}
+
+}catch(e){
+
+console.log("firebase error",e);
+
+}
+
+}
+
+loadUser();
+
+
+
+// INCREMENT SCAN COUNTER
+async function incrementScan(){
+
+try{
+
+const newCount = (userData.scans || 0) + 1;
+
+await update(ref(db,"cards/" + userId),{
+scans:newCount
+});
+
+document.getElementById("scanText").innerText =
+"Scans: " + newCount;
+
+}catch(e){
+
+console.log(e);
+
+}
+
+}
+
+
+
+// BUTTON ACTIONS
+function setupButtons(){
+
+// call
+document.getElementById("callBtn").onclick = () => {
+window.location.href = "tel:" + userData.phone;
+};
+
+// whatsapp
+document.getElementById("whatsappBtn").onclick = () => {
+window.open("https://wa.me/" + userData.phone);
+};
+
+// website
+document.getElementById("websiteBtn").onclick = () => {
+openWebsiteModal(userData.website);
+};
+
+// instagram
+document.getElementById("instagramBtn").onclick = () => {
+window.open(userData.instagram);
+};
+
+// location
+document.getElementById("locationBtn").onclick = () => {
+window.open(userData.location);
+};
+
+}
+
+
+
+// SAVE CONTACT
+window.saveContact = function(){
 
 if(!userData) return;
 
@@ -545,20 +653,23 @@ URL.revokeObjectURL(url);
 
 }
 
-function openWebsiteModal(url){
+
+
+// WEBSITE MODAL
+window.openWebsiteModal = function(url){
 
 document.getElementById("websiteModal").classList.add("open");
 document.getElementById("websiteLink").href = url;
 
 }
 
-function closeModal(){
+window.closeModal = function(){
 
 document.getElementById("websiteModal").classList.remove("open");
 
 }
 
-function handleOverlayClick(e){
+window.handleOverlayClick = function(e){
 
 if(e.target.id === "websiteModal"){
 closeModal();
@@ -566,7 +677,10 @@ closeModal();
 
 }
 
-function rate(num){
+
+
+// STAR RATING
+window.rate = function(num){
 
 const stars = document.querySelectorAll(".star");
 const feedback = document.getElementById("starFeedback");
