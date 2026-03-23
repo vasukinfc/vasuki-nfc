@@ -597,9 +597,21 @@ window.location.href = "tel:"+userData.phone;
 };
 
 document.getElementById("whatsappBtn").onclick = ()=>{
-window.open("https://wa.me/"+userData.phone);
-};
 
+let number = userData.whatsapp || userData.phone;
+
+// agar user +91 likh de to remove
+number = number.replace("+","");
+
+// agar 91 nahi hai to auto add
+if(!number.startsWith("91")){
+  number = "91" + number;
+}
+
+// final open
+window.open("https://wa.me/" + number);
+
+};
 document.getElementById("websiteBtn").onclick = ()=>{
 openWebsiteModal(userData.website);
 };
