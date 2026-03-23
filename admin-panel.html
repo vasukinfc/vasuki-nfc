@@ -39,7 +39,6 @@ button:hover { opacity:0.9; }
 <script type="module">
 
 import { db, ref, set, get, storage, sRef, uploadBytes, getDownloadURL } from "./firebase.js";
-
 window.addCustomer = async function(){
 
   const id = document.getElementById("customId").value.trim();
@@ -73,22 +72,22 @@ const whatsapp = document.getElementById("whatsapp").value || phone;
     photoURL = await getDownloadURL(storageRef);
   }
 
-  await set(ref(db,'customers/'+id), {
-    name,
-    phone,
-    whatsapp,
-    instagram,
-    website,
-    location,
-    theme,
-    photo: photoURL,
-    scans:0
-  });
+ await set(ref(db,'customers/'+id), {
+  name,
+  phone,
+  whatsapp,
+  instagram,
+  website,
+  location,
+  theme,
+  photo: photoURL,
+  scans:0
+});
+
+// YAH ADD KAR
+document.getElementById("successMsg").innerText = "Customer Added Successfully ✅";
 
 alert("Customer Added Successfully 🔥");
-
-  document.getElementById("successMsg").innerText = "Customer Added Successfully ✅";
-}
 </script>
 
 </body>
