@@ -23,42 +23,21 @@ button:hover { opacity:0.9; }
 </div>
 <script type="module">
 
-import { db, ref, set, get } from "./firebase.js";
+import { auth, signInWithEmailAndPassword } from "./firebase.js";
 
-window.addCustomer = async function(){
+window.login = function(){
 
-  const id = document.getElementById("customId").value.trim();
+  const email = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
 
-  const name = document.getElementById("name").value;
-  const phone = document.getElementById("phone").value;
-  const instagram = document.getElementById("instagram").value;
-  const website = document.getElementById("website").value;
-  const location = document.getElementById("location").value;
+  signInWithEmailAndPassword(auth, email, password)
+    .then(()=>{
+      window.location.href = "admin-panel.html";
+    })
+    .catch((error)=>{
+      alert("Login failed: " + error.message);
+    });
 
-  if(!id){
-    alert("Please enter custom ID");
-    return;
-  }
-
-  if(!name || !phone){
-    alert("Name and Phone required");
-    return;
-  }
-
-  const snapshot = await get(ref(db,'customers/'+id));
-
-  if(snapshot.exists()){
-    alert("ID already exists! Choose another");
-    return;
-  }
-
-  set(ref(db,'customers/'+id), {
-    name, phone, instagram, website, location, scans:0
-  })
-  .then(()=> {
-    document.getElementById("successMsg").innerText = "Customer added successfully!";
-  })
-  .catch(err => alert("Error: " + err));
 }
 
 </script>
