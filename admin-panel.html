@@ -25,63 +25,68 @@ button:hover { opacity:0.9; }
   <input id="instagram" placeholder="Instagram">
   <input id="website" placeholder="Website">
   <input id="location" placeholder="Location">
-  <button onclick="addCustomer()">Add Customer</button>
-  <div class="success-msg" id="successMsg"></div>
-</div>
-
-<script type="module">
-
-import { db, ref, set, get } from "./firebase.js";
-
-window.addCustomer = async function(){
-
-  const id = document.getElementById("customId").value.trim();
-
-  const name = document.getElementById("name").value;
-  const phone = document.getElementById("phone").value;
-  const whatsapp = document.getElementById("whatsapp").value;
-  const instagram = document.getElementById("instagram").value;
-  const website = document.getElementById("website").value;
-  const location = document.getElementById("location").value;
-
-  if(!id){
-    alert("Please enter custom ID");
-    return;
-  }
-
-  if(!name || !phone){
-    alert("Name and Phone required");
-    return;
-  }
-
-  const snapshot = await get(ref(db,'customers/'+id));
-
-  if(snapshot.exists()){
-    alert("ID already exists! Choose another");
-    return;
-  }
-
- set(ref(db,'customers/'+id), {
-  name,
-  phone,
-  whatsapp,
-  instagram,
-  website,
-  location,
-  scans:0
-})
-  .then(()=> {
-    document.getElementById("successMsg").innerText = "Customer added successfully!";
-  })
-  .catch(err => alert("Error: " + err));
-}
   <input type="file" id="photo">
 
 <select id="theme">
   <option value="light">Light</option>
   <option value="dark">Dark</option>
   <option value="luxury">Luxury</option>
+</select>
+  <button onclick="addCustomer()">Add Customer</button>
+  <div class="success-msg" id="successMsg"></div>
+</div>
 
+<script type="module">
+
+import { db, ref, set, get, storage, sRef, uploadBytes, getDownloadURL } from "./firebase.js";
+
+window.addCustomer = async function(){
+
+  const id = document.getElementById("customId").value.trim();
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value;
+const whatsapp = document.getElementById("whatsapp").value || phone;
+  const instagram = document.getElementById("instagram").value;
+  const website = document.getElementById("website").value;
+  const location = document.getElementById("location").value;
+  const theme = document.getElementById("theme").value;
+
+  const file = document.getElementById("photo").files[0];
+
+  if(!id || !name || !phone){
+    alert("ID, Name, Phone required");
+    return;
+  }
+
+  // check duplicate
+  const snapshot = await get(ref(db,'customers/'+id));
+  if(snapshot.exists()){
+    alert("ID already exists!");
+    return;
+  }
+
+  let photoURL = "";
+
+  if(file){
+    const storageRef = sRef(storage, "profiles/" + id);
+    await uploadBytes(storageRef, file);
+    photoURL = await getDownloadURL(storageRef);
+  }
+
+  await set(ref(db,'customers/'+id), {
+    name,
+    phone,
+    whatsapp,
+    instagram,
+    website,
+    location,
+    theme,
+    photo: photoURL,
+    scans:0
+  });
+
+  alert("Customer Added Successfully 🔥");
+}
 
 </script>
 
