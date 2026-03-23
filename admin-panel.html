@@ -61,9 +61,15 @@ window.addCustomer = async function(){
     return;
   }
 
-  set(ref(db,'customers/'+id), {
-    name, phone, instagram, website, location, scans:0
-  })
+ set(ref(db,'customers/'+id), {
+  name,
+  phone,
+  whatsapp,
+  instagram,
+  website,
+  location,
+  scans:0
+})
   .then(()=> {
     document.getElementById("successMsg").innerText = "Customer added successfully!";
   })
