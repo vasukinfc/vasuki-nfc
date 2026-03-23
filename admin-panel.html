@@ -29,29 +29,45 @@ button:hover { opacity:0.9; }
 </div>
 
 <script type="module">
-import { db, ref, set } from "./firebase.js";
-  window.addCustomer = function(){
-    const id = Date.now();
-    const name = document.getElementById("name").value;
-    const phone = document.getElementById("phone").value;
-    const instagram = document.getElementById("instagram").value;
-    const website = document.getElementById("website").value;
-    const location = document.getElementById("location").value;
 
-    if(!name || !phone){ alert("Name and Phone required"); return; }
+import { db, ref, set, get } from "./firebase.js";
 
-    set(ref(db,'customers/'+id), {name, phone, instagram, website, location, scans:0})
-    .then(()=> {
-        document.getElementById("successMsg").innerText = "Customer added successfully!";
-        document.getElementById("name").value = "";
-        document.getElementById("phone").value = "";
-        document.getElementById("instagram").value = "";
-        document.getElementById("website").value = "";
-        document.getElementById("location").value = "";
-    })
-    .catch(err => alert("Error: " + err));
+window.addCustomer = async function(){
+
+  const id = document.getElementById("customId").value.trim();
+
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value;
+  const instagram = document.getElementById("instagram").value;
+  const website = document.getElementById("website").value;
+  const location = document.getElementById("location").value;
+
+  if(!id){
+    alert("Please enter custom ID");
+    return;
+  }
+
+  if(!name || !phone){
+    alert("Name and Phone required");
+    return;
+  }
+
+  const snapshot = await get(ref(db,'customers/'+id));
+
+  if(snapshot.exists()){
+    alert("ID already exists! Choose another");
+    return;
+  }
+
+  set(ref(db,'customers/'+id), {
+    name, phone, instagram, website, location, scans:0
+  })
+  .then(()=> {
+    document.getElementById("successMsg").innerText = "Customer added successfully!";
+  })
+  .catch(err => alert("Error: " + err));
 }
-  <button onclick="logout()">Logout</button>
+
 </script>
 
 </body>
