@@ -3,15 +3,14 @@ import { getDatabase, ref, set, get, update } from "https://www.gstatic.com/fire
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  databaseURL: "YOUR_URL",
-  projectId: "YOUR_ID",
-  storageBucket: "YOUR_BUCKET",
-  messagingSenderId: "YOUR_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyBg-MhiTCTG56NSSMZNwNVZ8CBOkD1YQ3c",
+  authDomain: "vasuki-60ed9.firebaseapp.com",
+  databaseURL: "https://vasuki-60ed9-default-rtdb.firebaseio.com",
+  projectId: "vasuki-60ed9",
+  storageBucket: "vasuki-60ed9.firebasestorage.app",
+  messagingSenderId: "233551822151",
+  appId: "1:233551822151:web:9f43ad1e97fe6270c26062"
 };
-
 const app = initializeApp(firebaseConfig);
 
 const db = getDatabase(app);
