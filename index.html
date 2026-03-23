@@ -576,7 +576,7 @@ try{
 
 const newCount = (userData.scans || 0) + 1;
 
-await update(ref(db,"cards/"+userId),{
+await update(ref(db,"customers/"+userId),{
 scans:newCount
 });
 document.getElementById("scanText").innerText =
