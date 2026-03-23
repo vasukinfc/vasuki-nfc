@@ -21,14 +21,20 @@ button:hover { opacity:0.9; }
   <input type="password" id="password" placeholder="Password">
   <button onclick="login()">Login</button>
 </div>
-<script type="module">
+  <script type="module">
 
-import { auth, signInWithEmailAndPassword } from "./firebase.js";
+import { auth } from "./firebase.js";
+import { signInWithEmailAndPassword, onAuthStateChanged } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+// ✅ AUTO LOGIN
 onAuthStateChanged(auth, (user)=>{
   if(user){
     window.location.href = "admin-panel.html";
   }
 });
+
+// ✅ LOGIN FUNCTION (GLOBAL BANAYA)
 window.login = function(){
 
   const email = document.getElementById("username").value;
