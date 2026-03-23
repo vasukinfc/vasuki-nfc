@@ -21,18 +21,20 @@ button:hover { opacity:0.9; }
   <input type="password" id="password" placeholder="Password">
   <button onclick="login()">Login</button>
 </div>
+<script type="module">
+import { auth, signInWithEmailAndPassword } from "./firebase.js";
 
-<script>
-function login(){
-    const user = document.getElementById("username").value;
-    const pass = document.getElementById("password").value;
+window.login = function(){
+  const email = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
 
-    if(user === "VASUKI" && pass === "2521"){
-        // redirect to admin panel
-        window.location.href = "admin-panel.html";
-    } else {
-        alert("Invalid username or password!");
-    }
+  signInWithEmailAndPassword(auth, email, password)
+    .then(() => {
+      window.location.href = "admin-panel.html";
+    })
+    .catch((error) => {
+      alert("Login failed: " + error.message);
+    });
 }
 </script>
 
