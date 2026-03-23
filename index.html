@@ -369,7 +369,10 @@ body {
     <!-- ══ FRONT FACE ══ -->
     <div class="face face-front">
       <div class="header">
-        <div class="avatar-wrap" id="avatarInitial">V</div>
+       <div class="avatar-wrap">
+  <img id="profileImg" style="width:100%; height:100%; border-radius:50%; display:none;">
+  <span id="avatarInitial">V</span>
+</div>
         <div class="card-name" id="name">Loading…</div>
         <div class="card-title">Digital Business Card</div>
         <div class="scan-badge" id="scanText">Scans: 0</div>
@@ -524,7 +527,24 @@ body {
 </div>
 
  <script type="module">
+function applyTheme(theme){
 
+if(theme === "dark"){
+  document.body.style.background = "#111";
+  document.body.style.color = "#fff";
+}
+
+else if(theme === "luxury"){
+  document.body.style.background = "linear-gradient(135deg,#1a1510,#3a2c1a)";
+  document.body.style.color = "#D4AF6A";
+}
+
+else{
+  document.body.style.background = "#FDFAF4";
+  document.body.style.color = "#1A1510";
+}
+
+}
 import { db, ref, get, update } from "./firebase.js";
 
 let userData = null;
@@ -540,6 +560,12 @@ const snapshot = await get(ref(db,"customers/"+userId));
   if(snapshot.exists()){
 
 userData = snapshot.val();
+    // PROFILE PHOTO
+if(userData.photo){
+  document.getElementById("profileImg").src = userData.photo;
+  document.getElementById("profileImg").style.display = "block";
+  document.getElementById("avatarInitial").style.display = "none";
+}
 
 document.getElementById("name").innerText = userData.name || "No Name";
 
@@ -552,6 +578,7 @@ document.getElementById("scanText").innerText =
 setupButtons();
 incrementScan();
 
+applyTheme(userData.theme);
 }else{
 
 document.getElementById("name").innerText = "Card Not Found";
