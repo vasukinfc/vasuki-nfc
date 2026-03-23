@@ -23,9 +23,7 @@ button:hover { opacity:0.9; }
 </div>
   <script type="module">
 
-import { auth } from "./firebase.js";
-import { signInWithEmailAndPassword, onAuthStateChanged } 
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { auth, signInWithEmailAndPassword, onAuthStateChanged } from "./firebase.js";
 
 // ✅ AUTO LOGIN
 onAuthStateChanged(auth, (user)=>{
@@ -34,7 +32,7 @@ onAuthStateChanged(auth, (user)=>{
   }
 });
 
-// ✅ LOGIN FUNCTION (GLOBAL BANAYA)
+// ✅ LOGIN FUNCTION (GLOBAL)
 window.login = function(){
 
   const email = document.getElementById("username").value;
