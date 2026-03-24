@@ -7,7 +7,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyBg-MhiTCTG56NSSMZNwNVZ8CBOkD1YQ3c",
   authDomain: "vasuki-60ed9.firebaseapp.com", 
   projectId: "vasuki-60ed9",
-storageBucket: "vasuki-60ed9.appspot.com"
+storageBucket: "vasuki-60ed9.appspot.com",
   messagingSenderId: "233551822151",
   appId: "1:233551822151:web:9f43ad1e97fe6270c26062"
 };
