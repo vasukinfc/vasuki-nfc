@@ -26,7 +26,6 @@
   <input id="instagram" placeholder="Instagram URL">
   <input id="website" placeholder="Website URL">
   <input id="location" placeholder="Google Maps Location URL">
-  <input type="file" id="photo" accept="image/*">
 
   <select id="theme">
     <option value="light">Light</option>
@@ -66,7 +65,6 @@ window.addCustomer = async function(){
   const website = document.getElementById("website").value.trim();
   const location = document.getElementById("location").value.trim();
   const theme = document.getElementById("theme").value;
-  const file = document.getElementById("photo").files[0];
 
   if(!id || !name || !phone){
     alert("ID, Name, and Phone are required fields.");
@@ -86,13 +84,7 @@ window.addCustomer = async function(){
         return;
       }
 
-      let photoURL = "";
-      if(file){
-        const storageRef = sRef(storage, "profiles/" + id);
-        await uploadBytes(storageRef, file);
-        photoURL = await getDownloadURL(storageRef);
-      }
-
+ 
       await set(ref(db, 'customers/' + id), {
         name,
         phone,
@@ -101,7 +93,6 @@ window.addCustomer = async function(){
         website,
         location,
         theme,
-        photo: photoURL,
         scans: 0
       });
 
