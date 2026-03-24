@@ -1,7 +1,7 @@
 [
   {
-    "origin": ["https://vasukinfc.github.io"],
-    "method": ["GET", "POST", "PUT", "DELETE"],
+    "origin": ["*"],
+    "method": ["GET", "POST", "PUT"],
     "maxAgeSeconds": 3600,
     "responseHeader": ["Content-Type", "Authorization"]
   }
