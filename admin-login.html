@@ -1,42 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VASUKI Admin Login</title>
 <style>
-body { font-family: Arial; background: linear-gradient(135deg,#ff416c,#ff4b2b); height: 100vh; display: flex; align-items: center; justify-content: center; }
-.login-card { background:white; padding:30px; border-radius:12px; width:320px; box-shadow:0 6px 20px rgba(0,0,0,0.15); }
-.login-card h2 { text-align:center; margin-bottom:20px; }
-input { width:100%; padding:12px; margin:10px 0; border-radius:6px; border:1px solid #ccc; }
-button { width:100%; padding:12px; background:#ff416c; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold; }
-button:hover { opacity:0.9; }
+  body { font-family: Arial, sans-serif; background: linear-gradient(135deg,#ff416c,#ff4b2b); height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; }
+  .login-card { background: white; padding: 30px; border-radius: 12px; width: 320px; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+  .login-card h2 { text-align: center; margin-bottom: 20px; color: #333; }
+  input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; }
+  button { width: 100%; padding: 12px; background: #ff416c; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+  button:hover { opacity: 0.9; }
 </style>
 </head>
 <body>
 
 <div class="login-card">
   <h2>Admin Login</h2>
-<input type="email" id="username" placeholder="Email">
+  <input type="email" id="username" placeholder="Email">
   <input type="password" id="password" placeholder="Password">
   <button onclick="login()">Login</button>
 </div>
-  <script type="module">
 
+<script type="module">
 import { auth, signInWithEmailAndPassword, onAuthStateChanged } from "./firebase.js";
 
-// ✅ AUTO LOGIN
-onAuthStateChanged(auth, (user)=>{
+// ✅ AUTO LOGIN (Agar pehle se login hai to redirect)
+onAuthStateChanged(auth, (user) => {
   if(user){
     window.location.href = "admin-panel.html";
   }
 });
 
-// ✅ LOGIN FUNCTION (GLOBAL)
+// ✅ LOGIN FUNCTION
 window.login = function(){
-
-  const email = document.getElementById("username").value;
+  const email = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value;
+
+  if(!email || !password) {
+      alert("Please enter both email and password.");
+      return;
+  }
 
   signInWithEmailAndPassword(auth, email, password)
     .then(()=>{
@@ -45,9 +49,7 @@ window.login = function(){
     .catch((error)=>{
       alert("Login failed: " + error.message);
     });
-
 }
-
 </script>
 </body>
 </html>
