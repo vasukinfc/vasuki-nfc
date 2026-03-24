@@ -5,167 +5,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VASUKI NFC</title>
 
-
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
+/* CSS me koi error nahi tha, structure same rakha gaya hai */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --gold: #B8953F;
-  --gold-light: #D4AF6A;
-  --gold-pale: #F5EDD8;
-  --cream: #FDFAF4;
-  --warm-white: #FFF9F0;
-  --dark: #1A1510;
-  --dark2: #2C2218;
-  --text-mid: #4A3F32;
-  --text-soft: #8A7A68;
-  --border: #E8DCC8;
-  --shadow: rgba(184,149,63,0.18);
+  --gold: #B8953F; --gold-light: #D4AF6A; --gold-pale: #F5EDD8;
+  --cream: #FDFAF4; --warm-white: #FFF9F0; --dark: #1A1510;
+  --dark2: #2C2218; --text-mid: #4A3F32; --text-soft: #8A7A68;
+  --border: #E8DCC8; --shadow: rgba(184,149,63,0.18);
 }
-
 body {
-  min-height: 100vh;
-  background: var(--cream);
-  font-family: 'DM Sans', sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  overflow-x: hidden;
-  background-image:
-    radial-gradient(ellipse at 15% 15%, rgba(212,175,106,0.14) 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 85%, rgba(212,175,106,0.10) 0%, transparent 55%);
+  min-height: 100vh; background: var(--cream); font-family: 'DM Sans', sans-serif;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 24px; overflow-x: hidden;
+  background-image: radial-gradient(ellipse at 15% 15%, rgba(212,175,106,0.14) 0%, transparent 55%),
+                    radial-gradient(ellipse at 85% 85%, rgba(212,175,106,0.10) 0%, transparent 55%);
 }
-
-.hint {
-  font-size: 11.5px;
-  letter-spacing: 1.8px;
-  text-transform: uppercase;
-  color: var(--text-soft);
-  margin-bottom: 18px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  opacity: 0;
-  animation: fadeIn 0.6s ease 1.5s forwards;
-}
-.hint-arrow {
-  display: inline-flex;
-  gap: 2px;
-  font-size: 14px;
-  color: var(--gold);
-  animation: nudgeLeft 2s ease-in-out 2.2s infinite;
-}
-
-/* ── Scene & 3D flip ── */
-.scene {
-  width: 100%;
-  max-width: 420px;
-  perspective: 1400px;
-  cursor: grab;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: pan-y;
-}
+.hint { font-size: 11.5px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--text-soft); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; opacity: 0; animation: fadeIn 0.6s ease 1.5s forwards; }
+.hint-arrow { display: inline-flex; gap: 2px; font-size: 14px; color: var(--gold); animation: nudgeLeft 2s ease-in-out 2.2s infinite; }
+.scene { width: 100%; max-width: 420px; perspective: 1400px; cursor: grab; user-select: none; -webkit-user-select: none; touch-action: pan-y; }
 .scene:active { cursor: grabbing; }
-
-.card-flipper {
-  position: relative;
-  width: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.6s cubic-bezier(0.22,1,0.36,1);
-}
-
-.face {
-  width: 100%;
-  border-radius: 28px;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  overflow: hidden;
-}
-
-.face-front {
-  position: relative;
-  background: var(--warm-white);
-  border: 1px solid var(--border);
-  box-shadow: 0 8px 40px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,0.9) inset;
-}
-
-.face-back {
-  position: absolute;
-  inset: 0;
-  transform: rotateY(180deg);
-  background: var(--dark);
-  border: 1px solid rgba(212,175,106,0.2);
-  box-shadow: 0 8px 40px rgba(0,0,0,0.3);
-  display: flex;
-  flex-direction: column;
-}
-
-.face::before {
-  content: '';
-  display: block;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent);
-}
-
-/* ── FRONT ── */
-.header {
-  padding: 32px 32px 22px;
-  text-align: center;
-  opacity: 0;
-  transform: translateY(-16px);
-  animation: fadeDown 0.7s cubic-bezier(0.22,1,0.36,1) 0.15s forwards;
-}
-.avatar-wrap {
-  width: 76px; height: 76px;
-  margin: 0 auto 14px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--gold-pale), #FFF3D6);
-  border: 2px solid var(--gold-light);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 30px; font-weight: 700; color: var(--gold);
-  box-shadow: 0 4px 16px var(--shadow), 0 0 0 6px rgba(212,175,106,0.1);
-}
-.card-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 28px; font-weight: 600; color: var(--dark);
-  letter-spacing: 0.5px; line-height: 1.1;
-}
-.card-title {
-  font-size: 11px; font-weight: 400; color: var(--text-soft);
-  letter-spacing: 2.5px; text-transform: uppercase; margin-top: 5px;
-}
-.scan-badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  margin-top: 12px; padding: 4px 13px;
-  background: var(--gold-pale); border: 1px solid rgba(184,149,63,0.3);
-  border-radius: 100px; font-size: 11px; font-weight: 500; color: var(--gold); letter-spacing: 0.4px;
-}
-.scan-badge::before {
-  content: ''; width: 5px; height: 5px; border-radius: 50%;
-  background: var(--gold); animation: pulse 2s infinite;
-}
-.divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border), transparent);
-  margin: 0 24px; opacity: 0; animation: fadeIn 0.5s ease 0.65s forwards;
-}
+.card-flipper { position: relative; width: 100%; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.22,1,0.36,1); }
+.face { width: 100%; border-radius: 28px; backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: hidden; }
+.face-front { position: relative; background: var(--warm-white); border: 1px solid var(--border); box-shadow: 0 8px 40px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,0.9) inset; }
+.face-back { position: absolute; inset: 0; transform: rotateY(180deg); background: var(--dark); border: 1px solid rgba(212,175,106,0.2); box-shadow: 0 8px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column; }
+.face::before { content: ''; display: block; height: 3px; background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent); }
+.header { padding: 32px 32px 22px; text-align: center; opacity: 0; transform: translateY(-16px); animation: fadeDown 0.7s cubic-bezier(0.22,1,0.36,1) 0.15s forwards; }
+.avatar-wrap { width: 76px; height: 76px; margin: 0 auto 14px; border-radius: 50%; background: linear-gradient(135deg, var(--gold-pale), #FFF3D6); border: 2px solid var(--gold-light); display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 700; color: var(--gold); box-shadow: 0 4px 16px var(--shadow), 0 0 0 6px rgba(212,175,106,0.1); overflow:hidden; }
+.card-name { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; color: var(--dark); letter-spacing: 0.5px; line-height: 1.1; }
+.card-title { font-size: 11px; font-weight: 400; color: var(--text-soft); letter-spacing: 2.5px; text-transform: uppercase; margin-top: 5px; }
+.scan-badge { display: inline-flex; align-items: center; gap: 5px; margin-top: 12px; padding: 4px 13px; background: var(--gold-pale); border: 1px solid rgba(184,149,63,0.3); border-radius: 100px; font-size: 11px; font-weight: 500; color: var(--gold); letter-spacing: 0.4px; }
+.scan-badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--gold); animation: pulse 2s infinite; }
+.divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 0 24px; opacity: 0; animation: fadeIn 0.5s ease 0.65s forwards; }
 .buttons { padding: 20px 20px 22px; display: grid; gap: 9px; }
-.btn {
-  position: relative; display: flex; align-items: center;
-  gap: 13px; padding: 13px 18px;
-  border: 1px solid var(--border); border-radius: 13px;
-  background: #fff; cursor: pointer;
-  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--text-mid);
-  text-align: left; width: 100%;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-  opacity: 0; transform: translateX(60px);
-}
+.btn { position: relative; display: flex; align-items: center; gap: 13px; padding: 13px 18px; border: 1px solid var(--border); border-radius: 13px; background: #fff; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--text-mid); text-align: left; width: 100%; transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease; opacity: 0; transform: translateX(60px); }
 .btn:hover { transform: translateX(-3px) translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.07), 0 2px 6px var(--shadow); border-color: var(--gold-light); }
 .btn:active { transform: scale(0.98); }
 .btn-icon { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; transition: transform 0.2s ease; }
@@ -173,161 +48,60 @@ body {
 .btn-label { flex: 1; }
 .btn-arrow { font-size: 15px; color: var(--text-soft); opacity: 0; transform: translateX(-6px); transition: opacity 0.2s, transform 0.2s; }
 .btn:hover .btn-arrow { opacity: 1; transform: translateX(0); }
-
-.btn-call  .btn-icon { background:#E8F5E9; color:#2E7D32; }
-.btn-wp    .btn-icon { background:#E8F5E9; color:#1B7943; }
-.btn-web   .btn-icon { background:#E3F0FF; color:#1565C0; }
+.btn-call .btn-icon { background:#E8F5E9; color:#2E7D32; }
+.btn-wp .btn-icon { background:#E8F5E9; color:#1B7943; }
+.btn-web .btn-icon { background:#E3F0FF; color:#1565C0; }
 .btn-insta .btn-icon { background:#FCE4EC; color:#AD1457; }
-.btn-loc   .btn-icon { background:#FFF3E0; color:#E65100; }
-.btn-save  .btn-icon { background:#EDE7F6; color:#4527A0; }
-
-.btn-call:hover  { border-color:#A5D6A7; background:#F9FFF9; }
-.btn-wp:hover    { border-color:#A5D6A7; background:#F9FFF9; }
-.btn-web:hover   { border-color:#90CAF9; background:#F5F9FF; }
+.btn-loc .btn-icon { background:#FFF3E0; color:#E65100; }
+.btn-save .btn-icon { background:#EDE7F6; color:#4527A0; }
+.btn-call:hover { border-color:#A5D6A7; background:#F9FFF9; }
+.btn-wp:hover { border-color:#A5D6A7; background:#F9FFF9; }
+.btn-web:hover { border-color:#90CAF9; background:#F5F9FF; }
 .btn-insta:hover { border-color:#F48FB1; background:#FFF5F8; }
-.btn-loc:hover   { border-color:#FFCC80; background:#FFFAF5; }
-.btn-save:hover  { border-color:#CE93D8; background:#FAF7FF; }
-
+.btn-loc:hover { border-color:#FFCC80; background:#FFFAF5; }
+.btn-save:hover { border-color:#CE93D8; background:#FAF7FF; }
 .btn:nth-child(1){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 0.45s forwards; }
 .btn:nth-child(2){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 0.57s forwards; }
 .btn:nth-child(3){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 0.69s forwards; }
 .btn:nth-child(4){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 0.81s forwards; }
 .btn:nth-child(5){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 0.93s forwards; }
 .btn:nth-child(6){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 1.05s forwards; }
-
-.front-footer {
-  padding: 0 24px 20px; text-align: center;
-  font-size: 10.5px; letter-spacing: 1.5px; text-transform: uppercase;
-  color: var(--text-soft); opacity: 0; animation: fadeIn 0.5s ease 1.3s forwards;
-}
+.front-footer { padding: 0 24px 20px; text-align: center; font-size: 10.5px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-soft); opacity: 0; animation: fadeIn 0.5s ease 1.3s forwards; }
 .front-footer span { color: var(--gold); font-weight: 600; }
-
-/* ── BACK ── */
-.back-glow {
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse at 25% 25%, rgba(212,175,106,0.1) 0%, transparent 60%),
-    radial-gradient(ellipse at 75% 75%, rgba(212,175,106,0.07) 0%, transparent 50%);
-  pointer-events: none;
-}
-.back-corner {
-  position: absolute; width: 56px; height: 56px; opacity: 0.22;
-}
+.back-glow { position: absolute; inset: 0; background: radial-gradient(ellipse at 25% 25%, rgba(212,175,106,0.1) 0%, transparent 60%), radial-gradient(ellipse at 75% 75%, rgba(212,175,106,0.07) 0%, transparent 50%); pointer-events: none; }
+.back-corner { position: absolute; width: 56px; height: 56px; opacity: 0.22; }
 .bc-tl { top: 14px; left: 14px; }
 .bc-tr { top: 14px; right: 14px; transform: scaleX(-1); }
 .bc-bl { bottom: 14px; left: 14px; transform: scaleY(-1); }
 .bc-br { bottom: 14px; right: 14px; transform: scale(-1); }
-
-.back-inner {
-  position: relative; z-index: 1;
-  padding: 26px 26px 22px;
-  display: flex; flex-direction: column; align-items: center;
-}
-.back-logo {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 34px; font-weight: 700; letter-spacing: 5px;
-  color: var(--gold-light); text-transform: uppercase;
-  text-shadow: 0 0 30px rgba(212,175,106,0.3);
-}
-.back-sub {
-  font-size: 9.5px; letter-spacing: 3px; text-transform: uppercase;
-  color: rgba(212,175,106,0.45); margin-bottom: 18px; margin-top: 3px;
-}
-.back-rule {
-  width: 70px; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  margin-bottom: 18px;
-}
-.back-about {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 15px; font-weight: 300; font-style: italic;
-  color: rgba(253,250,244,0.72); line-height: 1.75; text-align: center;
-  margin-bottom: 20px;
-}
-.back-stats {
-  display: grid; grid-template-columns: 1fr 1fr 1fr;
-  gap: 9px; width: 100%; margin-bottom: 18px;
-}
-.stat-box {
-  background: rgba(212,175,106,0.07);
-  border: 1px solid rgba(212,175,106,0.16);
-  border-radius: 12px; padding: 12px 4px; text-align: center;
-}
-.stat-num {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 20px; font-weight: 600; color: var(--gold-light); line-height: 1;
-}
-.stat-label {
-  font-size: 9px; letter-spacing: 1.2px; text-transform: uppercase;
-  color: rgba(212,175,106,0.45); margin-top: 4px;
-}
-.back-features {
-  width: 100%; display: grid; grid-template-columns: 1fr 1fr;
-  gap: 8px; margin-bottom: 18px;
-}
-.feature-pill {
-  background: rgba(212,175,106,0.06);
-  border: 1px solid rgba(212,175,106,0.14);
-  border-radius: 10px; padding: 10px 12px;
-  display: flex; align-items: center; gap: 8px;
-}
+.back-inner { position: relative; z-index: 1; padding: 26px 26px 22px; display: flex; flex-direction: column; align-items: center; }
+.back-logo { font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 700; letter-spacing: 5px; color: var(--gold-light); text-transform: uppercase; text-shadow: 0 0 30px rgba(212,175,106,0.3); }
+.back-sub { font-size: 9.5px; letter-spacing: 3px; text-transform: uppercase; color: rgba(212,175,106,0.45); margin-bottom: 18px; margin-top: 3px; }
+.back-rule { width: 70px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin-bottom: 18px; }
+.back-about { font-family: 'Cormorant Garamond', serif; font-size: 15px; font-weight: 300; font-style: italic; color: rgba(253,250,244,0.72); line-height: 1.75; text-align: center; margin-bottom: 20px; }
+.back-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 9px; width: 100%; margin-bottom: 18px; }
+.stat-box { background: rgba(212,175,106,0.07); border: 1px solid rgba(212,175,106,0.16); border-radius: 12px; padding: 12px 4px; text-align: center; }
+.stat-num { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--gold-light); line-height: 1; }
+.stat-label { font-size: 9px; letter-spacing: 1.2px; text-transform: uppercase; color: rgba(212,175,106,0.45); margin-top: 4px; }
+.back-features { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 18px; }
+.feature-pill { background: rgba(212,175,106,0.06); border: 1px solid rgba(212,175,106,0.14); border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; gap: 8px; }
 .fp-icon { font-size: 14px; }
 .fp-text { font-size: 11px; font-weight: 500; color: rgba(253,250,244,0.68); letter-spacing: 0.2px; }
-
-.back-contact-row {
-  width: 100%;
-  background: rgba(212,175,106,0.07);
-  border: 1px solid rgba(212,175,106,0.15);
-  border-radius: 13px; padding: 12px 16px;
-  display: flex; align-items: center; gap: 11px;
-  margin-bottom: 8px;
-}
+.back-contact-row { width: 100%; background: rgba(212,175,106,0.07); border: 1px solid rgba(212,175,106,0.15); border-radius: 13px; padding: 12px 16px; display: flex; align-items: center; gap: 11px; margin-bottom: 8px; }
 .bcr-icon { font-size: 15px; flex-shrink: 0; }
 .bcr-label { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(212,175,106,0.4); }
 .bcr-value { font-size: 12.5px; font-weight: 500; color: rgba(253,250,244,0.78); margin-top: 2px; }
-.back-footer {
-  margin-top: 16px; font-size: 9.5px; letter-spacing: 2px; text-transform: uppercase;
-  color: rgba(212,175,106,0.25);
-}
-
-/* ── Dots ── */
-.flip-dots {
-  display: flex; gap: 7px; margin-top: 16px;
-  opacity: 0; animation: fadeIn 0.5s ease 1.6s forwards;
-}
-.dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--border);
-  transition: background 0.3s, transform 0.3s;
-}
+.back-footer { margin-top: 16px; font-size: 9.5px; letter-spacing: 2px; text-transform: uppercase; color: rgba(212,175,106,0.25); }
+.flip-dots { display: flex; gap: 7px; margin-top: 16px; opacity: 0; animation: fadeIn 0.5s ease 1.6s forwards; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); transition: background 0.3s, transform 0.3s; }
 .dot.active { background: var(--gold); transform: scale(1.3); }
-
-/* ── Modal ── */
-.modal-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(26,21,16,0.5);
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  justify-content: center; align-items: flex-end; z-index: 1000;
-}
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(26,21,16,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); justify-content: center; align-items: flex-end; z-index: 1000; }
 .modal-overlay.open { display: flex; }
-.modal-sheet {
-  background: var(--warm-white);
-  border-radius: 24px 24px 0 0;
-  padding: 28px 28px 36px; width: 100%; max-width: 480px;
-  text-align: center; border-top: 1px solid var(--border);
-  animation: sheetUp 0.4s cubic-bezier(0.22,1,0.36,1);
-}
+.modal-sheet { background: var(--warm-white); border-radius: 24px 24px 0 0; padding: 28px 28px 36px; width: 100%; max-width: 480px; text-align: center; border-top: 1px solid var(--border); animation: sheetUp 0.4s cubic-bezier(0.22,1,0.36,1); }
 .sheet-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 22px; }
 .modal-sheet h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--dark); margin-bottom: 6px; }
 .modal-sheet p { font-size: 13px; color: var(--text-soft); margin-bottom: 18px; }
-.website-link {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 11px 22px;
-  background: linear-gradient(135deg, var(--gold-pale), #FDF0CB);
-  border: 1px solid rgba(184,149,63,0.4); border-radius: 12px;
-  color: var(--gold); font-weight: 600; font-size: 14px; text-decoration: none;
-  transition: box-shadow 0.2s, transform 0.2s; margin-bottom: 24px;
-}
+.website-link { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; background: linear-gradient(135deg, var(--gold-pale), #FDF0CB); border: 1px solid rgba(184,149,63,0.4); border-radius: 12px; color: var(--gold); font-weight: 600; font-size: 14px; text-decoration: none; transition: box-shadow 0.2s, transform 0.2s; margin-bottom: 24px; }
 .website-link:hover { box-shadow: 0 4px 16px var(--shadow); transform: translateY(-2px); }
 .stars-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-soft); margin-bottom: 10px; }
 .stars-row { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; }
@@ -335,25 +109,14 @@ body {
 .star:hover, .star.selected { color: var(--gold); }
 .star:hover { transform: scale(1.2); }
 .star-feedback { font-size: 13px; color: var(--gold); font-weight: 500; min-height: 18px; margin-bottom: 18px; }
-.btn-close {
-  padding: 11px 30px; background: var(--dark); color: white;
-  border: none; border-radius: 12px;
-  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
-  cursor: pointer; letter-spacing: 0.3px;
-  transition: opacity 0.2s, transform 0.2s;
-}
+.btn-close { padding: 11px 30px; background: var(--dark); color: white; border: none; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; letter-spacing: 0.3px; transition: opacity 0.2s, transform 0.2s; }
 .btn-close:hover { opacity: 0.85; transform: translateY(-1px); }
-
-/* ── Keyframes ── */
 @keyframes fadeDown { to { opacity:1; transform:translateY(0); } }
 @keyframes fadeIn   { to { opacity:1; } }
 @keyframes slideInRight { to { opacity:1; transform:translateX(0); } }
 @keyframes sheetUp { from { transform:translateY(60px); opacity:0; } to { transform:translateY(0); opacity:1; } }
 @keyframes pulse   { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.5;transform:scale(.8);} }
-@keyframes nudgeLeft {
-  0%,100%{ transform:translateX(0); opacity:0.7; }
-  50%     { transform:translateX(-7px); opacity:1; }
-}
+@keyframes nudgeLeft { 0%,100%{ transform:translateX(0); opacity:0.7; } 50% { transform:translateX(-7px); opacity:1; } }
 </style>
 </head>
 <body>
@@ -366,62 +129,55 @@ body {
 <div class="scene" id="scene">
   <div class="card-flipper" id="flipper">
 
-    <!-- ══ FRONT FACE ══ -->
     <div class="face face-front">
       <div class="header">
        <div class="avatar-wrap">
-  <img id="profileImg" style="width:100%; height:100%; border-radius:50%; display:none;">
-  <span id="avatarInitial">V</span>
-</div>
+          <img id="profileImg" style="width:100%; height:100%; border-radius:50%; display:none; object-fit: cover;">
+          <span id="avatarInitial">V</span>
+        </div>
         <div class="card-name" id="name">Loading…</div>
         <div class="card-title">Digital Business Card</div>
         <div class="scan-badge" id="scanText">Scans: 0</div>
       </div>
+    
       <div class="divider"></div>
       <div class="buttons">
         <button id="callBtn" class="btn btn-call">
-
-  <div class="btn-icon">📞</div>
-  <span class="btn-label">Call</span> <span class="btn-arrow">›</span>
-</button>
+          <div class="btn-icon">📞</div>
+          <span class="btn-label">Call</span> <span class="btn-arrow">›</span>
+        </button>
         
-<button id="whatsappBtn" class="btn btn-wp">
-
-        <div class="btn-icon">💬</div><span class="btn-label">WhatsApp</span>
-  <span class="btn-arrow">›</span>
-</button>
+        <button id="whatsappBtn" class="btn btn-wp">
+          <div class="btn-icon">💬</div>
+          <span class="btn-label">WhatsApp</span><span class="btn-arrow">›</span>
+        </button>
         
-<button id="websiteBtn" class="btn btn-web">
-
-  <div class="btn-icon">🌐</div>
-  <span class="btn-label">Website</span>
-  <span class="btn-arrow">›</span>
-</button>
+        <button id="websiteBtn" class="btn btn-web">
+          <div class="btn-icon">🌐</div>
+          <span class="btn-label">Website</span><span class="btn-arrow">›</span>
+        </button>
         
-<button id="instagramBtn" class="btn btn-insta">
-
-  <div class="btn-icon">📸</div>
-  <span class="btn-label">Instagram</span>
-  <span class="btn-arrow">›</span>
-
-</button>
+        <button id="instagramBtn" class="btn btn-insta">
+          <div class="btn-icon">📸</div>
+          <span class="btn-label">Instagram</span><span class="btn-arrow">›</span>
+        </button>
+       
+        <button id="locationBtn" class="btn btn-loc">       
+          <div class="btn-icon">📍</div>
+          <span class="btn-label">Location</span><span class="btn-arrow">›</span>
+        </button>
         
-<button id="locationBtn" class="btn btn-loc">       
-  <div class="btn-icon">📍</div>
-  <span class="btn-label">Location</span>
-  <span class="btn-arrow">›</span>
-</button>
-        
-        
+        <button onclick="saveContact()" class="btn btn-save">
+          <div class="btn-icon">💾</div>
+          <span class="btn-label">Save Contact</span><span class="btn-arrow">›</span>
+        </button>
       </div>
       <div class="front-footer">Powered by <span>VASUKI NFC</span></div>
     </div>
 
-    <!-- ══ BACK FACE ══ -->
     <div class="face face-back">
       <div class="back-glow"></div>
-
-      <!-- corner ornaments -->
+      
       <div class="back-corner bc-tl">
         <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M4 52 L4 4 L52 4" stroke="#B8953F" stroke-width="1.5" stroke-linecap="round"/>
@@ -458,18 +214,9 @@ body {
         </p>
 
         <div class="back-stats">
-          <div class="stat-box">
-            <div class="stat-num">NFC</div>
-            <div class="stat-label">Powered</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-num">∞</div>
-            <div class="stat-label">Shares</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-num">1s</div>
-            <div class="stat-label">Connect</div>
-          </div>
+          <div class="stat-box"><div class="stat-num">NFC</div><div class="stat-label">Powered</div></div>
+          <div class="stat-box"><div class="stat-num">∞</div><div class="stat-label">Shares</div></div>
+          <div class="stat-box"><div class="stat-num">1s</div><div class="stat-label">Connect</div></div>
         </div>
 
         <div class="back-features">
@@ -481,32 +228,21 @@ body {
 
         <div class="back-contact-row">
           <span class="bcr-icon">🌐</span>
-          <div>
-            <div class="bcr-label">Website</div>
-            <div class="bcr-value">www.vasukinfc.com</div>
-          </div>
+          <div><div class="bcr-label">Website</div><div class="bcr-value">www.vasukinfc.com</div></div>
         </div>
         <div class="back-contact-row">
           <span class="bcr-icon">📧</span>
-          <div>
-            <div class="bcr-label">Email</div>
-            <div class="bcr-value">vasukinfc@gmail.com</div>
-          </div>
+          <div><div class="bcr-label">Email</div><div class="bcr-value">vasukinfc@gmail.com</div></div>
         </div>
 
         <div class="back-footer">© 2026 Vasuki NFC · All rights reserved</div>
       </div>
     </div>
-
-  </div><!-- /flipper -->
-</div><!-- /scene -->
-
-<div class="flip-dots">
+  </div></div><div class="flip-dots">
   <div class="dot active" id="dot0"></div>
   <div class="dot" id="dot1"></div>
 </div>
 
-<!-- Website + Rating Modal -->
 <div id="websiteModal" class="modal-overlay" onclick="handleOverlayClick(event)">
   <div class="modal-sheet">
     <div class="sheet-handle"></div>
@@ -526,240 +262,185 @@ body {
   </div>
 </div>
 
- <script type="module">
-function applyTheme(theme){
-
-if(theme === "dark"){
-  document.body.style.background = "#111";
-  document.body.style.color = "#fff";
-}
-
-else if(theme === "luxury"){
-  document.body.style.background = "linear-gradient(135deg,#1a1510,#3a2c1a)";
-  document.body.style.color = "#D4AF6A";
-}
-
-else{
-  document.body.style.background = "#FDFAF4";
-  document.body.style.color = "#1A1510";
-}
-
-}
+<script type="module">
 import { db, ref, get, update } from "./firebase.js";
+
+function applyTheme(theme){
+  if(theme === "dark"){
+    document.body.style.background = "#111";
+    document.body.style.color = "#fff";
+  } else if(theme === "luxury"){
+    document.body.style.background = "linear-gradient(135deg,#1a1510,#3a2c1a)";
+    document.body.style.color = "#D4AF6A";
+  } else {
+    document.body.style.background = "#FDFAF4";
+    document.body.style.color = "#1A1510";
+  }
+}
 
 let userData = null;
 const params = new URLSearchParams(window.location.search);
 const userId = params.get("id");
 
-// LOAD USER
 async function loadUser(){
+  if (!userId) {
+      document.getElementById("name").innerText = "Invalid Scan (No ID)";
+      return;
+  }
 
-try{
+  try{
+    const snapshot = await get(ref(db,"customers/"+userId));
+    if(snapshot.exists()){
+      userData = snapshot.val();
+      
+      if(userData.photo){
+        document.getElementById("profileImg").src = userData.photo;
+        document.getElementById("profileImg").style.display = "block";
+        document.getElementById("avatarInitial").style.display = "none";
+      }
 
-const snapshot = await get(ref(db,"customers/"+userId));
-  if(snapshot.exists()){
+      document.getElementById("name").innerText = userData.name || "No Name";
+      document.getElementById("avatarInitial").innerText = (userData.name || "V").charAt(0).toUpperCase();
+      document.getElementById("scanText").innerText = "Scans: " + (userData.scans || 0);
 
-userData = snapshot.val();
-    // PROFILE PHOTO
-if(userData.photo){
-  document.getElementById("profileImg").src = userData.photo;
-  document.getElementById("profileImg").style.display = "block";
-  document.getElementById("avatarInitial").style.display = "none";
-}
-
-document.getElementById("name").innerText = userData.name || "No Name";
-
-document.getElementById("avatarInitial").innerText =
-(userData.name || "V").charAt(0).toUpperCase();
-
-document.getElementById("scanText").innerText =
-"Scans: " + (userData.scans || 0);
-
-setupButtons();
-incrementScan();
-
-applyTheme(userData.theme);
-}else{
-
-document.getElementById("name").innerText = "Card Not Found";
-
-}
-
-}catch(e){
-
-console.log(e);
-
-}
-
+      setupButtons();
+      incrementScan();
+      applyTheme(userData.theme);
+    } else {
+      document.getElementById("name").innerText = "Card Not Found";
+    }
+  }catch(e){
+    console.log(e);
+  }
 }
 
 loadUser();
 
-
-// SCAN COUNTER
 async function incrementScan(){
-
-try{
-
-const newCount = (userData.scans || 0) + 1;
-
-await update(ref(db,"customers/"+userId),{
-scans:newCount
-});
-document.getElementById("scanText").innerText =
-"Scans: " + newCount;
-
-}catch(e){
-console.log(e);
+  try{
+    const newCount = (userData.scans || 0) + 1;
+    await update(ref(db,"customers/"+userId),{ scans: newCount });
+    document.getElementById("scanText").innerText = "Scans: " + newCount;
+  }catch(e){
+    console.log(e);
+  }
 }
 
-}
-
-
-// BUTTONS
 function setupButtons(){
+  document.getElementById("callBtn").onclick = ()=>{
+    if(userData.phone) window.location.href = "tel:" + userData.phone;
+    else alert("Phone number not provided");
+  };
 
-document.getElementById("callBtn").onclick = ()=>{
-window.location.href = "tel:"+userData.phone;
-};
+  document.getElementById("whatsappBtn").onclick = ()=>{
+    // Sahi format me string conversion (Bug fixed)
+    let number = String(userData.whatsapp || userData.phone || "");
+    number = number.replace(/\+/g, "").replace(/\s+/g, ""); // saare symbols/spaces remove
 
-document.getElementById("whatsappBtn").onclick = ()=>{
+    if(!number) {
+        alert("WhatsApp number not provided");
+        return;
+    }
 
-let number = userData.whatsapp || userData.phone;
+    if(!number.startsWith("91") && number.length >= 10){
+      number = "91" + number;
+    }
+    window.open("https://wa.me/" + number);
+  };
 
-// agar user +91 likh de to remove
-number = number.replace("+","");
+  document.getElementById("websiteBtn").onclick = ()=>{
+    if(userData.website) openWebsiteModal(userData.website);
+    else alert("Website not available");
+  };
 
-// agar 91 nahi hai to auto add
-if(!number.startsWith("91")){
-  number = "91" + number;
+  document.getElementById("instagramBtn").onclick = ()=>{
+    if(userData.instagram) window.open(userData.instagram);
+    else alert("Instagram not available");
+  };
+
+  document.getElementById("locationBtn").onclick = ()=>{
+    if(userData.location) window.open(userData.location);
+    else alert("Location not available");
+  };
 }
 
-// final open
-window.open("https://wa.me/" + number);
-
-};
-document.getElementById("websiteBtn").onclick = ()=>{
-openWebsiteModal(userData.website);
-};
-
-document.getElementById("instagramBtn").onclick = ()=>{
-window.open(userData.instagram);
-};
-
-document.getElementById("locationBtn").onclick = ()=>{
-window.open(userData.location);
-};
-
-}
-
-
-// SAVE CONTACT
 window.saveContact = function(){
-
-if(!userData) return;
-
-const vCard =
+  if(!userData) return;
+  const vCard = 
 `BEGIN:VCARD
 VERSION:3.0
 FN:${userData.name}
-TEL:${userData.phone}
+TEL:${userData.phone || ""}
 END:VCARD`;
 
-const blob = new Blob([vCard],{type:"text/vcard"});
-const url = URL.createObjectURL(blob);
-
-const a = document.createElement("a");
-a.href = url;
-a.download = "contact.vcf";
-a.click();
-
-URL.revokeObjectURL(url);
-
+  const blob = new Blob([vCard],{type:"text/vcard"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${userData.name || "Contact"}.vcf`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
-
-// WEBSITE MODAL
 window.openWebsiteModal = function(url){
-
-document.getElementById("websiteModal").classList.add("open");
-document.getElementById("websiteLink").href = url;
-
+  document.getElementById("websiteModal").classList.add("open");
+  
+  // Basic URL fix agar user ne http:// nahi likha
+  if(url && !url.startsWith("http")) url = "https://" + url;
+  
+  document.getElementById("websiteLink").href = url || "#";
 }
 
 window.closeModal = function(){
-
-document.getElementById("websiteModal").classList.remove("open");
-
+  document.getElementById("websiteModal").classList.remove("open");
 }
 
 window.handleOverlayClick = function(e){
-
-if(e.target.id === "websiteModal"){
-closeModal();
+  if(e.target.id === "websiteModal") closeModal();
 }
 
-}
-
-
-// STAR RATING
 window.rate = function(num){
+  const stars = document.querySelectorAll(".star");
+  const feedback = document.getElementById("starFeedback");
+  stars.forEach((s,i) => s.classList.toggle("selected", i < num));
 
-const stars = document.querySelectorAll(".star");
-const feedback = document.getElementById("starFeedback");
-
-stars.forEach((s,i)=>{
-s.classList.toggle("selected", i < num);
-});
-
-if(num === 5) feedback.innerText = "Excellent ⭐";
-else if(num === 4) feedback.innerText = "Very Good 👍";
-else if(num === 3) feedback.innerText = "Good 🙂";
-else if(num === 2) feedback.innerText = "Could be better";
-else feedback.innerText = "We'll improve 🙏";
-
+  if(num === 5) feedback.innerText = "Excellent ⭐";
+  else if(num === 4) feedback.innerText = "Very Good 👍";
+  else if(num === 3) feedback.innerText = "Good 🙂";
+  else if(num === 2) feedback.innerText = "Could be better";
+  else feedback.innerText = "We'll improve 🙏";
 }
-
 </script>
-  <script>
 
+<script>
 const scene = document.getElementById("scene");
 const flipper = document.getElementById("flipper");
-
 let startX = 0;
 let flipped = false;
 
-scene.addEventListener("touchstart",function(e){
-startX = e.touches[0].clientX;
+scene.addEventListener("touchstart", function(e){
+  startX = e.touches[0].clientX;
 });
 
-scene.addEventListener("touchend",function(e){
+scene.addEventListener("touchend", function(e){
+  let endX = e.changedTouches[0].clientX;
+  let diff = startX - endX;
 
-let endX = e.changedTouches[0].clientX;
-let diff = startX - endX;
-
-if(diff > 50 && !flipped){
-
-flipper.style.transform = "rotateY(180deg)";
-document.getElementById("dot0").classList.remove("active");
-document.getElementById("dot1").classList.add("active");
-
-flipped = true;
-
-}
-
-if(diff < -50 && flipped){
-
-flipper.style.transform = "rotateY(0deg)";
-document.getElementById("dot0").classList.add("active");
-document.getElementById("dot1").classList.remove("active");
-
-flipped = false;
-
-}
-
+  if(diff > 50 && !flipped){
+    flipper.style.transform = "rotateY(180deg)";
+    document.getElementById("dot0").classList.remove("active");
+    document.getElementById("dot1").classList.add("active");
+    flipped = true;
+  }
+  
+  if(diff < -50 && flipped){
+    flipper.style.transform = "rotateY(0deg)";
+    document.getElementById("dot0").classList.add("active");
+    document.getElementById("dot1").classList.remove("active");
+    flipped = false;
+  }
 });
-
 </script>
+
 </body>
 </html>
