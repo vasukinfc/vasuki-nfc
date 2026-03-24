@@ -23,8 +23,7 @@
 </div>
 
 <script type="module">
-import { auth, signInWithEmailAndPassword, onAuthStateChanged } from "./firebase.js";
-
+  import { auth, signInWithEmailAndPassword } from "./firebase.js";
 // ✅ AUTO LOGIN (Agar pehle se login hai to redirect)
 onAuthStateChanged(auth, (user) => {
   if(user){
@@ -32,9 +31,8 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// ✅ LOGIN FUNCTION
-window.login = function(){
-  const email = document.getElementById("username").value.trim();
+window.loginAdmin = function(){
+  const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
 
   if(!email || !password) {
@@ -44,6 +42,7 @@ window.login = function(){
 
   signInWithEmailAndPassword(auth, email, password)
     .then(()=>{
+      alert("Login Success ✅");
       window.location.href = "admin-panel.html";
     })
     .catch((error)=>{
