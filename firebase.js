@@ -5,8 +5,7 @@ import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://ww
 
 const firebaseConfig = {
   apiKey: "AIzaSyBg-MhiTCTG56NSSMZNwNVZ8CBOkD1YQ3c",
-  authDomain: "vasuki-60ed9.firebaseapp.com",
-storageBucket: "vasuki-60ed9.firebasestorage.app" 
+  authDomain: "vasuki-60ed9.firebaseapp.com", 
   projectId: "vasuki-60ed9",
 storageBucket: "vasuki-60ed9.appspot.com"
   messagingSenderId: "233551822151",
