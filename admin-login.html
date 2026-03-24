@@ -17,14 +17,14 @@
 
 <div class="login-card">
   <h2>Admin Login</h2>
-  <input type="email" id="username" placeholder="Email">
+  <input type="email" id="" placeholder="Email">
   <input type="password" id="password" placeholder="Password">
-  <button onclick="login()">Login</button>
+<button onclick="loginAdmin()">Login</button>
 </div>
-
 <script type="module">
-  import { auth, signInWithEmailAndPassword } from "./firebase.js";
-// ✅ AUTO LOGIN (Agar pehle se login hai to redirect)
+import { auth, signInWithEmailAndPassword, onAuthStateChanged } from "./firebase.js";
+
+// AUTO LOGIN
 onAuthStateChanged(auth, (user) => {
   if(user){
     window.location.href = "admin-panel.html";
@@ -32,7 +32,7 @@ onAuthStateChanged(auth, (user) => {
 });
 
 window.loginAdmin = function(){
-  const email = document.getElementById("email").value.trim();
+  const email = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value;
 
   if(!email || !password) {
