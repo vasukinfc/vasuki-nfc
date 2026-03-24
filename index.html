@@ -293,11 +293,6 @@ async function loadUser(){
     if(snapshot.exists()){
       userData = snapshot.val();
       
-      if(userData.photo){
-        document.getElementById("profileImg").src = userData.photo;
-        document.getElementById("profileImg").style.display = "block";
-        document.getElementById("avatarInitial").style.display = "none";
-      }
 
       document.getElementById("name").innerText = userData.name || "No Name";
       document.getElementById("avatarInitial").innerText = (userData.name || "V").charAt(0).toUpperCase();
