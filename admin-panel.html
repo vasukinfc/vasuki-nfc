@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VASUKI Admin Panel</title>
 <style>
-body { font-family: Arial; background:#f5f5f5; display:flex; justify-content:center; padding:40px; }
-.panel { background:white; padding:30px; border-radius:12px; width:400px; box-shadow:0 6px 20px rgba(0,0,0,0.15); }
-.panel h2 { text-align:center; margin-bottom:25px; color:#ff416c; }
-input { width:100%; padding:12px; margin:8px 0; border-radius:6px; border:1px solid #ccc; }
-button { width:100%; padding:12px; margin-top:12px; background:#ff416c; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold; }
-button:hover { opacity:0.9; }
-.success-msg { color:green; font-weight:bold; margin-top:10px; text-align:center; }
+  body { font-family: Arial, sans-serif; background: #f5f5f5; display: flex; justify-content: center; padding: 40px; margin: 0; }
+  .panel { background: white; padding: 30px; border-radius: 12px; width: 400px; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+  .panel h2 { text-align: center; margin-bottom: 25px; color: #ff416c; }
+  input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; }
+  button { width: 100%; padding: 12px; margin-top: 12px; background: #ff416c; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+  button:hover { opacity: 0.9; }
+  .success-msg { color: green; font-weight: bold; margin-top: 15px; text-align: center; }
+  .logout-btn { background: #333; margin-top: 15px; }
 </style>
 </head>
 <body>
@@ -22,74 +23,104 @@ button:hover { opacity:0.9; }
   <input id="name" placeholder="Name">
   <input id="phone" placeholder="Phone">
   <input id="whatsapp" placeholder="WhatsApp Number (optional)">
-  <input id="instagram" placeholder="Instagram">
-  <input id="website" placeholder="Website">
-  <input id="location" placeholder="Location">
-  <input type="file" id="photo">
+  <input id="instagram" placeholder="Instagram URL">
+  <input id="website" placeholder="Website URL">
+  <input id="location" placeholder="Google Maps Location URL">
+  <input type="file" id="photo" accept="image/*">
 
-<select id="theme">
-  <option value="light">Light</option>
-  <option value="dark">Dark</option>
-  <option value="luxury">Luxury</option>
-</select>
+  <select id="theme">
+    <option value="light">Light</option>
+    <option value="dark">Dark</option>
+    <option value="luxury">Luxury</option>
+  </select>
+  
   <button onclick="addCustomer()">Add Customer</button>
+  <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
   <div class="success-msg" id="successMsg"></div>
 </div>
 
 <script type="module">
+import { db, ref, set, get, storage, sRef, uploadBytes, getDownloadURL, auth, onAuthStateChanged, signOut } from "./firebase.js";
 
-import { db, ref, set, get, storage, sRef, uploadBytes, getDownloadURL } from "./firebase.js";
+// ✅ PROTECT ROUTE: Agar user login nahi hai to wapas login page par bhejo
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "admin-login.html";
+  }
+});
+
+// ✅ LOGOUT FUNCTION
+window.logoutAdmin = function() {
+    signOut(auth).then(() => {
+        window.location.href = "admin-login.html";
+    });
+};
+
 window.addCustomer = async function(){
-
-  const id = document.getElementById("customId").value.trim();
-  const name = document.getElementById("name").value;
-  const phone = document.getElementById("phone").value;
-const whatsapp = document.getElementById("whatsapp").value || phone;
-  const instagram = document.getElementById("instagram").value;
-  const website = document.getElementById("website").value;
-  const location = document.getElementById("location").value;
+  const btn = document.querySelector("button");
+  const id = document.getElementById("customId").value.trim().toLowerCase();
+  const name = document.getElementById("name").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const whatsapp = document.getElementById("whatsapp").value.trim() || phone;
+  const instagram = document.getElementById("instagram").value.trim();
+  const website = document.getElementById("website").value.trim();
+  const location = document.getElementById("location").value.trim();
   const theme = document.getElementById("theme").value;
-
   const file = document.getElementById("photo").files[0];
 
   if(!id || !name || !phone){
-    alert("ID, Name, Phone required");
+    alert("ID, Name, and Phone are required fields.");
     return;
   }
 
-  // check duplicate
-  const snapshot = await get(ref(db,'customers/'+id));
-  if(snapshot.exists()){
-    alert("ID already exists!");
-    return;
+  btn.disabled = true;
+  btn.innerText = "Adding...";
+
+  try {
+      // check duplicate
+      const snapshot = await get(ref(db, 'customers/' + id));
+      if(snapshot.exists()){
+        alert("This ID already exists! Choose a different ID.");
+        btn.disabled = false;
+        btn.innerText = "Add Customer";
+        return;
+      }
+
+      let photoURL = "";
+      if(file){
+        const storageRef = sRef(storage, "profiles/" + id);
+        await uploadBytes(storageRef, file);
+        photoURL = await getDownloadURL(storageRef);
+      }
+
+      await set(ref(db, 'customers/' + id), {
+        name,
+        phone,
+        whatsapp,
+        instagram,
+        website,
+        location,
+        theme,
+        photo: photoURL,
+        scans: 0
+      });
+
+      document.getElementById("successMsg").innerText = "Customer Added Successfully ✅";
+      
+      // Form Clear karna taaki dusra user add karne me aasaani ho
+      document.querySelectorAll("input").forEach(input => input.value = "");
+      
+      setTimeout(() => {
+          document.getElementById("successMsg").innerText = "";
+      }, 4000);
+
+  } catch(e) {
+      alert("Error adding customer: " + e.message);
+  } finally {
+      btn.disabled = false;
+      btn.innerText = "Add Customer";
   }
-
-  let photoURL = "";
-
-  if(file){
-    const storageRef = sRef(storage, "profiles/" + id);
-    await uploadBytes(storageRef, file);
-    photoURL = await getDownloadURL(storageRef);
-  }
-
- await set(ref(db,'customers/'+id), {
-  name,
-  phone,
-  whatsapp,
-  instagram,
-  website,
-  location,
-  theme,
-  photo: photoURL,
-  scans:0
-});
-
-document.getElementById("successMsg").innerText = "Customer Added Successfully ✅";
-
-alert("Customer Added Successfully 🔥");
-
-}; // ✅ YE MISSING THA
-
+};
 </script>
 </body>
 </html>
