@@ -8,7 +8,7 @@ const firebaseConfig = {
   authDomain: "vasuki-60ed9.firebaseapp.com",
 storageBucket: "vasuki-60ed9.firebasestorage.app" 
   projectId: "vasuki-60ed9",
-storageBucket: "vasuki-60ed9.appspot.app" 
+storageBucket: "vasuki-60ed9.appspot.com"
   messagingSenderId: "233551822151",
   appId: "1:233551822151:web:9f43ad1e97fe6270c26062"
 };
