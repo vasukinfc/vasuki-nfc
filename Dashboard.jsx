@@ -5,15 +5,13 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pi
 
 // 🔥 Firebase Config (replace with yours)
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  databaseURL: "YOUR_DB_URL",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyBg-MhiTCTG56NSSMZNwNVZ8CBOkD1YQ3c",
+  authDomain: "vasuki-60ed9.firebaseapp.com", 
+  projectId: "vasuki-60ed9",
+storageBucket: "vasuki-60ed9.appspot.com",
+  messagingSenderId: "233551822151",
+  appId: "1:233551822151:web:9f43ad1e97fe6270c26062"
 };
-
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
