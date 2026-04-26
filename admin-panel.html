@@ -1,243 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Admin Panel - Smart Dashboard</title>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VASUKI Admin Panel</title>
 <style>
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  background: linear-gradient(135deg, #0f172a, #1e293b);
-  color: white;
-}
-
-.header {
-  background: rgba(0,0,0,0.4);
-  padding: 15px 20px;
-  font-size: 20px;
-  font-weight: bold;
-  backdrop-filter: blur(10px);
-}
-
-.container {
-  padding: 20px;
-}
-
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.card {
-  background: rgba(255,255,255,0.08);
-  padding: 15px;
-  border-radius: 15px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-  backdrop-filter: blur(10px);
-}
-
-.card h3 {
-  margin: 0;
-  font-size: 14px;
-  opacity: 0.7;
-}
-
-.card p {
-  font-size: 24px;
-  font-weight: bold;
-  margin-top: 5px;
-}
-
-.section {
-  background: rgba(255,255,255,0.08);
-  padding: 15px;
-  border-radius: 15px;
-  margin-top: 20px;
-}
-
-input {
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0;
-  border-radius: 10px;
-  border: none;
-  outline: none;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(90deg,#22c55e,#16a34a);
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-button:hover {
-  transform: scale(1.02);
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
-
-th, td {
-  padding: 10px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-
-canvas {
-  background: white;
-  border-radius: 10px;
-  margin-top: 10px;
-}
-
+  body { font-family: Arial, sans-serif; background: #f5f5f5; display: flex; justify-content: center; padding: 40px; margin: 0; }
+  .panel { background: white; padding: 30px; border-radius: 12px; width: 400px; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+  .panel h2 { text-align: center; margin-bottom: 25px; color: #ff416c; }
+  input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; }
+  button { width: 100%; padding: 12px; margin-top: 12px; background: #ff416c; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+  button:hover { opacity: 0.9; }
+  .success-msg { color: green; font-weight: bold; margin-top: 15px; text-align: center; }
+  .logout-btn { background: #333; margin-top: 15px; }
 </style>
 </head>
 <body>
 
-<div class="header">⚡ Smart Admin Dashboard</div>
+<div class="panel">
+  <h2>Add Customer</h2>
+  <input id="customId" placeholder="Custom ID (ex: vasukil123)">
+  <input id="name" placeholder="Name">
+  <input id="phone" placeholder="Phone">
+  <input id="whatsapp" placeholder="WhatsApp Number (optional)">
+  <input id="instagram" placeholder="Instagram URL">
+  <input id="website" placeholder="Website URL">
+  <input id="location" placeholder="Google Maps Location URL">
 
-<div class="container">
-
-  <!-- STATS -->
-  <div class="cards">
-    <div class="card">
-      <h3>Total Customers</h3>
-      <p id="totalCustomers">0</p>
-    </div>
-
-    <div class="card">
-      <h3>Total Scans</h3>
-      <p id="totalScans">0</p>
-    </div>
-
-    <div class="card">
-      <h3>Avg Scans</h3>
-      <p id="avgScans">0</p>
-    </div>
-  </div>
-
-  <!-- ADD CUSTOMER -->
-  <div class="section">
-    <h3>➕ Add Customer</h3>
-    <input id="name" placeholder="Customer Name" />
-    <input id="phone" placeholder="Phone Number" />
-    <button onclick="addCustomer()">Add Customer</button>
-  </div>
-
-  <!-- CHART -->
-  <div class="section">
-    <h3>📊 Live Scan Chart</h3>
-    <canvas id="chart"></canvas>
-  </div>
-
-  <!-- TABLE -->
-  <div class="section">
-    <h3>👥 Customer List</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Phone</th>
-          <th>Scans</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
-    </table>
-  </div>
-
+  <select id="theme">
+    <option value="light">Light</option>
+    <option value="dark">Dark</option>
+    <option value="luxury">Luxury</option>
+  </select>
+  
+  <button onclick="addCustomer()">Add Customer</button>
+  <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
+  <div class="success-msg" id="successMsg"></div>
 </div>
 
 <script type="module">
-import { db, ref, onValue, push, set } from "./firebase.js";
+import { db, ref, set, get, storage, sRef, uploadBytes, getDownloadURL, auth, onAuthStateChanged, signOut } from "./firebase.js";
 
-let chart;
+// ✅ PROTECT ROUTE: Agar user login nahi hai to wapas login page par bhejo
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "admin-login.html";
+  }
+});
 
-window.addCustomer = function () {
-  const name = document.getElementById("name").value;
-  const phone = document.getElementById("phone").value;
+// ✅ LOGOUT FUNCTION
+window.logoutAdmin = function() {
+    signOut(auth).then(() => {
+        window.location.href = "admin-login.html";
+    });
+};
 
-  if (!name || !phone) {
-    alert("Fill all fields");
+window.addCustomer = async function(){
+  const btn = document.querySelector("button");
+  const id = document.getElementById("customId").value.trim().toLowerCase();
+  const name = document.getElementById("name").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const whatsapp = document.getElementById("whatsapp").value.trim() || phone;
+  const instagram = document.getElementById("instagram").value.trim();
+  const website = document.getElementById("website").value.trim();
+  const location = document.getElementById("location").value.trim();
+  const theme = document.getElementById("theme").value;
+
+  if(!id || !name || !phone){
+    alert("ID, Name, and Phone are required fields.");
     return;
   }
 
-  const newRef = push(ref(db, "customers"));
+  btn.disabled = true;
+  btn.innerText = "Adding...";
 
-  set(newRef, {
-    name,
-    phone,
-    scans: 0,
-    id: newRef.key
-  });
+  try {
+      // check duplicate
+      const snapshot = await get(ref(db, 'customers/' + id));
+      if(snapshot.exists()){
+        alert("This ID already exists! Choose a different ID.");
+        btn.disabled = false;
+        btn.innerText = "Add Customer";
+        return;
+      }
 
-  document.getElementById("name").value = "";
-  document.getElementById("phone").value = "";
+ 
+      await set(ref(db, 'customers/' + id), {
+        name,
+        phone,
+        whatsapp,
+        instagram,
+        website,
+        location,
+        theme,
+        scans: 0
+      });
 
-  alert("Customer Added ✔");
-};
+      document.getElementById("successMsg").innerText = "Customer Added Successfully ✅";
+      
+      // Form Clear karna taaki dusra user add karne me aasaani ho
+      document.querySelectorAll("input").forEach(input => input.value = "");
+      
+      setTimeout(() => {
+          document.getElementById("successMsg").innerText = "";
+      }, 4000);
 
-function renderChart(labels, data) {
-  const ctx = document.getElementById("chart");
-
-  if (chart) chart.destroy();
-
-  chart = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels,
-      datasets: [{
-        label: "Scans",
-        data,
-        backgroundColor: "#22c55e"
-      }]
-    }
-  });
-}
-
-const customersRef = ref(db, "customers");
-
-onValue(customersRef, (snapshot) => {
-  const data = snapshot.val() || {};
-
-  let list = [];
-  let total = 0;
-
-  for (let key in data) {
-    list.push(data[key]);
-    total += data[key].scans || 0;
+  } catch(e) {
+      alert("Error adding customer: " + e.message);
+  } finally {
+      btn.disabled = false;
+      btn.innerText = "Add Customer";
   }
-
-  document.getElementById("totalCustomers").innerText = list.length;
-  document.getElementById("totalScans").innerText = total;
-  document.getElementById("avgScans").innerText = list.length ? (total / list.length).toFixed(1) : 0;
-
-  document.getElementById("tableBody").innerHTML = list.map(c => `
-    <tr>
-      <td>${c.name || "-"}</td>
-      <td>${c.phone || "-"}</td>
-      <td>${c.scans || 0}</td>
-    </tr>
-  `).join("");
-
-  renderChart(
-    list.map(c => c.name),
-    list.map(c => c.scans || 0)
-  );
-});
-
+};
 </script>
-
 </body>
 </html>
