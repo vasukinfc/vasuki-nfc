@@ -1,117 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VASUKI Admin Panel</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin Panel - Live Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
-  body { font-family: Arial, sans-serif; background: #f5f5f5; display: flex; justify-content: center; padding: 40px; margin: 0; }
-  .panel { background: white; padding: 30px; border-radius: 12px; width: 400px; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
-  .panel h2 { text-align: center; margin-bottom: 25px; color: #ff416c; }
-  input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; }
-  button { width: 100%; padding: 12px; margin-top: 12px; background: #ff416c; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
-  button:hover { opacity: 0.9; }
-  .success-msg { color: green; font-weight: bold; margin-top: 15px; text-align: center; }
-  .logout-btn { background: #333; margin-top: 15px; }
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f4f6f9;
+}
+
+.header {
+  background: #111827;
+  color: white;
+  padding: 15px 20px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.container {
+  padding: 20px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.card p {
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.table {
+  width: 100%;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+th {
+  background: #f9fafb;
+}
+
+.chartBox {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
 </style>
 </head>
 <body>
 
-<div class="panel">
-  <h2>Add Customer</h2>
-  <input id="customId" placeholder="Custom ID (ex: vasukil123)">
-  <input id="name" placeholder="Name">
-  <input id="phone" placeholder="Phone">
-  <input id="whatsapp" placeholder="WhatsApp Number (optional)">
-  <input id="instagram" placeholder="Instagram URL">
-  <input id="website" placeholder="Website URL">
-  <input id="location" placeholder="Google Maps Location URL">
+<div class="header">📊 Live Admin Dashboard</div>
 
-  <select id="theme">
-    <option value="light">Light</option>
-    <option value="dark">Dark</option>
-    <option value="luxury">Luxury</option>
-  </select>
-  
-  <button onclick="addCustomer()">Add Customer</button>
-  <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
-  <div class="success-msg" id="successMsg"></div>
+<div class="container">
+
+  <!-- STATS -->
+  <div class="cards">
+    <div class="card">
+      <h3>Total Customers</h3>
+      <p id="totalCustomers">0</p>
+    </div>
+
+    <div class="card">
+      <h3>Total Scans</h3>
+      <p id="totalScans">0</p>
+    </div>
+
+    <div class="card">
+      <h3>Avg Scans</h3>
+      <p id="avgScans">0</p>
+    </div>
+  </div>
+
+  <!-- CHART -->
+  <div class="chartBox">
+    <canvas id="scanChart"></canvas>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table" style="margin-top:20px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Scans</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
 </div>
 
 <script type="module">
-import { db, ref, set, get, storage, sRef, uploadBytes, getDownloadURL, auth, onAuthStateChanged, signOut } from "./firebase.js";
+import { db, ref, onValue } from "./firebase.js";
 
-// ✅ PROTECT ROUTE: Agar user login nahi hai to wapas login page par bhejo
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.href = "admin-login.html";
+let chart;
+
+function renderChart(labels, data){
+  const ctx = document.getElementById("scanChart");
+
+  if(chart) chart.destroy();
+
+  chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Scans",
+        data: data,
+        backgroundColor: "#6366F1"
+      }]
+    }
+  });
+}
+
+const customersRef = ref(db, "customers");
+
+onValue(customersRef, (snapshot)=>{
+  const data = snapshot.val() || {};
+
+  let total = 0;
+  let list = [];
+
+  for(let key in data){
+    list.push(data[key]);
+    total += data[key].scans || 0;
   }
+
+  document.getElementById("totalCustomers").innerText = list.length;
+  document.getElementById("totalScans").innerText = total;
+  document.getElementById("avgScans").innerText = list.length ? (total / list.length).toFixed(1) : 0;
+
+  // table
+  document.getElementById("tableBody").innerHTML = list.map(c=>`
+    <tr>
+      <td>${c.name || "-"}</td>
+      <td>${c.phone || "-"}</td>
+      <td>${c.scans || 0}</td>
+    </tr>
+  `).join("");
+
+  // chart
+  renderChart(
+    list.map(c=>c.name),
+    list.map(c=>c.scans || 0)
+  );
 });
 
-// ✅ LOGOUT FUNCTION
-window.logoutAdmin = function() {
-    signOut(auth).then(() => {
-        window.location.href = "admin-login.html";
-    });
-};
-
-window.addCustomer = async function(){
-  const btn = document.querySelector("button");
-  const id = document.getElementById("customId").value.trim().toLowerCase();
-  const name = document.getElementById("name").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const whatsapp = document.getElementById("whatsapp").value.trim() || phone;
-  const instagram = document.getElementById("instagram").value.trim();
-  const website = document.getElementById("website").value.trim();
-  const location = document.getElementById("location").value.trim();
-  const theme = document.getElementById("theme").value;
-
-  if(!id || !name || !phone){
-    alert("ID, Name, and Phone are required fields.");
-    return;
-  }
-
-  btn.disabled = true;
-  btn.innerText = "Adding...";
-
-  try {
-      // check duplicate
-      const snapshot = await get(ref(db, 'customers/' + id));
-      if(snapshot.exists()){
-        alert("This ID already exists! Choose a different ID.");
-        btn.disabled = false;
-        btn.innerText = "Add Customer";
-        return;
-      }
-
- 
-      await set(ref(db, 'customers/' + id), {
-        name,
-        phone,
-        whatsapp,
-        instagram,
-        website,
-        location,
-        theme,
-        scans: 0
-      });
-
-      document.getElementById("successMsg").innerText = "Customer Added Successfully ✅";
-      
-      // Form Clear karna taaki dusra user add karne me aasaani ho
-      document.querySelectorAll("input").forEach(input => input.value = "");
-      
-      setTimeout(() => {
-          document.getElementById("successMsg").innerText = "";
-      }, 4000);
-
-  } catch(e) {
-      alert("Error adding customer: " + e.message);
-  } finally {
-      btn.disabled = false;
-      btn.innerText = "Add Customer";
-  }
-};
 </script>
+
 </body>
 </html>
