@@ -26,6 +26,7 @@
   <input id="instagram" placeholder="Instagram URL">
   <input id="website" placeholder="Website URL">
   <input id="location" placeholder="Google Maps Location URL">
+  <input id="whatsappGroup" placeholder="WhatsApp Group Link (optional)">
 
   <select id="theme">
     <option value="light">Light</option>
@@ -64,6 +65,7 @@ window.addCustomer = async function(){
   const instagram = document.getElementById("instagram").value.trim();
   const website = document.getElementById("website").value.trim();
   const location = document.getElementById("location").value.trim();
+  const whatsappGroup = document.getElementById("whatsappGroup").value.trim();
   const theme = document.getElementById("theme").value;
 
   if(!id || !name || !phone){
@@ -85,16 +87,17 @@ window.addCustomer = async function(){
       }
 
  
-      await set(ref(db, 'customers/' + id), {
-        name,
-        phone,
-        whatsapp,
-        instagram,
-        website,
-        location,
-        theme,
-        scans: 0
-      });
+     await set(ref(db, 'customers/' + id), {
+  name,
+  phone,
+  whatsapp,
+  instagram,
+  website,
+  location,
+  whatsappGroup,
+  theme,
+  scans: 0
+});
 
       document.getElementById("successMsg").innerText = "Customer Added Successfully ✅";
       
