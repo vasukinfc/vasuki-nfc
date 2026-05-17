@@ -54,12 +54,14 @@ body {
 .btn-insta .btn-icon { background:#FCE4EC; color:#AD1457; }
 .btn-loc .btn-icon { background:#FFF3E0; color:#E65100; }
 .btn-save .btn-icon { background:#EDE7F6; color:#4527A0; }
-.btn-call:hover { border-color:#A5D6A7; background:#F9FFF9; }
+.btn-group .btn-icon { background:#E8F5E9; color:#128C7E; }
+  .btn-call:hover { border-color:#A5D6A7; background:#F9FFF9; }
 .btn-wp:hover { border-color:#A5D6A7; background:#F9FFF9; }
 .btn-web:hover { border-color:#90CAF9; background:#F5F9FF; }
 .btn-insta:hover { border-color:#F48FB1; background:#FFF5F8; }
 .btn-loc:hover { border-color:#FFCC80; background:#FFFAF5; }
 .btn-save:hover { border-color:#CE93D8; background:#FAF7FF; }
+  .btn-group:hover { border-color:#A5D6A7; background:#F9FFF9; }
 .btn:nth-child(1){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 0.45s forwards; }
 .btn:nth-child(2){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 0.57s forwards; }
 .btn:nth-child(3){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 0.69s forwards; }
@@ -166,6 +168,10 @@ body {
           <div class="btn-icon">📍</div>
           <span class="btn-label">Location</span><span class="btn-arrow">›</span>
         </button>
+        <button id="whatsappGroupBtn" class="btn btn-group" style="display:none;">
+  <div class="btn-icon">👥</div>
+  <span class="btn-label">Join WhatsApp Group</span><span class="btn-arrow">›</span>
+</button>
         
         <button onclick="saveContact()" class="btn btn-save">
           <div class="btn-icon">💾</div>
@@ -357,6 +363,23 @@ function setupButtons(){
     if(userData.location) window.open(userData.location);
     else alert("Location not available");
   };
+  const whatsappGroupBtn = document.getElementById("whatsappGroupBtn");
+
+if (userData.whatsappGroup && userData.whatsappGroup.trim() !== "") {
+  whatsappGroupBtn.style.display = "flex";
+
+  whatsappGroupBtn.onclick = () => {
+    let groupLink = userData.whatsappGroup.trim();
+
+    if (!groupLink.startsWith("http")) {
+      groupLink = "https://" + groupLink;
+    }
+
+    window.open(groupLink, "_blank");
+  };
+} else {
+  whatsappGroupBtn.style.display = "none";
+}
 }
 
 window.saveContact = function(){
