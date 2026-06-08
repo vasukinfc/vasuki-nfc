@@ -55,6 +55,18 @@ body {
 .btn-loc .btn-icon { background:#FFF3E0; color:#E65100; }
 .btn-save .btn-icon { background:#EDE7F6; color:#4527A0; }
 .btn-group .btn-icon { background:#E8F5E9; color:#128C7E; }
+.btn-email .btn-icon { background:#FFF8E1; color:#F57F17; }
+.btn-fb .btn-icon { background:#E3F2FD; color:#0D47A1; }
+.btn-yt .btn-icon { background:#FFEBEE; color:#B71C1C; }
+.btn-linkedin .btn-icon { background:#E1F5FE; color:#01579B; }
+.btn-review .btn-icon { background:#E8F5E9; color:#33691E; }
+.btn-pay .btn-icon { background:#F3E5F5; color:#6A1B9A; }
+  .btn-email:hover { border-color:#FFE082; }
+.btn-fb:hover { border-color:#90CAF9; }
+.btn-yt:hover { border-color:#EF9A9A; }
+.btn-linkedin:hover { border-color:#81D4FA; }
+.btn-review:hover { border-color:#A5D6A7; }
+.btn-pay:hover { border-color:#CE93D8; }
   .btn-call:hover { border-color:#A5D6A7; background:#F9FFF9; }
 .btn-wp:hover { border-color:#A5D6A7; background:#F9FFF9; }
 .btn-web:hover { border-color:#90CAF9; background:#F5F9FF; }
@@ -69,6 +81,12 @@ body {
 .btn:nth-child(5){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 0.93s forwards; }
 .btn:nth-child(6){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 1.05s forwards; }
   .btn:nth-child(7){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 1.17s forwards; }
+.btn:nth-child(8){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 1.29s forwards; }
+.btn:nth-child(9){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 1.41s forwards; }
+.btn:nth-child(10){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 1.53s forwards; }
+.btn:nth-child(11){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 1.65s forwards; }
+.btn:nth-child(12){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 1.77s forwards; }
+.btn:nth-child(13){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 1.89s forwards; }
 .front-footer { padding: 0 24px 20px; text-align: center; font-size: 10.5px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-soft); opacity: 0; animation: fadeIn 0.5s ease 1.3s forwards; }
 .front-footer span { color: var(--gold); font-weight: 600; }
 .back-glow { position: absolute; inset: 0; background: radial-gradient(ellipse at 25% 25%, rgba(212,175,106,0.1) 0%, transparent 60%), radial-gradient(ellipse at 75% 75%, rgba(212,175,106,0.07) 0%, transparent 50%); pointer-events: none; }
@@ -95,6 +113,10 @@ body {
 .bcr-label { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(212,175,106,0.4); }
 .bcr-value { font-size: 12.5px; font-weight: 500; color: rgba(253,250,244,0.78); margin-top: 2px; }
 .back-footer { margin-top: 16px; font-size: 9.5px; letter-spacing: 2px; text-transform: uppercase; color: rgba(212,175,106,0.25); }
+.back-company-note { width: 100%; margin: 2px 0 14px; padding: 11px 14px; text-align: center; border-radius: 13px; background: rgba(212,175,106,0.08); border: 1px solid rgba(212,175,106,0.14); color: rgba(253,250,244,0.78); font-size: 12px; line-height: 1.55; }
+.back-contact-link { width: 100%; display: flex; align-items: center; gap: 11px; color: inherit; text-decoration: none; }
+.back-contact-link .link-arrow { margin-left: auto; color: rgba(212,175,106,0.72); font-size: 14px; }
+.back-contact-row:hover { background: rgba(212,175,106,0.11); border-color: rgba(212,175,106,0.28); transform: translateY(-1px); }
 .flip-dots { display: flex; gap: 7px; margin-top: 16px; opacity: 0; animation: fadeIn 0.5s ease 1.6s forwards; }
 .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); transition: background 0.3s, transform 0.3s; }
 .dot.active { background: var(--gold); transform: scale(1.3); }
@@ -169,10 +191,41 @@ body {
           <div class="btn-icon">📍</div>
           <span class="btn-label">Location</span><span class="btn-arrow">›</span>
         </button>
+
+        <button id="emailBtn" class="btn btn-email" style="display:none;">
+          <div class="btn-icon">✉️</div>
+          <span class="btn-label">Email</span><span class="btn-arrow">›</span>
+        </button>
+
+        <button id="facebookBtn" class="btn btn-fb" style="display:none;">
+          <div class="btn-icon">f</div>
+          <span class="btn-label">Facebook</span><span class="btn-arrow">›</span>
+        </button>
+
+        <button id="youtubeBtn" class="btn btn-yt" style="display:none;">
+          <div class="btn-icon">▶</div>
+          <span class="btn-label">YouTube</span><span class="btn-arrow">›</span>
+        </button>
+
+        <button id="linkedinBtn" class="btn btn-linkedin" style="display:none;">
+          <div class="btn-icon">in</div>
+          <span class="btn-label">LinkedIn</span><span class="btn-arrow">›</span>
+        </button>
+
+        <button id="googleReviewBtn" class="btn btn-review" style="display:none;">
+          <div class="btn-icon">⭐</div>
+          <span class="btn-label">Google Review</span><span class="btn-arrow">›</span>
+        </button>
+
+        <button id="upiBtn" class="btn btn-pay" style="display:none;">
+          <div class="btn-icon">₹</div>
+          <span class="btn-label">Pay / UPI</span><span class="btn-arrow">›</span>
+        </button>
+
         <button id="whatsappGroupBtn" class="btn btn-group" style="display:none;">
-  <div class="btn-icon">👥</div>
-  <span class="btn-label">Join WhatsApp Group</span><span class="btn-arrow">›</span>
-</button>
+          <div class="btn-icon">👥</div>
+          <span class="btn-label">Join WhatsApp Group</span><span class="btn-arrow">›</span>
+        </button>
         
         <button onclick="saveContact()" class="btn btn-save">
           <div class="btn-icon">💾</div>
@@ -233,13 +286,37 @@ body {
           <div class="feature-pill"><span class="fp-icon">✏️</span><span class="fp-text">Always Editable</span></div>
         </div>
 
+        <div class="back-company-note">
+          Smart NFC business cards with QR, custom design, and instant profile sharing for businesses, shop owners, creators, and professionals.
+        </div>
+
         <div class="back-contact-row">
-          <span class="bcr-icon">🌐</span>
-          <div><div class="bcr-label">Website</div><div class="bcr-value">www.vasukinfc</div></div>
+          <a class="back-contact-link" href="https://vasukinfc.in" target="_blank" rel="noopener noreferrer">
+            <span class="bcr-icon">🌐</span>
+            <div><div class="bcr-label">Website</div><div class="bcr-value">vasukinfc.in</div></div>
+            <span class="link-arrow">↗</span>
+          </a>
         </div>
         <div class="back-contact-row">
-          <span class="bcr-icon">📧</span>
-          <div><div class="bcr-label">Email</div><div class="bcr-value">vasukinfc@gmail.com</div></div>
+          <a class="back-contact-link" href="https://wa.me/916377393721" target="_blank" rel="noopener noreferrer">
+            <span class="bcr-icon">💬</span>
+            <div><div class="bcr-label">WhatsApp</div><div class="bcr-value">+91 63773 93721</div></div>
+            <span class="link-arrow">↗</span>
+          </a>
+        </div>
+        <div class="back-contact-row">
+          <a class="back-contact-link" href="mailto:vasukinfc@gmail.com">
+            <span class="bcr-icon">📧</span>
+            <div><div class="bcr-label">Email</div><div class="bcr-value">vasukinfc@gmail.com</div></div>
+            <span class="link-arrow">↗</span>
+          </a>
+        </div>
+        <div class="back-contact-row">
+          <a class="back-contact-link" href="https://www.instagram.com/_vasuki_99/" target="_blank" rel="noopener noreferrer">
+            <span class="bcr-icon">📸</span>
+            <div><div class="bcr-label">Instagram</div><div class="bcr-value">@_vasuki_99</div></div>
+            <span class="link-arrow">↗</span>
+          </a>
         </div>
 
         <div class="back-footer">© 2026 Vasuki NFC · All rights reserved</div>
@@ -255,7 +332,7 @@ body {
     <div class="sheet-handle"></div>
     <h3>Visit Our Website</h3>
     <p>Tap below to open, then leave a rating</p>
-    <a id="websiteLink" href="https://vasukinfc.github.io/vasuki__NFC/" target="_blank" class="website-link">🌐 Open Website ↗</a>
+    <a id="websiteLink" href="https://vasukinfc.in" target="_blank" class="website-link">🌐 Open Website ↗</a>
     <div class="stars-label">Rate Your Experience</div>
     <div class="stars-row">
       <span class="star" onclick="rate(1)">★</span>
@@ -328,68 +405,101 @@ async function incrementScan(){
   }
 }
 
+function safeText(value){
+  return String(value || "").trim();
+}
+
+function addHttps(url){
+  url = safeText(url);
+  if(!url) return "";
+  return url.startsWith("http://") || url.startsWith("https://") ? url : "https://" + url;
+}
+
+function normalizePhone(number){
+  number = safeText(number).replace(/\+/g, "").replace(/\s+/g, "").replace(/-/g, "");
+  if(number && !number.startsWith("91") && number.length >= 10){
+    number = "91" + number;
+  }
+  return number;
+}
+
+function toggleButton(buttonId, value, onClick){
+  const btn = document.getElementById(buttonId);
+  if(!btn) return;
+
+  if(safeText(value)){
+    btn.style.display = "flex";
+    btn.onclick = onClick;
+  } else {
+    btn.style.display = "none";
+    btn.onclick = null;
+  }
+}
+
 function setupButtons(){
-  document.getElementById("callBtn").onclick = ()=>{
-    if(userData.phone) window.location.href = "tel:" + userData.phone;
-    else alert("Phone number not provided");
-  };
+  toggleButton("callBtn", userData.phone, () => {
+    window.location.href = "tel:" + safeText(userData.phone);
+  });
 
-  document.getElementById("whatsappBtn").onclick = ()=>{
-    // Sahi format me string conversion (Bug fixed)
-    let number = String(userData.whatsapp || userData.phone || "");
-    number = number.replace(/\+/g, "").replace(/\s+/g, ""); // saare symbols/spaces remove
+  toggleButton("whatsappBtn", userData.whatsapp || userData.phone, () => {
+    const number = normalizePhone(userData.whatsapp || userData.phone);
+    window.open("https://wa.me/" + number, "_blank");
+  });
 
-    if(!number) {
-        alert("WhatsApp number not provided");
-        return;
-    }
+  toggleButton("websiteBtn", userData.website, () => {
+    openWebsiteModal(userData.website);
+  });
 
-    if(!number.startsWith("91") && number.length >= 10){
-      number = "91" + number;
-    }
-    window.open("https://wa.me/" + number);
-  };
+  toggleButton("instagramBtn", userData.instagram, () => {
+    window.open(addHttps(userData.instagram), "_blank");
+  });
 
-  document.getElementById("websiteBtn").onclick = ()=>{
-    if(userData.website) openWebsiteModal(userData.website);
-    else alert("Website not available");
-  };
+  toggleButton("locationBtn", userData.location, () => {
+    window.open(addHttps(userData.location), "_blank");
+  });
 
-  document.getElementById("instagramBtn").onclick = ()=>{
-    if(userData.instagram) window.open(userData.instagram);
-    else alert("Instagram not available");
-  };
+  toggleButton("emailBtn", userData.email, () => {
+    window.location.href = "mailto:" + safeText(userData.email);
+  });
 
-  document.getElementById("locationBtn").onclick = ()=>{
-    if(userData.location) window.open(userData.location);
-    else alert("Location not available");
-  };
-  const whatsappGroupBtn = document.getElementById("whatsappGroupBtn");
+  toggleButton("facebookBtn", userData.facebook, () => {
+    window.open(addHttps(userData.facebook), "_blank");
+  });
 
-if (userData.whatsappGroup && userData.whatsappGroup.trim() !== "") {
-  whatsappGroupBtn.style.display = "flex";
+  toggleButton("youtubeBtn", userData.youtube, () => {
+    window.open(addHttps(userData.youtube), "_blank");
+  });
 
-  whatsappGroupBtn.onclick = () => {
-    let groupLink = userData.whatsappGroup.trim();
+  toggleButton("linkedinBtn", userData.linkedin, () => {
+    window.open(addHttps(userData.linkedin), "_blank");
+  });
 
-    if (!groupLink.startsWith("http")) {
-      groupLink = "https://" + groupLink;
-    }
+  toggleButton("googleReviewBtn", userData.googleReview, () => {
+    window.open(addHttps(userData.googleReview), "_blank");
+  });
 
-    window.open(groupLink, "_blank");
-  };
-} else {
-  whatsappGroupBtn.style.display = "none";
+  toggleButton("upiBtn", userData.upi, () => {
+    const upiValue = safeText(userData.upi);
+    const paymentUrl = upiValue.includes("@") && !upiValue.startsWith("http")
+      ? "upi://pay?pa=" + encodeURIComponent(upiValue) + "&pn=" + encodeURIComponent(userData.name || "Vasuki NFC")
+      : addHttps(upiValue);
+    window.open(paymentUrl, "_blank");
+  });
+
+  toggleButton("whatsappGroupBtn", userData.whatsappGroup, () => {
+    window.open(addHttps(userData.whatsappGroup), "_blank");
+  });
 }
-}
-
 window.saveContact = function(){
   if(!userData) return;
   const vCard = 
 `BEGIN:VCARD
 VERSION:3.0
-FN:${userData.name}
+FN:${userData.name || ""}
 TEL:${userData.phone || ""}
+EMAIL:${userData.email || ""}
+URL:${userData.website || ""}
+NOTE:WhatsApp: ${userData.whatsapp || userData.phone || ""}${userData.instagram ? " | Instagram: " + userData.instagram : ""}${userData.linkedin ? " | LinkedIn: " + userData.linkedin : ""}
 END:VCARD`;
 
   const blob = new Blob([vCard],{type:"text/vcard"});
@@ -435,30 +545,50 @@ window.rate = function(num){
 const scene = document.getElementById("scene");
 const flipper = document.getElementById("flipper");
 let startX = 0;
+let startY = 0;
+let touchMoved = false;
 let flipped = false;
+
+function setFlip(state){
+  flipped = state;
+  flipper.style.transform = flipped ? "rotateY(180deg)" : "rotateY(0deg)";
+  document.getElementById("dot0").classList.toggle("active", !flipped);
+  document.getElementById("dot1").classList.toggle("active", flipped);
+}
+
+function isInteractiveElement(target){
+  return target.closest("button, a, input, select, textarea, .modal-overlay, .modal-sheet");
+}
+
+scene.addEventListener("click", function(e){
+  // Desktop aur mobile dono par card ke empty area par click/tap karne se flip hoga.
+  // Buttons/links par click karne se wahi action chalega, flip nahi hoga.
+  if(isInteractiveElement(e.target)) return;
+  if(touchMoved) return;
+  setFlip(!flipped);
+});
 
 scene.addEventListener("touchstart", function(e){
   startX = e.touches[0].clientX;
-});
+  startY = e.touches[0].clientY;
+  touchMoved = false;
+}, { passive: true });
+
+scene.addEventListener("touchmove", function(e){
+  const moveX = Math.abs(e.touches[0].clientX - startX);
+  const moveY = Math.abs(e.touches[0].clientY - startY);
+  if(moveX > 10 || moveY > 10) touchMoved = true;
+}, { passive: true });
 
 scene.addEventListener("touchend", function(e){
   let endX = e.changedTouches[0].clientX;
   let diff = startX - endX;
 
-  if(diff > 50 && !flipped){
-    flipper.style.transform = "rotateY(180deg)";
-    document.getElementById("dot0").classList.remove("active");
-    document.getElementById("dot1").classList.add("active");
-    flipped = true;
+  if(Math.abs(diff) > 50){
+    setFlip(diff > 0);
+    setTimeout(() => { touchMoved = false; }, 250);
   }
-  
-  if(diff < -50 && flipped){
-    flipper.style.transform = "rotateY(0deg)";
-    document.getElementById("dot0").classList.add("active");
-    document.getElementById("dot1").classList.remove("active");
-    flipped = false;
-  }
-});
+}, { passive: true });
 </script>
 
 </body>

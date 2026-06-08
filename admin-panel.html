@@ -6,13 +6,15 @@
 <title>VASUKI Admin Panel</title>
 <style>
   body { font-family: Arial, sans-serif; background: #f5f5f5; display: flex; justify-content: center; padding: 40px; margin: 0; }
-  .panel { background: white; padding: 30px; border-radius: 12px; width: 400px; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+  .panel { background: white; padding: 30px; border-radius: 12px; width: 460px; max-width: 100%; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
   .panel h2 { text-align: center; margin-bottom: 25px; color: #ff416c; }
   input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; }
   button { width: 100%; padding: 12px; margin-top: 12px; background: #ff416c; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
   button:hover { opacity: 0.9; }
   .success-msg { color: green; font-weight: bold; margin-top: 15px; text-align: center; }
   .logout-btn { background: #333; margin-top: 15px; }
+  .section-title { margin-top: 14px; margin-bottom: 4px; font-size: 13px; font-weight: bold; color: #555; }
+  .small-note { font-size: 12px; color: #777; line-height: 1.4; margin: 6px 0 10px; }
 </style>
 </head>
 <body>
@@ -23,9 +25,18 @@
   <input id="name" placeholder="Name">
   <input id="phone" placeholder="Phone">
   <input id="whatsapp" placeholder="WhatsApp Number (optional)">
+
+  <div class="section-title">Optional Buttons</div>
+  <div class="small-note">Jis field me data hoga, wahi button card par show hoga. Empty field ka button hide rahega.</div>
   <input id="instagram" placeholder="Instagram URL">
   <input id="website" placeholder="Website URL">
   <input id="location" placeholder="Google Maps Location URL">
+  <input id="email" placeholder="Email Address (optional)">
+  <input id="facebook" placeholder="Facebook URL (optional)">
+  <input id="youtube" placeholder="YouTube URL (optional)">
+  <input id="linkedin" placeholder="LinkedIn URL (optional)">
+  <input id="googleReview" placeholder="Google Review Link (optional)">
+  <input id="upi" placeholder="UPI ID or Payment Link (optional)">
   <input id="whatsappGroup" placeholder="WhatsApp Group Link (optional)">
 
   <select id="theme">
@@ -65,6 +76,12 @@ window.addCustomer = async function(){
   const instagram = document.getElementById("instagram").value.trim();
   const website = document.getElementById("website").value.trim();
   const location = document.getElementById("location").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const facebook = document.getElementById("facebook").value.trim();
+  const youtube = document.getElementById("youtube").value.trim();
+  const linkedin = document.getElementById("linkedin").value.trim();
+  const googleReview = document.getElementById("googleReview").value.trim();
+  const upi = document.getElementById("upi").value.trim();
   const whatsappGroup = document.getElementById("whatsappGroup").value.trim();
   const theme = document.getElementById("theme").value;
 
@@ -94,6 +111,12 @@ window.addCustomer = async function(){
   instagram,
   website,
   location,
+  email,
+  facebook,
+  youtube,
+  linkedin,
+  googleReview,
+  upi,
   whatsappGroup,
   theme,
   scans: 0
