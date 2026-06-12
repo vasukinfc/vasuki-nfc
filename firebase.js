@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, get, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, set, get, update, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
@@ -20,7 +20,7 @@ const auth = getAuth(app);
 const storage = getStorage(app);
 
 export {
-  db, ref, set, get, update,
+  db, ref, set, get, update, runTransaction,
   auth, signInWithEmailAndPassword, onAuthStateChanged, signOut,
   storage, sRef, uploadBytes, getDownloadURL
 };

@@ -347,7 +347,7 @@ body {
 </div>
 
 <script type="module">
-import { db, ref, get, update } from "./firebase.js";
+import { db, ref, get, runTransaction } from "./firebase.js";
 
 function applyTheme(theme){
   if(theme === "dark"){
@@ -427,11 +427,22 @@ loadUser();
 
 async function incrementScan(){
   try{
-    const newCount = (userData.scans || 0) + 1;
-    await update(ref(db,"customers/"+userId),{ scans: newCount });
-    document.getElementById("scanText").innerText = "Scans: " + newCount;
+    const scanRef = ref(db, "customers/" + userId + "/scans");
+
+    const result = await runTransaction(scanRef, (currentValue) => {
+      const currentCount = Number(currentValue || 0);
+      return currentCount + 1;
+    });
+
+    if (result.committed) {
+      const newCount = result.snapshot.val() || 0;
+      userData.scans = newCount;
+      document.getElementById("scanText").innerText = "Scans: " + newCount;
+    }
   }catch(e){
-    console.log(e);
+    console.error("Scan count update failed:", e);
+    // Card open hona chahiye, isliye scan count fail hone par page ko block nahi karenge.
+    document.getElementById("scanText").innerText = "Scans: " + (userData.scans || 0);
   }
 }
 
