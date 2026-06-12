@@ -162,8 +162,9 @@ window.addCustomer = async function(){
   scans: 0
 });
 
-      const cardLink = window.location.origin + window.location.pathname.replace("admin-panel.html", "index.html") + "?id=" + encodeURIComponent(id);
-      document.getElementById("successMsg").innerHTML = "Customer Added Successfully ✅<br>Card Link: <a href='" + cardLink + "' target='_blank'>" + cardLink + "</a>";
+      const basePath = window.location.pathname.replace(/admin-panel\.html$/i, "index.html");
+      const cardLink = window.location.origin + basePath + "?id=" + encodeURIComponent(id);
+      document.getElementById("successMsg").innerHTML = "Customer Added Successfully ✅<br>Card Link: <a href='" + cardLink + "' target='_blank'>" + cardLink + "</a><br><small>Is link ko QR/NFC me use karo.</small>";
       
       // Form Clear karna taaki dusra user add karne me aasaani ho
       document.querySelectorAll("input").forEach(input => input.value = "");

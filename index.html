@@ -363,12 +363,28 @@ function applyTheme(theme){
 }
 
 let userData = null;
-const params = new URLSearchParams(window.location.search);
-const userId = params.get("id");
+
+function getCardId(){
+  const params = new URLSearchParams(window.location.search);
+  let id = params.get("id") || params.get("card") || params.get("customer");
+  if(id) return id.trim();
+
+  const hashId = (window.location.hash || "").replace("#", "").trim();
+  if(hashId) return hashId;
+
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  const last = parts[parts.length - 1] || "";
+  if(last && !last.includes(".") && last !== "vasuki-nfc") return decodeURIComponent(last);
+
+  return "";
+}
+
+const userId = getCardId();
 
 async function loadUser(){
   if (!userId) {
       document.getElementById("name").innerText = "Invalid Scan (No ID)";
+      document.getElementById("scanText").innerText = "Open card link with ?id=customerId";
       return;
   }
 
@@ -398,9 +414,12 @@ async function loadUser(){
       applyTheme(userData.theme);
     } else {
       document.getElementById("name").innerText = "Card Not Found";
+      document.getElementById("scanText").innerText = "Check customer ID in admin panel";
     }
   }catch(e){
     console.log(e);
+    document.getElementById("name").innerText = "Firebase Error";
+    document.getElementById("scanText").innerText = e.message || "Check Firebase rules/config";
   }
 }
 
