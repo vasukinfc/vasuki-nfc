@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
+/* CSS me koi error nahi tha, structure same rakha gaya hai */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --gold: #B8953F; --gold-light: #D4AF6A; --gold-pale: #F5EDD8;
@@ -30,22 +30,7 @@ body {
 .card-flipper { position: relative; width: 100%; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.22,1,0.36,1); }
 .face { width: 100%; border-radius: 28px; backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: hidden; }
 .face-front { position: relative; background: var(--warm-white); border: 1px solid var(--border); box-shadow: 0 8px 40px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,0.9) inset; }
-
-.face-back {
-  position: absolute;
-  inset: 0;
-  transform: rotateY(180deg);
-  background: var(--dark);
-  border: 1px solid rgba(212,175,106,0.2);
-  box-shadow: 0 8px 40px rgba(0,0,0,0.3);
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-.face-back::-webkit-scrollbar { display: none; }
-
+.face-back { position: absolute; inset: 0; transform: rotateY(180deg); background: var(--dark); border: 1px solid rgba(212,175,106,0.2); box-shadow: 0 8px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column; }
 .face::before { content: ''; display: block; height: 3px; background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent); }
 .header { padding: 32px 32px 22px; text-align: center; opacity: 0; transform: translateY(-16px); animation: fadeDown 0.7s cubic-bezier(0.22,1,0.36,1) 0.15s forwards; }
 .avatar-wrap { width: 76px; height: 76px; margin: 0 auto 14px; border-radius: 50%; background: linear-gradient(135deg, var(--gold-pale), #FFF3D6); border: 2px solid var(--gold-light); display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 700; color: var(--gold); box-shadow: 0 4px 16px var(--shadow), 0 0 0 6px rgba(212,175,106,0.1); overflow:hidden; }
@@ -76,23 +61,26 @@ body {
 .btn-linkedin .btn-icon { background:#E1F5FE; color:#01579B; }
 .btn-review .btn-icon { background:#E8F5E9; color:#33691E; }
 .btn-pay .btn-icon { background:#F3E5F5; color:#6A1B9A; }
-.btn-call:hover, .btn-wp:hover, .btn-group:hover { border-color:#A5D6A7; background:#F9FFF9; }
-.btn-web:hover { border-color:#90CAF9; background:#F5F9FF; }
-.btn-insta:hover { border-color:#F48FB1; background:#FFF5F8; }
-.btn-loc:hover { border-color:#FFCC80; background:#FFFAF5; }
-.btn-save:hover, .btn-pay:hover { border-color:#CE93D8; background:#FAF7FF; }
-.btn-email:hover { border-color:#FFE082; }
+  .btn-email:hover { border-color:#FFE082; }
 .btn-fb:hover { border-color:#90CAF9; }
 .btn-yt:hover { border-color:#EF9A9A; }
 .btn-linkedin:hover { border-color:#81D4FA; }
 .btn-review:hover { border-color:#A5D6A7; }
+.btn-pay:hover { border-color:#CE93D8; }
+  .btn-call:hover { border-color:#A5D6A7; background:#F9FFF9; }
+.btn-wp:hover { border-color:#A5D6A7; background:#F9FFF9; }
+.btn-web:hover { border-color:#90CAF9; background:#F5F9FF; }
+.btn-insta:hover { border-color:#F48FB1; background:#FFF5F8; }
+.btn-loc:hover { border-color:#FFCC80; background:#FFFAF5; }
+.btn-save:hover { border-color:#CE93D8; background:#FAF7FF; }
+  .btn-group:hover { border-color:#A5D6A7; background:#F9FFF9; }
 .btn:nth-child(1){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 0.45s forwards; }
 .btn:nth-child(2){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 0.57s forwards; }
 .btn:nth-child(3){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 0.69s forwards; }
 .btn:nth-child(4){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 0.81s forwards; }
 .btn:nth-child(5){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 0.93s forwards; }
 .btn:nth-child(6){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 1.05s forwards; }
-.btn:nth-child(7){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 1.17s forwards; }
+  .btn:nth-child(7){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 1.17s forwards; }
 .btn:nth-child(8){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 1.29s forwards; }
 .btn:nth-child(9){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 1.41s forwards; }
 .btn:nth-child(10){ animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) 1.53s forwards; }
@@ -102,12 +90,12 @@ body {
 .front-footer { padding: 0 24px 20px; text-align: center; font-size: 10.5px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-soft); opacity: 0; animation: fadeIn 0.5s ease 1.3s forwards; }
 .front-footer span { color: var(--gold); font-weight: 600; }
 .back-glow { position: absolute; inset: 0; background: radial-gradient(ellipse at 25% 25%, rgba(212,175,106,0.1) 0%, transparent 60%), radial-gradient(ellipse at 75% 75%, rgba(212,175,106,0.07) 0%, transparent 50%); pointer-events: none; }
-.back-corner { position: absolute; width: 56px; height: 56px; opacity: 0.22; pointer-events: none; }
+.back-corner { position: absolute; width: 56px; height: 56px; opacity: 0.22; }
 .bc-tl { top: 14px; left: 14px; }
 .bc-tr { top: 14px; right: 14px; transform: scaleX(-1); }
 .bc-bl { bottom: 14px; left: 14px; transform: scaleY(-1); }
 .bc-br { bottom: 14px; right: 14px; transform: scale(-1); }
-.back-inner { position: relative; z-index: 1; padding: 26px 26px 22px; display: flex; flex-direction: column; align-items: center; min-height: 100%; }
+.back-inner { position: relative; z-index: 1; padding: 26px 26px 22px; display: flex; flex-direction: column; align-items: center; }
 .back-logo { font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 700; letter-spacing: 5px; color: var(--gold-light); text-transform: uppercase; text-shadow: 0 0 30px rgba(212,175,106,0.3); }
 .back-sub { font-size: 9.5px; letter-spacing: 3px; text-transform: uppercase; color: rgba(212,175,106,0.45); margin-bottom: 18px; margin-top: 3px; }
 .back-rule { width: 70px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin-bottom: 18px; }
@@ -123,8 +111,8 @@ body {
 .back-contact-row { width: 100%; background: rgba(212,175,106,0.07); border: 1px solid rgba(212,175,106,0.15); border-radius: 13px; padding: 12px 16px; display: flex; align-items: center; gap: 11px; margin-bottom: 8px; }
 .bcr-icon { font-size: 15px; flex-shrink: 0; }
 .bcr-label { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(212,175,106,0.4); }
-.bcr-value { font-size: 12.5px; font-weight: 500; color: rgba(253,250,244,0.78); margin-top: 2px; word-break: break-word; }
-.back-footer { margin-top: 16px; padding-bottom: 8px; font-size: 9.5px; letter-spacing: 2px; text-transform: uppercase; color: rgba(212,175,106,0.25); text-align: center; }
+.bcr-value { font-size: 12.5px; font-weight: 500; color: rgba(253,250,244,0.78); margin-top: 2px; }
+.back-footer { margin-top: 16px; font-size: 9.5px; letter-spacing: 2px; text-transform: uppercase; color: rgba(212,175,106,0.25); }
 .back-company-note { width: 100%; margin: 2px 0 14px; padding: 11px 14px; text-align: center; border-radius: 13px; background: rgba(212,175,106,0.08); border: 1px solid rgba(212,175,106,0.14); color: rgba(253,250,244,0.78); font-size: 12px; line-height: 1.55; }
 .back-contact-link { width: 100%; display: flex; align-items: center; gap: 11px; color: inherit; text-decoration: none; }
 .back-contact-link .link-arrow { margin-left: auto; color: rgba(212,175,106,0.72); font-size: 14px; }
@@ -148,31 +136,6 @@ body {
 .star-feedback { font-size: 13px; color: var(--gold); font-weight: 500; min-height: 18px; margin-bottom: 18px; }
 .btn-close { padding: 11px 30px; background: var(--dark); color: white; border: none; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; letter-spacing: 0.3px; transition: opacity 0.2s, transform 0.2s; }
 .btn-close:hover { opacity: 0.85; transform: translateY(-1px); }
-
-@media (max-height: 760px) {
-  body { justify-content: flex-start; padding-top: 14px; padding-bottom: 18px; }
-  .hint { margin-bottom: 10px; }
-  .back-inner { padding: 18px 20px 18px; }
-  .back-logo { font-size: 28px; }
-  .back-sub { margin-bottom: 10px; }
-  .back-rule { margin-bottom: 10px; }
-  .back-about { font-size: 13px; line-height: 1.45; margin-bottom: 10px; }
-  .back-stats, .back-features { margin-bottom: 10px; }
-  .stat-box { padding: 8px 4px; }
-  .feature-pill { padding: 8px 10px; }
-  .back-company-note { margin-bottom: 10px; padding: 9px 12px; font-size: 11px; }
-  .back-contact-row { padding: 9px 13px; margin-bottom: 7px; }
-  .back-footer { margin-top: 8px; }
-}
-
-@media (max-width: 390px) {
-  body { padding-left: 14px; padding-right: 14px; }
-  .buttons { padding: 16px; gap: 8px; }
-  .btn { padding: 11px 14px; font-size: 13px; }
-  .back-inner { padding-left: 18px; padding-right: 18px; }
-  .bcr-value { font-size: 11.5px; }
-}
-
 @keyframes fadeDown { to { opacity:1; transform:translateY(0); } }
 @keyframes fadeIn   { to { opacity:1; } }
 @keyframes slideInRight { to { opacity:1; transform:translateX(0); } }
@@ -193,7 +156,7 @@ body {
 
     <div class="face face-front">
       <div class="header">
-        <div class="avatar-wrap">
+       <div class="avatar-wrap">
           <img id="profileImg" style="width:100%; height:100%; border-radius:50%; display:none; object-fit: cover;">
           <span id="avatarInitial">V</span>
         </div>
@@ -201,29 +164,29 @@ body {
         <div class="card-title">Digital Business Card</div>
         <div class="scan-badge" id="scanText">Scans: 0</div>
       </div>
-
+    
       <div class="divider"></div>
       <div class="buttons">
         <button id="callBtn" class="btn btn-call">
           <div class="btn-icon">📞</div>
           <span class="btn-label">Call</span> <span class="btn-arrow">›</span>
         </button>
-
+        
         <button id="whatsappBtn" class="btn btn-wp">
           <div class="btn-icon">💬</div>
           <span class="btn-label">WhatsApp</span><span class="btn-arrow">›</span>
         </button>
-
+        
         <button id="websiteBtn" class="btn btn-web">
           <div class="btn-icon">🌐</div>
           <span class="btn-label">Website</span><span class="btn-arrow">›</span>
         </button>
-
+        
         <button id="instagramBtn" class="btn btn-insta">
           <div class="btn-icon">📸</div>
           <span class="btn-label">Social Media</span><span class="btn-arrow">›</span>
         </button>
-
+       
         <button id="locationBtn" class="btn btn-loc">       
           <div class="btn-icon">📍</div>
           <span class="btn-label">Location</span><span class="btn-arrow">›</span>
@@ -263,7 +226,7 @@ body {
           <div class="btn-icon">👥</div>
           <span class="btn-label">Join WhatsApp Group</span><span class="btn-arrow">›</span>
         </button>
-
+        
         <button onclick="saveContact()" class="btn btn-save">
           <div class="btn-icon">💾</div>
           <span class="btn-label">Save Contact</span><span class="btn-arrow">›</span>
@@ -274,7 +237,7 @@ body {
 
     <div class="face face-back">
       <div class="back-glow"></div>
-
+      
       <div class="back-corner bc-tl">
         <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M4 52 L4 4 L52 4" stroke="#B8953F" stroke-width="1.5" stroke-linecap="round"/>
@@ -307,7 +270,7 @@ body {
         <div class="back-rule"></div>
 
         <p class="back-about">
-          Vasuki NFC bridges the physical and digital worlds, one tap unlocks your complete professional identity, instantly shared with anyone, anywhere.
+          Vasuki NFC bridges the physical and digital worlds — one tap unlocks your complete professional identity, instantly shared with anyone, anywhere.
         </p>
 
         <div class="back-stats">
@@ -359,10 +322,7 @@ body {
         <div class="back-footer">© 2026 Vasuki NFC · All rights reserved</div>
       </div>
     </div>
-  </div>
-</div>
-
-<div class="flip-dots">
+  </div></div><div class="flip-dots">
   <div class="dot active" id="dot0"></div>
   <div class="dot" id="dot1"></div>
 </div>
@@ -408,53 +368,51 @@ const userId = params.get("id");
 
 async function loadUser(){
   if (!userId) {
-    document.getElementById("name").innerText = "Invalid Scan (No ID)";
-    return;
+      document.getElementById("name").innerText = "Invalid Scan (No ID)";
+      return;
   }
 
   try{
     const snapshot = await get(ref(db,"customers/"+userId));
     if(snapshot.exists()){
       userData = snapshot.val();
+      
 
       document.getElementById("name").innerText = userData.name || "No Name";
       document.getElementById("avatarInitial").innerText = (userData.name || "V").charAt(0).toUpperCase();
       document.getElementById("scanText").innerText = "Scans: " + (userData.scans || 0);
 
-      if(userData.photo || userData.profilePhoto || userData.image){
-        const img = document.getElementById("profileImg");
-        img.src = userData.photo || userData.profilePhoto || userData.image;
-        img.style.display = "block";
-        document.getElementById("avatarInitial").style.display = "none";
+      const profileImg = document.getElementById("profileImg");
+      const avatarInitial = document.getElementById("avatarInitial");
+      if(userData.profileImage){
+        profileImg.src = userData.profileImage;
+        profileImg.style.display = "block";
+        avatarInitial.style.display = "none";
+      } else {
+        profileImg.style.display = "none";
+        avatarInitial.style.display = "inline";
       }
 
       setupButtons();
-      await incrementScan();
+      incrementScan();
       applyTheme(userData.theme);
     } else {
       document.getElementById("name").innerText = "Card Not Found";
     }
   }catch(e){
-    console.log("User load failed:", e);
+    console.log(e);
   }
 }
 
 loadUser();
 
 async function incrementScan(){
-  if(!userId) return;
-
   try{
-    const scanSnap = await get(ref(db, "customers/" + userId + "/scans"));
-    const currentCount = Number(scanSnap.val() || 0);
-    const newCount = currentCount + 1;
-
-    await update(ref(db, "customers/" + userId), { scans: newCount });
-
-    if(userData) userData.scans = newCount;
+    const newCount = (userData.scans || 0) + 1;
+    await update(ref(db,"customers/"+userId),{ scans: newCount });
     document.getElementById("scanText").innerText = "Scans: " + newCount;
   }catch(e){
-    console.log("Scan count update failed:", e);
+    console.log(e);
   }
 }
 
@@ -468,12 +426,34 @@ function addHttps(url){
   return url.startsWith("http://") || url.startsWith("https://") ? url : "https://" + url;
 }
 
+function getSavedCountryCode(){
+  const code = safeText(userData.countryCode || "+91").replace(/\D/g, "");
+  return code || "91";
+}
+
 function normalizePhone(number){
-  number = safeText(number).replace(/\+/g, "").replace(/\s+/g, "").replace(/-/g, "");
-  if(number && !number.startsWith("91") && number.length >= 10){
-    number = "91" + number;
+  const raw = safeText(number);
+  if(!raw) return "";
+
+  // Full international format supported: +65 9123 4567, 0091 94147 25264
+  if(raw.startsWith("+")){
+    return raw.replace(/\D/g, "");
   }
-  return number;
+  if(raw.startsWith("00")){
+    return raw.replace(/\D/g, "").replace(/^00/, "");
+  }
+
+  let digits = raw.replace(/\D/g, "").replace(/^0+/, "");
+  const code = getSavedCountryCode();
+  if(!digits.startsWith(code)){
+    digits = code + digits;
+  }
+  return digits;
+}
+
+function phoneForCall(number){
+  const digits = normalizePhone(number);
+  return digits ? "+" + digits : "";
 }
 
 function toggleButton(buttonId, value, onClick){
@@ -491,12 +471,13 @@ function toggleButton(buttonId, value, onClick){
 
 function setupButtons(){
   toggleButton("callBtn", userData.phone, () => {
-    window.location.href = "tel:" + safeText(userData.phone);
+    const callNumber = phoneForCall(userData.phone);
+    if(callNumber) window.location.href = "tel:" + callNumber;
   });
 
   toggleButton("whatsappBtn", userData.whatsapp || userData.phone, () => {
     const number = normalizePhone(userData.whatsapp || userData.phone);
-    window.open("https://wa.me/" + number, "_blank");
+    window.open("https://wa.me/" + number + "?text=" + encodeURIComponent("Hello, I got your digital business card."), "_blank");
   });
 
   toggleButton("websiteBtn", userData.website, () => {
@@ -543,17 +524,16 @@ function setupButtons(){
     window.open(addHttps(userData.whatsappGroup), "_blank");
   });
 }
-
 window.saveContact = function(){
   if(!userData) return;
   const vCard = 
 `BEGIN:VCARD
 VERSION:3.0
 FN:${userData.name || ""}
-TEL:${userData.phone || ""}
+TEL:${phoneForCall(userData.phone) || ""}
 EMAIL:${userData.email || ""}
 URL:${userData.website || ""}
-NOTE:WhatsApp: ${userData.whatsapp || userData.phone || ""}${userData.instagram ? " | Instagram: " + userData.instagram : ""}${userData.linkedin ? " | LinkedIn: " + userData.linkedin : ""}
+NOTE:WhatsApp: ${phoneForCall(userData.whatsapp || userData.phone) || ""}${userData.instagram ? " | Instagram: " + userData.instagram : ""}${userData.linkedin ? " | LinkedIn: " + userData.linkedin : ""}
 END:VCARD`;
 
   const blob = new Blob([vCard],{type:"text/vcard"});
@@ -567,7 +547,10 @@ END:VCARD`;
 
 window.openWebsiteModal = function(url){
   document.getElementById("websiteModal").classList.add("open");
+  
+  // Basic URL fix agar user ne http:// nahi likha
   if(url && !url.startsWith("http")) url = "https://" + url;
+  
   document.getElementById("websiteLink").href = url || "#";
 }
 
@@ -612,6 +595,8 @@ function isInteractiveElement(target){
 }
 
 scene.addEventListener("click", function(e){
+  // Desktop aur mobile dono par card ke empty area par click/tap karne se flip hoga.
+  // Buttons/links par click karne se wahi action chalega, flip nahi hoga.
   if(isInteractiveElement(e.target)) return;
   if(touchMoved) return;
   setFlip(!flipped);

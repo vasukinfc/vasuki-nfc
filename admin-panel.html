@@ -23,8 +23,10 @@
   <h2>Add Customer</h2>
   <input id="customId" placeholder="Custom ID (ex: vasukil123)">
   <input id="name" placeholder="Name">
-  <input id="phone" placeholder="Phone">
+  <input id="countryCode" placeholder="Country Code (ex: +91 India, +65 Singapore)" value="+91">
+  <input id="phone" placeholder="Phone / Mobile Number">
   <input id="whatsapp" placeholder="WhatsApp Number (optional)">
+  <input id="profileImage" placeholder="Profile Image URL (optional)">
 
   <div class="section-title">Optional Buttons</div>
   <div class="small-note">Jis field me data hoga, wahi button card par show hoga. Empty field ka button hide rahega.</div>
@@ -67,12 +69,48 @@ window.logoutAdmin = function() {
     });
 };
 
+function getCountryCode(){
+  let code = String(document.getElementById("countryCode")?.value || "+91").trim();
+  let digits = code.replace(/\D/g, "");
+  return digits || "91";
+}
+
+function normalizePhoneForSave(number, countryCode){
+  const raw = String(number || "").trim();
+  if(!raw) return "";
+
+  // Full international number diya hai, jaise +65 9123 4567 ya 0091 94147 25264
+  if(raw.startsWith("+")){
+    const digits = raw.replace(/\D/g, "");
+    return digits ? "+" + digits : "";
+  }
+  if(raw.startsWith("00")){
+    const digits = raw.replace(/\D/g, "").replace(/^00/, "");
+    return digits ? "+" + digits : "";
+  }
+
+  // Local number diya hai to selected country code add hoga.
+  let digits = raw.replace(/\D/g, "");
+  digits = digits.replace(/^0+/, ""); // local trunk zero remove
+  const code = String(countryCode || getCountryCode()).replace(/\D/g, "") || "91";
+
+  // Agar user ne already country code ke sath digits likh diye, double add nahi hoga.
+  if(!digits.startsWith(code)){
+    digits = code + digits;
+  }
+  return digits ? "+" + digits : "";
+}
+
 window.addCustomer = async function(){
   const btn = document.querySelector("button");
-  const id = document.getElementById("customId").value.trim().toLowerCase();
+  const id = document.getElementById("customId").value.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "");
   const name = document.getElementById("name").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const whatsapp = document.getElementById("whatsapp").value.trim() || phone;
+  const countryCode = getCountryCode();
+  const rawPhone = document.getElementById("phone").value.trim();
+  const rawWhatsapp = document.getElementById("whatsapp").value.trim();
+  const phone = normalizePhoneForSave(rawPhone, countryCode);
+  const whatsapp = normalizePhoneForSave(rawWhatsapp || rawPhone, countryCode);
+  const profileImage = document.getElementById("profileImage").value.trim();
   const instagram = document.getElementById("instagram").value.trim();
   const website = document.getElementById("website").value.trim();
   const location = document.getElementById("location").value.trim();
@@ -86,7 +124,7 @@ window.addCustomer = async function(){
   const theme = document.getElementById("theme").value;
 
   if(!id || !name || !phone){
-    alert("ID, Name, and Phone are required fields.");
+    alert("ID, Name, Country Code, and Phone required hain. Example: Country Code +91 / +65, Phone local number ya full +country number.");
     return;
   }
 
@@ -106,8 +144,10 @@ window.addCustomer = async function(){
  
      await set(ref(db, 'customers/' + id), {
   name,
+  countryCode: "+" + countryCode,
   phone,
   whatsapp,
+  profileImage,
   instagram,
   website,
   location,
@@ -122,10 +162,12 @@ window.addCustomer = async function(){
   scans: 0
 });
 
-      document.getElementById("successMsg").innerText = "Customer Added Successfully ✅";
+      const cardLink = window.location.origin + window.location.pathname.replace("admin-panel.html", "index.html") + "?id=" + encodeURIComponent(id);
+      document.getElementById("successMsg").innerHTML = "Customer Added Successfully ✅<br>Card Link: <a href='" + cardLink + "' target='_blank'>" + cardLink + "</a>";
       
       // Form Clear karna taaki dusra user add karne me aasaani ho
       document.querySelectorAll("input").forEach(input => input.value = "");
+      document.getElementById("countryCode").value = "+91";
       
       setTimeout(() => {
           document.getElementById("successMsg").innerText = "";
