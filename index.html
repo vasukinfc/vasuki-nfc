@@ -16,6 +16,24 @@
   --dark2: #2C2218; --text-mid: #4A3F32; --text-soft: #8A7A68;
   --border: #E8DCC8; --shadow: rgba(184,149,63,0.18);
 }
+
+/* Safe category theme system: old customers without category keep default theme */
+body.vsk-theme-gym { --gold:#7CFF6B; --gold-light:#B8FF7A; --gold-pale:#E9FFE6; --cream:#06110A; --warm-white:#0E1B12; --dark:#F5FFF2; --dark2:#D9FFD3; --text-mid:#DDF7D5; --text-soft:#9FCA9A; --border:#244D2B; --shadow:rgba(124,255,107,.18); }
+body.vsk-theme-cafe { --gold:#A97445; --gold-light:#C89B6D; --gold-pale:#F7E7D3; --cream:#FFF7EC; --warm-white:#FFFDF8; --dark:#3A2417; --dark2:#5B3A25; --text-mid:#5A3B26; --text-soft:#9A7A61; --border:#E8D1B9; --shadow:rgba(169,116,69,.18); }
+body.vsk-theme-restaurant { --gold:#F4C95D; --gold-light:#FFE08A; --gold-pale:#FFF2CC; --cream:#160808; --warm-white:#FFF9EF; --dark:#2A0909; --dark2:#501515; --text-mid:#563535; --text-soft:#9B7777; --border:#F0D8B0; --shadow:rgba(244,201,93,.2); }
+body.vsk-theme-salon { --gold:#D7B56D; --gold-light:#F0D48A; --gold-pale:#F8EED7; --cream:#0E0E12; --warm-white:#16171C; --dark:#FFF7E8; --dark2:#EEE1C8; --text-mid:#EFE7D6; --text-soft:#B5A98E; --border:#3F3828; --shadow:rgba(215,181,109,.2); }
+body.vsk-theme-doctor { --gold:#0AA6A6; --gold-light:#4CD6D6; --gold-pale:#DDFBFA; --cream:#F4FFFF; --warm-white:#FFFFFF; --dark:#063B3D; --dark2:#0A5E62; --text-mid:#315A5D; --text-soft:#73979A; --border:#D5F0EF; --shadow:rgba(10,166,166,.16); }
+body.vsk-theme-advocate { --gold:#CDAA4D; --gold-light:#E4C76F; --gold-pale:#F7ECCA; --cream:#F7F7FA; --warm-white:#FFFFFF; --dark:#101726; --dark2:#17213A; --text-mid:#2F3B52; --text-soft:#798196; --border:#DADDEA; --shadow:rgba(16,23,38,.14); }
+body.vsk-theme-realestate { --gold:#1B66D1; --gold-light:#5A98F0; --gold-pale:#E6F0FF; --cream:#F4F8FF; --warm-white:#FFFFFF; --dark:#0C254A; --dark2:#143C78; --text-mid:#304A73; --text-soft:#758AA8; --border:#D8E5FA; --shadow:rgba(27,102,209,.16); }
+body.vsk-theme-coaching { --gold:#F5A400; --gold-light:#FFD057; --gold-pale:#FFF4C8; --cream:#F6FAFF; --warm-white:#FFFFFF; --dark:#10294B; --dark2:#17457D; --text-mid:#304863; --text-soft:#75899D; --border:#DCE7F5; --shadow:rgba(245,164,0,.18); }
+body.vsk-theme-retail { --gold:#FF6B35; --gold-light:#FF9A68; --gold-pale:#FFE7DA; --cream:#FFF8F3; --warm-white:#FFFFFF; --dark:#3A2115; --dark2:#65351F; --text-mid:#5C3C2C; --text-soft:#9A7B6C; --border:#F3D4C4; --shadow:rgba(255,107,53,.16); }
+body.vsk-theme-creator { --gold:#8A4DFF; --gold-light:#FF5EBB; --gold-pale:#F0E7FF; --cream:#0E0A1F; --warm-white:#171128; --dark:#FFFFFF; --dark2:#F0EAFE; --text-mid:#E9E2FF; --text-soft:#BBA9D9; --border:#3A2A66; --shadow:rgba(138,77,255,.22); }
+body[class*="vsk-theme-"] .face-front { background: var(--warm-white); }
+body.vsk-theme-gym .face-back, body.vsk-theme-salon .face-back, body.vsk-theme-creator .face-back { background:#050505; }
+.theme-chip { display:inline-flex; align-items:center; justify-content:center; margin-top:7px; padding:4px 11px; border-radius:999px; border:1px solid var(--border); color:var(--gold); background:rgba(255,255,255,.35); font-size:10px; letter-spacing:1.2px; text-transform:uppercase; }
+.btn-service .btn-icon { background:#FFF8E1; color:#B26A00; }
+.btn-service:hover { border-color:#FFE082; background:#FFFDF4; }
+
 body {
   min-height: 100vh; background: var(--cream); font-family: 'DM Sans', sans-serif;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -161,7 +179,7 @@ body {
           <span id="avatarInitial">V</span>
         </div>
         <div class="card-name" id="name">Loading…</div>
-        <div class="card-title">Digital Business Card</div>
+        <div class="card-title" id="categoryTitle">Digital Business Card</div><div class="theme-chip" id="themeChip" style="display:none;">Default</div>
         <div class="scan-badge" id="scanText">Scans: 0</div>
       </div>
     
@@ -192,34 +210,9 @@ body {
           <span class="btn-label">Location</span><span class="btn-arrow">›</span>
         </button>
 
-        <button id="emailBtn" class="btn btn-email" style="display:none;">
-          <div class="btn-icon">✉️</div>
-          <span class="btn-label">Email</span><span class="btn-arrow">›</span>
-        </button>
-
-        <button id="facebookBtn" class="btn btn-fb" style="display:none;">
-          <div class="btn-icon">f</div>
-          <span class="btn-label">Facebook</span><span class="btn-arrow">›</span>
-        </button>
-
-        <button id="youtubeBtn" class="btn btn-yt" style="display:none;">
-          <div class="btn-icon">▶</div>
-          <span class="btn-label">YouTube</span><span class="btn-arrow">›</span>
-        </button>
-
-        <button id="linkedinBtn" class="btn btn-linkedin" style="display:none;">
-          <div class="btn-icon">in</div>
-          <span class="btn-label">LinkedIn</span><span class="btn-arrow">›</span>
-        </button>
-
-        <button id="googleReviewBtn" class="btn btn-review" style="display:none;">
-          <div class="btn-icon">⭐</div>
-          <span class="btn-label">Google Review</span><span class="btn-arrow">›</span>
-        </button>
-
-        <button id="upiBtn" class="btn btn-pay" style="display:none;">
-          <div class="btn-icon">₹</div>
-          <span class="btn-label">Pay / UPI</span><span class="btn-arrow">›</span>
+        <button id="servicesBtn" class="btn btn-service" style="display:none;">
+          <div class="btn-icon">🧩</div>
+          <span class="btn-label">Our Services</span><span class="btn-arrow">›</span>
         </button>
 
         <button id="whatsappGroupBtn" class="btn btn-group" style="display:none;">
@@ -265,12 +258,12 @@ body {
       </div>
 
       <div class="back-inner">
-        <div class="back-logo">VASUKI</div>
-        <div class="back-sub">NFC Smart Cards</div>
+        <div class="back-logo" id="backLogo">VASUKI</div>
+        <div class="back-sub" id="backSub">NFC Smart Cards</div>
         <div class="back-rule"></div>
 
-        <p class="back-about">
-          Vasuki NFC bridges the physical and digital worlds — one tap unlocks your complete professional identity, instantly shared with anyone, anywhere.
+        <p class="back-about" id="backAbout">
+          Vasuki NFC bridges the physical and digital worlds, one tap unlocks your complete professional identity.
         </p>
 
         <div class="back-stats">
@@ -286,35 +279,10 @@ body {
           <div class="feature-pill"><span class="fp-icon">✏️</span><span class="fp-text">Always Editable</span></div>
         </div>
 
-        <div class="back-company-note">
-          Smart NFC business cards with QR, custom design, and instant profile sharing for businesses, shop owners, creators, and professionals.
+        <div class="back-company-note" id="backNote">
+          Smart NFC business card with instant profile sharing.
         </div>
-
-        <div class="back-contact-row">
-          <a class="back-contact-link" href="https://vasukinfc.in" target="_blank" rel="noopener noreferrer">
-            <span class="bcr-icon">🌐</span>
-            <div><div class="bcr-label">Website</div><div class="bcr-value">vasukinfc.in</div></div>
-            <span class="link-arrow">↗</span>
-          </a>
-        </div>
-        <div class="back-contact-row">
-          <a class="back-contact-link" href="https://wa.me/916377393721" target="_blank" rel="noopener noreferrer">
-            <span class="bcr-icon">💬</span>
-            <div><div class="bcr-label">WhatsApp</div><div class="bcr-value">+91 63773 93721</div></div>
-            <span class="link-arrow">↗</span>
-          </a>
-        </div>
-        <div class="back-contact-row">
-          <a class="back-contact-link" href="mailto:vasukinfc@gmail.com">
-            <span class="bcr-icon">📧</span>
-            <div><div class="bcr-label">Email</div><div class="bcr-value">vasukinfc@gmail.com</div></div>
-            <span class="link-arrow">↗</span>
-          </a>
-        </div>
-        <div class="back-contact-row">
-          <a class="back-contact-link" href="https://www.instagram.com/_vasuki_99/" target="_blank" rel="noopener noreferrer">
-            <span class="bcr-icon">📸</span>
-            <div><div class="bcr-label">Instagram</div><div class="bcr-value">@_vasuki_99</div></div>
+        <div id="backContactRows"></div><div class="bcr-value">@_vasuki_99</div></div>
             <span class="link-arrow">↗</span>
           </a>
         </div>
@@ -347,9 +315,10 @@ body {
 </div>
 
 <script type="module">
-import { db, ref, get, runTransaction } from "./firebase.js";
+import { db, ref, get, update, runTransaction } from "./firebase.js";
 
 function applyTheme(theme){
+  if(userData && normalizeCategory(userData.category || userData.themeType || userData.businessCategory) !== "default") return;
   if(theme === "dark"){
     document.body.style.background = "#111";
     document.body.style.color = "#fff";
@@ -360,6 +329,82 @@ function applyTheme(theme){
     document.body.style.background = "#FDFAF4";
     document.body.style.color = "#1A1510";
   }
+}
+
+
+const CATEGORY_THEMES = {
+  default:{cls:'', label:'Digital Business Card', title:'Digital Business Card', about:'One tap opens contact, WhatsApp, website, location and social profile.', icon:'💼'},
+  gym:{cls:'vsk-theme-gym', label:'Gym / Fitness', title:'Fitness Profile', about:'Fitness profile with call, WhatsApp, location, membership details and trainer contact.', icon:'💪'},
+  cafe:{cls:'vsk-theme-cafe', label:'Cafe', title:'Cafe Profile', about:'Cafe profile with menu, timing, location, social media and order contact.', icon:'☕'},
+  restaurant:{cls:'vsk-theme-restaurant', label:'Restaurant', title:'Restaurant Profile', about:'Restaurant profile with menu, booking, location and WhatsApp ordering.', icon:'🍽️'},
+  salon:{cls:'vsk-theme-salon', label:'Salon / Barber', title:'Salon Profile', about:'Salon profile with appointment contact, services, location and social links.', icon:'✂️'},
+  doctor:{cls:'vsk-theme-doctor', label:'Doctor / Clinic', title:'Clinic Profile', about:'Clinic profile with appointment contact, timing, location and trusted details.', icon:'⚕️'},
+  advocate:{cls:'vsk-theme-advocate', label:'Advocate / Lawyer', title:'Legal Profile', about:'Professional legal profile with contact, location, website and consultation details.', icon:'⚖️'},
+  realestate:{cls:'vsk-theme-realestate', label:'Real Estate', title:'Property Profile', about:'Property consultant profile with contact, location, listings and website.', icon:'🏠'},
+  coaching:{cls:'vsk-theme-coaching', label:'Coaching / Institute', title:'Education Profile', about:'Institute profile with admissions contact, courses, location and website.', icon:'🎓'},
+  retail:{cls:'vsk-theme-retail', label:'Retail Shop', title:'Shop Profile', about:'Shop profile with contact, offers, location, website and customer support.', icon:'🛍️'},
+  creator:{cls:'vsk-theme-creator', label:'Creator / Influencer', title:'Creator Profile', about:'Creator profile with social media, collaborations, website and contact links.', icon:'✨'}
+};
+
+function normalizeCategory(value){
+  const raw = safeText(value).toLowerCase().replace(/[^a-z0-9]/g,'');
+  const map = {
+    fitness:'gym', gymer:'gym', gymfitness:'gym',
+    coffee:'cafe', caffee:'cafe', caffa:'cafe', cafeteria:'cafe',
+    restorant:'restaurant', restrond:'restaurant', hotel:'restaurant', food:'restaurant',
+    barber:'salon', beauty:'salon', parlour:'salon', parlor:'salon',
+    clinic:'doctor', medical:'doctor', dr:'doctor',
+    lawyer:'advocate', legal:'advocate', law:'advocate',
+    property:'realestate', realestateagent:'realestate', realtor:'realestate',
+    institute:'coaching', school:'coaching', education:'coaching', computer:'coaching',
+    shop:'retail', store:'retail', business:'retail',
+    influencer:'creator', instagram:'creator', youtuber:'creator'
+  };
+  if(CATEGORY_THEMES[raw]) return raw;
+  return map[raw] || 'default';
+}
+
+function applyCategoryTheme(data){
+  const oldClasses = Object.values(CATEGORY_THEMES).map(t=>t.cls).filter(Boolean);
+  document.body.classList.remove(...oldClasses);
+  const key = normalizeCategory(data.category || data.themeType || data.businessCategory || 'default');
+  const cfg = CATEGORY_THEMES[key] || CATEGORY_THEMES.default;
+  if(cfg.cls) document.body.classList.add(cfg.cls);
+  const title = safeText(data.title || data.designation) || cfg.title;
+  document.getElementById('categoryTitle').innerText = title;
+  const chip = document.getElementById('themeChip');
+  chip.innerText = cfg.icon + ' ' + cfg.label;
+  chip.style.display = key === 'default' ? 'none' : 'inline-flex';
+  return {key, cfg};
+}
+
+function escapeHtml(value){
+  return String(value || '').replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+}
+
+function setBackContactRows(){
+  const box = document.getElementById('backContactRows');
+  if(!box || !userData) return;
+  const rows = [];
+  const addRow = (icon,label,value,href) => {
+    if(!safeText(value) || !safeText(href)) return;
+    rows.push(`<div class="back-contact-row"><a class="back-contact-link" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer"><span class="bcr-icon">${icon}</span><div><div class="bcr-label">${escapeHtml(label)}</div><div class="bcr-value">${escapeHtml(value)}</div></div><span class="link-arrow">↗</span></a></div>`);
+  };
+  addRow('🌐','Website', userData.website, addHttps(userData.website));
+  addRow('💬','WhatsApp', phoneForCall(userData.whatsapp || userData.phone), 'https://wa.me/' + normalizePhone(userData.whatsapp || userData.phone));
+  addRow('📍','Location', 'Open location', addHttps(userData.location));
+  addRow('📸','Social', userData.instagram, addHttps(userData.instagram));
+  box.innerHTML = rows.join('') || '<div class="back-contact-row"><span class="bcr-icon">💼</span><div><div class="bcr-label">Digital Profile</div><div class="bcr-value">Contact details on front side</div></div></div>';
+}
+
+function updateBackSide(themeInfo){
+  const cfg = themeInfo?.cfg || CATEGORY_THEMES.default;
+  const business = safeText(userData.businessName || userData.company || userData.name || 'VASUKI');
+  document.getElementById('backLogo').innerText = business.slice(0,18);
+  document.getElementById('backSub').innerText = cfg.label;
+  document.getElementById('backAbout').innerText = safeText(userData.about || userData.description) || cfg.about;
+  document.getElementById('backNote').innerText = safeText(userData.services) || 'Tap, scan and save this digital profile anytime.';
+  setBackContactRows();
 }
 
 let userData = null;
@@ -394,8 +439,8 @@ async function loadUser(){
       userData = snapshot.val();
       
 
-      document.getElementById("name").innerText = userData.name || "No Name";
-      document.getElementById("avatarInitial").innerText = (userData.name || "V").charAt(0).toUpperCase();
+      document.getElementById("name").innerText = userData.name || userData.businessName || "No Name";
+      document.getElementById("avatarInitial").innerText = (userData.name || userData.businessName || "V").charAt(0).toUpperCase();
       document.getElementById("scanText").innerText = "Scans: " + (userData.scans || 0);
 
       const profileImg = document.getElementById("profileImg");
@@ -409,7 +454,9 @@ async function loadUser(){
         avatarInitial.style.display = "inline";
       }
 
+      const themeInfo = applyCategoryTheme(userData);
       setupButtons();
+      updateBackSide(themeInfo);
       incrementScan();
       applyTheme(userData.theme);
     } else {
@@ -438,6 +485,13 @@ async function incrementScan(){
       const newCount = result.snapshot.val() || 0;
       userData.scans = newCount;
       document.getElementById("scanText").innerText = "Scans: " + newCount;
+      const deviceType = /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "mobile" : (/Tablet|iPad/i.test(navigator.userAgent) ? "tablet" : "desktop");
+      update(ref(db, "customers/" + userId), {
+        lastScannedAt: new Date().toISOString(),
+        lastScanDevice: deviceType,
+        lastScanUserAgent: navigator.userAgent.slice(0, 180)
+      }).catch(err => console.warn("Scan meta update failed:", err));
+      runTransaction(ref(db, "customers/" + userId + "/deviceScans/" + deviceType), v => Number(v || 0) + 1).catch(()=>{});
     }
   }catch(e){
     console.error("Scan count update failed:", e);
@@ -507,70 +561,68 @@ function setupButtons(){
 
   toggleButton("whatsappBtn", userData.whatsapp || userData.phone, () => {
     const number = normalizePhone(userData.whatsapp || userData.phone);
-    window.open("https://wa.me/" + number + "?text=" + encodeURIComponent("Hello, I got your digital business card."), "_blank");
+    if(number) window.open("https://wa.me/" + number + "?text=" + encodeURIComponent("Hello, I got your digital business card."), "_blank");
   });
 
   toggleButton("websiteBtn", userData.website, () => {
-    openWebsiteModal(userData.website);
+    window.open(addHttps(userData.website), "_blank");
   });
 
-  toggleButton("instagramBtn", userData.instagram, () => {
-    window.open(addHttps(userData.instagram), "_blank");
+  toggleButton("instagramBtn", userData.instagram || userData.social || userData.socialMedia, () => {
+    window.open(addHttps(userData.instagram || userData.social || userData.socialMedia), "_blank");
   });
 
   toggleButton("locationBtn", userData.location, () => {
     window.open(addHttps(userData.location), "_blank");
   });
 
-  toggleButton("emailBtn", userData.email, () => {
-    window.location.href = "mailto:" + safeText(userData.email);
-  });
-
-  toggleButton("facebookBtn", userData.facebook, () => {
-    window.open(addHttps(userData.facebook), "_blank");
-  });
-
-  toggleButton("youtubeBtn", userData.youtube, () => {
-    window.open(addHttps(userData.youtube), "_blank");
-  });
-
-  toggleButton("linkedinBtn", userData.linkedin, () => {
-    window.open(addHttps(userData.linkedin), "_blank");
-  });
-
-  toggleButton("googleReviewBtn", userData.googleReview, () => {
-    window.open(addHttps(userData.googleReview), "_blank");
-  });
-
-  toggleButton("upiBtn", userData.upi, () => {
-    const upiValue = safeText(userData.upi);
-    const paymentUrl = upiValue.includes("@") && !upiValue.startsWith("http")
-      ? "upi://pay?pa=" + encodeURIComponent(upiValue) + "&pn=" + encodeURIComponent(userData.name || "Vasuki NFC")
-      : addHttps(upiValue);
-    window.open(paymentUrl, "_blank");
+  toggleButton("servicesBtn", userData.services, () => {
+    alert("Our Services:\n\n" + safeText(userData.services));
   });
 
   toggleButton("whatsappGroupBtn", userData.whatsappGroup, () => {
     window.open(addHttps(userData.whatsappGroup), "_blank");
   });
 }
+function vcfEscape(value){
+  return String(value || '').replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;').trim();
+}
+
+function smartContactName(){
+  const custom = safeText(userData.saveContactName || userData.contactSaveName);
+  if(custom) return custom;
+  const business = safeText(userData.businessName || userData.company);
+  const owner = safeText(userData.ownerName || userData.name);
+  const category = (CATEGORY_THEMES[normalizeCategory(userData.category || userData.themeType || userData.businessCategory)] || CATEGORY_THEMES.default).label;
+  if(business && owner && business.toLowerCase() !== owner.toLowerCase()) return business + " - " + owner;
+  if(business) return business + (category !== 'Digital Business Card' ? ' - ' + category : '');
+  return owner || "Contact";
+}
+
 window.saveContact = function(){
   if(!userData) return;
+  const contactName = smartContactName();
+  const org = safeText(userData.businessName || userData.company || '');
+  const title = safeText(userData.designation || userData.title || (CATEGORY_THEMES[normalizeCategory(userData.category || userData.themeType || userData.businessCategory)] || CATEGORY_THEMES.default).label);
   const vCard = 
 `BEGIN:VCARD
 VERSION:3.0
-FN:${userData.name || ""}
-TEL:${phoneForCall(userData.phone) || ""}
-EMAIL:${userData.email || ""}
-URL:${userData.website || ""}
-NOTE:WhatsApp: ${phoneForCall(userData.whatsapp || userData.phone) || ""}${userData.instagram ? " | Instagram: " + userData.instagram : ""}${userData.linkedin ? " | LinkedIn: " + userData.linkedin : ""}
+FN:${vcfEscape(contactName)}
+ORG:${vcfEscape(org)}
+TITLE:${vcfEscape(title)}
+TEL;TYPE=CELL:${vcfEscape(phoneForCall(userData.phone) || '')}
+TEL;TYPE=WHATSAPP:${vcfEscape(phoneForCall(userData.whatsapp || userData.phone) || '')}
+EMAIL:${vcfEscape(userData.email || '')}
+URL:${vcfEscape(addHttps(userData.website) || '')}
+ADR:${vcfEscape(userData.address || '')}
+NOTE:${vcfEscape('Category: ' + title + (userData.services ? ' | Services: ' + userData.services : '') + (userData.instagram ? ' | Social: ' + userData.instagram : ''))}
 END:VCARD`;
 
   const blob = new Blob([vCard],{type:"text/vcard"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `${userData.name || "Contact"}.vcf`;
+  a.download = `${contactName || "Contact"}.vcf`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -614,6 +666,7 @@ let touchMoved = false;
 let flipped = false;
 
 function setFlip(state){
+  if(userData && (userData.enableFlip === false || userData.enableFlip === "false")) return;
   flipped = state;
   flipper.style.transform = flipped ? "rotateY(180deg)" : "rotateY(0deg)";
   document.getElementById("dot0").classList.toggle("active", !flipped);
