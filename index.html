@@ -574,7 +574,7 @@ function setupButtons(){
 
   toggleButton("whatsappBtn", userData.whatsapp || userData.phone, () => {
     const number = normalizePhone(userData.whatsapp || userData.phone);
-    if(number) window.open("https://wa.me/" + number + "?text=" + encodeURIComponent("Namaste, mujhe aapki digital profile mili. Mujhe aapki services ke baare me jankari chahiye."), "_blank");
+    if(number) window.open("https://wa.me/" + number + "?text=" + encodeURIComponent("Hello sir"), "_blank");
   });
 
   toggleButton("websiteBtn", userData.website, () => {
