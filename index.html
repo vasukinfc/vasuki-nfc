@@ -43,10 +43,14 @@ body {
 }
 .hint { font-size: 11.5px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--text-soft); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; opacity: 0; animation: fadeIn 0.6s ease 1.5s forwards; }
 .hint-arrow { display: inline-flex; gap: 2px; font-size: 14px; color: var(--gold); animation: nudgeLeft 2s ease-in-out 2.2s infinite; }
-.scene { width: 100%; max-width: 420px; perspective: 1400px; cursor: grab; user-select: none; -webkit-user-select: none; touch-action: pan-y; }
-.scene:active { cursor: grabbing; }
-.card-flipper { position: relative; width: 100%; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.22,1,0.36,1); }
-.face { width: 100%; border-radius: 28px; backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: hidden; }
+.scene { width: 100%; max-width: 420px; perspective: 1400px; cursor: pointer; user-select: none; -webkit-user-select: none; touch-action: pan-y; }
+.scene:active { cursor: pointer; }
+.card-flipper:not(.is-flipped) .face-back { pointer-events:none; }
+.card-flipper.is-flipped .face-front { pointer-events:none; }
+.card-flipper.is-flipped .face-back { pointer-events:auto; }
+.card-flipper { position: relative; width: 100%; transform-style: preserve-3d; -webkit-transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.22,1,0.36,1); }
+.card-flipper.is-flipped { transform: rotateY(180deg); }
+.face { width: 100%; border-radius: 28px; backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: hidden; transform-style: preserve-3d; -webkit-transform-style: preserve-3d; }
 .face-front { position: relative; background: var(--warm-white); border: 1px solid var(--border); box-shadow: 0 8px 40px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,0.9) inset; }
 .face-back { position: absolute; inset: 0; transform: rotateY(180deg); background: var(--dark); border: 1px solid rgba(212,175,106,0.2); box-shadow: 0 8px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column; }
 .face::before { content: ''; display: block; height: 3px; background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent); }
@@ -138,7 +142,7 @@ body {
 .flip-dots { display: flex; gap: 7px; margin-top: 16px; opacity: 0; animation: fadeIn 0.5s ease 1.6s forwards; }
 .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); transition: background 0.3s, transform 0.3s; }
  .dot.active { background: var(--gold); transform: scale(1.3); }
-.flip-actions { display:flex; gap:10px; margin-top:14px; opacity:0; animation: fadeIn 0.5s ease 1.7s forwards; }
+.flip-actions { display:none !important; }
 .flip-action-btn { border:1px solid var(--border); background:var(--warm-white); color:var(--text-mid); border-radius:999px; padding:10px 16px; font-family:'DM Sans', sans-serif; font-size:12px; font-weight:600; letter-spacing:.4px; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,.06); transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease; }
 .flip-action-btn:hover { transform:translateY(-1px); border-color:var(--gold-light); box-shadow:0 8px 22px var(--shadow); }
 .flip-action-btn:active { transform:scale(.98); }
@@ -170,7 +174,7 @@ body {
 
 <div class="hint">
   <span class="hint-arrow">‹ ‹ ‹</span>
-  Tap Flip Card or swipe left
+  Tap card or swipe to flip
 </div>
 
 <div class="scene" id="scene">
@@ -298,10 +302,7 @@ body {
   <div class="dot active" id="dot0" title="Front side"></div>
   <div class="dot" id="dot1" title="Back side"></div>
 </div>
-<div class="flip-actions">
-  <button id="flipCardBtn" class="flip-action-btn" type="button">Flip Card</button>
-  <button id="frontCardBtn" class="flip-action-btn" type="button">Front Side</button>
-</div>
+
 
 <div id="websiteModal" class="modal-overlay" onclick="handleOverlayClick(event)">
   <div class="modal-sheet">
@@ -416,6 +417,8 @@ function updateBackSide(themeInfo){
 }
 
 let userData = null;
+window.vskUserData = null;
+window.vskFlipEnabled = true; // Flip always ON
 
 function getCardId(){
   const params = new URLSearchParams(window.location.search);
@@ -445,6 +448,8 @@ async function loadUser(){
     const snapshot = await get(ref(db,"customers/"+userId));
     if(snapshot.exists()){
       userData = snapshot.val();
+      window.vskUserData = userData;
+      window.vskFlipEnabled = true; // Flip always ON for every old/new customer
       
 
       document.getElementById("name").innerText = userData.name || userData.businessName || "No Name";
@@ -569,7 +574,7 @@ function setupButtons(){
 
   toggleButton("whatsappBtn", userData.whatsapp || userData.phone, () => {
     const number = normalizePhone(userData.whatsapp || userData.phone);
-    if(number) window.open("https://wa.me/" + number + "?text=" + encodeURIComponent("Hello sir"), "_blank");
+    if(number) window.open("https://wa.me/" + number + "?text=" + encodeURIComponent("Namaste, mujhe aapki digital profile mili. Mujhe aapki services ke baare me jankari chahiye."), "_blank");
   });
 
   toggleButton("websiteBtn", userData.website, () => {
@@ -674,9 +679,12 @@ let touchMoved = false;
 let flipped = false;
 
 function setFlip(state){
-  if(userData && (userData.enableFlip === false || userData.enableFlip === "false")) return;
+  // userData module scope me hai, isliye yaha direct userData use karne se flip break ho raha tha.
+  // Global flag use kar rahe hain, default ON hai. Old customers safe rahenge.
+  // Flip must always work. Admin/customer data cannot disable it.
   if(!flipper) return;
   flipped = !!state;
+  flipper.classList.toggle("is-flipped", flipped);
   flipper.style.transform = flipped ? "rotateY(180deg)" : "rotateY(0deg)";
   const dot0 = document.getElementById("dot0");
   const dot1 = document.getElementById("dot1");

@@ -46,25 +46,12 @@
   <input id="profileImage" placeholder="Profile Image URL (optional)">
 
   <div class="section-title">Main Buttons</div>
-  <div class="small-note">Front card par sirf important buttons show honge: Call, WhatsApp, Website, Social Media, Location, Save Contact. Website direct open hogi.</div>
+  <div class="small-note">Front card par sirf important buttons show honge: Call, WhatsApp, Website, Social Media, Location, Save Contact. Website direct open hogi. Card click/swipe par flip hoga.</div>
   <input id="instagram" placeholder="Social Media / Instagram URL">
   <input id="website" placeholder="Website URL">
   <input id="location" placeholder="Google Maps Location URL">
   <input id="whatsappGroup" placeholder="WhatsApp Group Link (optional)">
   <textarea id="services" placeholder="Our Services (optional) - comma ya line wise services likho"></textarea>
-
-  <div class="section-title">Hidden Data / Optional Future Use</div>
-  <div class="small-note">Ye data save ho sakta hai, lekin front card par button nahi dikhega.</div>
-  <input id="email" placeholder="Email Address (optional)">
-  <input id="facebook" placeholder="Facebook URL (hidden)">
-  <input id="youtube" placeholder="YouTube URL (hidden)">
-  <input id="linkedin" placeholder="LinkedIn URL (hidden)">
-  <input id="googleReview" placeholder="Google Review Link (hidden)">
-  <input id="upi" placeholder="UPI ID or Payment Link (hidden)">
-  <select id="enableFlip">
-    <option value="true">Flip Card: ON</option>
-    <option value="false">Flip Card: OFF</option>
-  </select>
 
   <div class="section-title">Old Theme Fallback</div>
   <select id="theme">
@@ -144,15 +131,8 @@ window.addCustomer = async function(){
   const instagram = document.getElementById("instagram").value.trim();
   const website = document.getElementById("website").value.trim();
   const location = document.getElementById("location").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const facebook = document.getElementById("facebook").value.trim();
-  const youtube = document.getElementById("youtube").value.trim();
-  const linkedin = document.getElementById("linkedin").value.trim();
-  const googleReview = document.getElementById("googleReview").value.trim();
-  const upi = document.getElementById("upi").value.trim();
   const whatsappGroup = document.getElementById("whatsappGroup").value.trim();
   const services = document.getElementById("services").value.trim();
-  const enableFlip = document.getElementById("enableFlip").value !== "false";
   const theme = document.getElementById("theme").value;
 
   if(!id || !name || !phone){
@@ -189,15 +169,8 @@ window.addCustomer = async function(){
   instagram,
   website,
   location,
-  email,
-  facebook,
-  youtube,
-  linkedin,
-  googleReview,
-  upi,
   whatsappGroup,
   services,
-  enableFlip,
   theme,
   scans: 0
 });
@@ -210,7 +183,6 @@ window.addCustomer = async function(){
       document.querySelectorAll("input").forEach(input => input.value = "");
       document.getElementById("countryCode").value = "+91";
       document.getElementById("category").value = "default";
-      document.getElementById("enableFlip").value = "true";
       document.getElementById("theme").value = "light";
       
       setTimeout(() => {
