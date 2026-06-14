@@ -8,8 +8,7 @@
   body { font-family: Arial, sans-serif; background: #f5f5f5; display: flex; justify-content: center; padding: 40px; margin: 0; }
   .panel { background: white; padding: 30px; border-radius: 12px; width: 460px; max-width: 100%; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
   .panel h2 { text-align: center; margin-bottom: 25px; color: #ff416c; }
-  input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; }
-  textarea { min-height: 80px; resize: vertical; font-family: Arial, sans-serif; }
+  input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 6px; border: 1px solid #ccc; box-sizing: border-box; }
   button { width: 100%; padding: 12px; margin-top: 12px; background: #ff416c; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
   button:hover { opacity: 0.9; }
   .success-msg { color: green; font-weight: bold; margin-top: 15px; text-align: center; }
@@ -23,37 +22,25 @@
 <div class="panel">
   <h2>Add Customer</h2>
   <input id="customId" placeholder="Custom ID (ex: vasukil123)">
-  <input id="name" placeholder="Owner / Person Name">
-  <input id="businessName" placeholder="Business Name (ex: PowerFit Gym, Brother Cafe)">
-  <input id="ownerName" placeholder="Owner Name for Save Contact (optional)">
-  <input id="saveContactName" placeholder="Save Contact Suggested Name (optional)">
-  <select id="category">
-    <option value="default">Default / Old Theme</option>
-    <option value="gym">Gym / Fitness</option>
-    <option value="cafe">Cafe</option>
-    <option value="restaurant">Restaurant</option>
-    <option value="salon">Salon / Barber</option>
-    <option value="doctor">Doctor / Clinic</option>
-    <option value="advocate">Advocate / Lawyer</option>
-    <option value="realestate">Real Estate</option>
-    <option value="coaching">Coaching / Institute</option>
-    <option value="retail">Retail Shop</option>
-    <option value="creator">Creator / Influencer</option>
-  </select>
+  <input id="name" placeholder="Name">
   <input id="countryCode" placeholder="Country Code (ex: +91 India, +65 Singapore)" value="+91">
   <input id="phone" placeholder="Phone / Mobile Number">
   <input id="whatsapp" placeholder="WhatsApp Number (optional)">
   <input id="profileImage" placeholder="Profile Image URL (optional)">
 
-  <div class="section-title">Main Buttons</div>
-  <div class="small-note">Front card par sirf important buttons show honge: Call, WhatsApp, Website, Social Media, Location, Save Contact. Website direct open hogi. Card click/swipe par flip hoga.</div>
-  <input id="instagram" placeholder="Social Media / Instagram URL">
+  <div class="section-title">Optional Buttons</div>
+  <div class="small-note">Jis field me data hoga, wahi button card par show hoga. Empty field ka button hide rahega.</div>
+  <input id="instagram" placeholder="Instagram URL">
   <input id="website" placeholder="Website URL">
   <input id="location" placeholder="Google Maps Location URL">
+  <input id="email" placeholder="Email Address (optional)">
+  <input id="facebook" placeholder="Facebook URL (optional)">
+  <input id="youtube" placeholder="YouTube URL (optional)">
+  <input id="linkedin" placeholder="LinkedIn URL (optional)">
+  <input id="googleReview" placeholder="Google Review Link (optional)">
+  <input id="upi" placeholder="UPI ID or Payment Link (optional)">
   <input id="whatsappGroup" placeholder="WhatsApp Group Link (optional)">
-  <textarea id="services" placeholder="Our Services (optional) - comma ya line wise services likho"></textarea>
 
-  <div class="section-title">Old Theme Fallback</div>
   <select id="theme">
     <option value="light">Light</option>
     <option value="dark">Dark</option>
@@ -118,10 +105,6 @@ window.addCustomer = async function(){
   const btn = document.querySelector("button");
   const id = document.getElementById("customId").value.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "");
   const name = document.getElementById("name").value.trim();
-  const businessName = document.getElementById("businessName").value.trim();
-  const ownerName = document.getElementById("ownerName").value.trim();
-  const saveContactName = document.getElementById("saveContactName").value.trim();
-  const category = document.getElementById("category").value || "default";
   const countryCode = getCountryCode();
   const rawPhone = document.getElementById("phone").value.trim();
   const rawWhatsapp = document.getElementById("whatsapp").value.trim();
@@ -131,8 +114,13 @@ window.addCustomer = async function(){
   const instagram = document.getElementById("instagram").value.trim();
   const website = document.getElementById("website").value.trim();
   const location = document.getElementById("location").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const facebook = document.getElementById("facebook").value.trim();
+  const youtube = document.getElementById("youtube").value.trim();
+  const linkedin = document.getElementById("linkedin").value.trim();
+  const googleReview = document.getElementById("googleReview").value.trim();
+  const upi = document.getElementById("upi").value.trim();
   const whatsappGroup = document.getElementById("whatsappGroup").value.trim();
-  const services = document.getElementById("services").value.trim();
   const theme = document.getElementById("theme").value;
 
   if(!id || !name || !phone){
@@ -156,12 +144,6 @@ window.addCustomer = async function(){
  
      await set(ref(db, 'customers/' + id), {
   name,
-  businessName,
-  ownerName,
-  saveContactName,
-  category,
-  themeType: category,
-  businessCategory: category,
   countryCode: "+" + countryCode,
   phone,
   whatsapp,
@@ -169,8 +151,13 @@ window.addCustomer = async function(){
   instagram,
   website,
   location,
+  email,
+  facebook,
+  youtube,
+  linkedin,
+  googleReview,
+  upi,
   whatsappGroup,
-  services,
   theme,
   scans: 0
 });
@@ -182,8 +169,6 @@ window.addCustomer = async function(){
       // Form Clear karna taaki dusra user add karne me aasaani ho
       document.querySelectorAll("input").forEach(input => input.value = "");
       document.getElementById("countryCode").value = "+91";
-      document.getElementById("category").value = "default";
-      document.getElementById("theme").value = "light";
       
       setTimeout(() => {
           document.getElementById("successMsg").innerText = "";
