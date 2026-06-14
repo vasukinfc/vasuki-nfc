@@ -30,16 +30,11 @@
 
   <div class="section-title">Optional Buttons</div>
   <div class="small-note">Jis field me data hoga, wahi button card par show hoga. Empty field ka button hide rahega.</div>
-  <input id="instagram" placeholder="Instagram URL">
+  <input id="socialMedia" placeholder="Social Media URL (Instagram / Facebook / LinkedIn etc.)">
   <input id="website" placeholder="Website URL">
   <input id="location" placeholder="Google Maps Location URL">
-  <input id="email" placeholder="Email Address (optional)">
-  <input id="facebook" placeholder="Facebook URL (optional)">
-  <input id="youtube" placeholder="YouTube URL (optional)">
-  <input id="linkedin" placeholder="LinkedIn URL (optional)">
-  <input id="googleReview" placeholder="Google Review Link (optional)">
-  <input id="upi" placeholder="UPI ID or Payment Link (optional)">
   <input id="whatsappGroup" placeholder="WhatsApp Group Link (optional)">
+  <input id="services" placeholder="Our Services Link (optional)">
 
   <select id="theme">
     <option value="light">Light</option>
@@ -111,16 +106,11 @@ window.addCustomer = async function(){
   const phone = normalizePhoneForSave(rawPhone, countryCode);
   const whatsapp = normalizePhoneForSave(rawWhatsapp || rawPhone, countryCode);
   const profileImage = document.getElementById("profileImage").value.trim();
-  const instagram = document.getElementById("instagram").value.trim();
+  const socialMedia = document.getElementById("socialMedia").value.trim();
   const website = document.getElementById("website").value.trim();
   const location = document.getElementById("location").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const facebook = document.getElementById("facebook").value.trim();
-  const youtube = document.getElementById("youtube").value.trim();
-  const linkedin = document.getElementById("linkedin").value.trim();
-  const googleReview = document.getElementById("googleReview").value.trim();
-  const upi = document.getElementById("upi").value.trim();
   const whatsappGroup = document.getElementById("whatsappGroup").value.trim();
+  const services = document.getElementById("services").value.trim();
   const theme = document.getElementById("theme").value;
 
   if(!id || !name || !phone){
@@ -148,16 +138,12 @@ window.addCustomer = async function(){
   phone,
   whatsapp,
   profileImage,
-  instagram,
+  socialMedia,
+  instagram: socialMedia, // old cards/backward compatibility ke liye
   website,
   location,
-  email,
-  facebook,
-  youtube,
-  linkedin,
-  googleReview,
-  upi,
   whatsappGroup,
+  services,
   theme,
   scans: 0
 });

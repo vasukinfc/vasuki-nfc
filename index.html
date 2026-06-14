@@ -182,7 +182,7 @@ body {
           <span class="btn-label">Website</span><span class="btn-arrow">›</span>
         </button>
         
-        <button id="instagramBtn" class="btn btn-insta">
+        <button id="socialMediaBtn" class="btn btn-insta">
           <div class="btn-icon">📸</div>
           <span class="btn-label">Social Media</span><span class="btn-arrow">›</span>
         </button>
@@ -192,39 +192,14 @@ body {
           <span class="btn-label">Location</span><span class="btn-arrow">›</span>
         </button>
 
-        <button id="emailBtn" class="btn btn-email" style="display:none;">
-          <div class="btn-icon">✉️</div>
-          <span class="btn-label">Email</span><span class="btn-arrow">›</span>
-        </button>
-
-        <button id="facebookBtn" class="btn btn-fb" style="display:none;">
-          <div class="btn-icon">f</div>
-          <span class="btn-label">Facebook</span><span class="btn-arrow">›</span>
-        </button>
-
-        <button id="youtubeBtn" class="btn btn-yt" style="display:none;">
-          <div class="btn-icon">▶</div>
-          <span class="btn-label">YouTube</span><span class="btn-arrow">›</span>
-        </button>
-
-        <button id="linkedinBtn" class="btn btn-linkedin" style="display:none;">
-          <div class="btn-icon">in</div>
-          <span class="btn-label">LinkedIn</span><span class="btn-arrow">›</span>
-        </button>
-
-        <button id="googleReviewBtn" class="btn btn-review" style="display:none;">
-          <div class="btn-icon">⭐</div>
-          <span class="btn-label">Google Review</span><span class="btn-arrow">›</span>
-        </button>
-
-        <button id="upiBtn" class="btn btn-pay" style="display:none;">
-          <div class="btn-icon">₹</div>
-          <span class="btn-label">Pay / UPI</span><span class="btn-arrow">›</span>
-        </button>
-
         <button id="whatsappGroupBtn" class="btn btn-group" style="display:none;">
           <div class="btn-icon">👥</div>
           <span class="btn-label">Join WhatsApp Group</span><span class="btn-arrow">›</span>
+        </button>
+
+        <button id="servicesBtn" class="btn btn-web" style="display:none;">
+          <div class="btn-icon">🛠️</div>
+          <span class="btn-label">Our Services</span><span class="btn-arrow">›</span>
         </button>
         
         <button onclick="saveContact()" class="btn btn-save">
@@ -514,44 +489,21 @@ function setupButtons(){
     openWebsiteModal(userData.website);
   });
 
-  toggleButton("instagramBtn", userData.instagram, () => {
-    window.open(addHttps(userData.instagram), "_blank");
+  const socialLink = userData.socialMedia || userData.instagram;
+  toggleButton("socialMediaBtn", socialLink, () => {
+    window.open(addHttps(socialLink), "_blank");
   });
 
   toggleButton("locationBtn", userData.location, () => {
     window.open(addHttps(userData.location), "_blank");
   });
 
-  toggleButton("emailBtn", userData.email, () => {
-    window.location.href = "mailto:" + safeText(userData.email);
-  });
-
-  toggleButton("facebookBtn", userData.facebook, () => {
-    window.open(addHttps(userData.facebook), "_blank");
-  });
-
-  toggleButton("youtubeBtn", userData.youtube, () => {
-    window.open(addHttps(userData.youtube), "_blank");
-  });
-
-  toggleButton("linkedinBtn", userData.linkedin, () => {
-    window.open(addHttps(userData.linkedin), "_blank");
-  });
-
-  toggleButton("googleReviewBtn", userData.googleReview, () => {
-    window.open(addHttps(userData.googleReview), "_blank");
-  });
-
-  toggleButton("upiBtn", userData.upi, () => {
-    const upiValue = safeText(userData.upi);
-    const paymentUrl = upiValue.includes("@") && !upiValue.startsWith("http")
-      ? "upi://pay?pa=" + encodeURIComponent(upiValue) + "&pn=" + encodeURIComponent(userData.name || "Vasuki NFC")
-      : addHttps(upiValue);
-    window.open(paymentUrl, "_blank");
-  });
-
   toggleButton("whatsappGroupBtn", userData.whatsappGroup, () => {
     window.open(addHttps(userData.whatsappGroup), "_blank");
+  });
+
+  toggleButton("servicesBtn", userData.services, () => {
+    window.open(addHttps(userData.services), "_blank");
   });
 }
 window.saveContact = function(){
@@ -561,9 +513,8 @@ window.saveContact = function(){
 VERSION:3.0
 FN:${userData.name || ""}
 TEL:${phoneForCall(userData.phone) || ""}
-EMAIL:${userData.email || ""}
 URL:${userData.website || ""}
-NOTE:WhatsApp: ${phoneForCall(userData.whatsapp || userData.phone) || ""}${userData.instagram ? " | Instagram: " + userData.instagram : ""}${userData.linkedin ? " | LinkedIn: " + userData.linkedin : ""}
+NOTE:WhatsApp: ${phoneForCall(userData.whatsapp || userData.phone) || ""}${(userData.socialMedia || userData.instagram) ? " | Social Media: " + (userData.socialMedia || userData.instagram) : ""}${userData.location ? " | Location: " + userData.location : ""}${userData.services ? " | Services: " + userData.services : ""}
 END:VCARD`;
 
   const blob = new Blob([vCard],{type:"text/vcard"});
