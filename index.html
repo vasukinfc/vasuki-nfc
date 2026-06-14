@@ -482,7 +482,7 @@ function setupButtons(){
 
   toggleButton("whatsappBtn", userData.whatsapp || userData.phone, () => {
     const number = normalizePhone(userData.whatsapp || userData.phone);
-    window.open("https://wa.me/" + number + "?text=" + encodeURIComponent("Hello, I got your digital business card."), "_blank");
+    window.open("https://wa.me/" + number + "?text=" + encodeURIComponent("Hello Sir."), "_blank");
   });
 
   toggleButton("websiteBtn", userData.website, () => {
