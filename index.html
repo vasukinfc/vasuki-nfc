@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>VASUKI NFC</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -322,7 +325,7 @@ body {
 </div>
 
 <script type="module">
-import { db, ref, get, runTransaction } from "./firebase.js";
+import { db, ref, get, update, runTransaction } from "./firebase.js?v=mobile-scan-fix-2";
 
 function applyTheme(theme){
   if(theme === "dark"){
@@ -401,23 +404,36 @@ async function loadUser(){
 loadUser();
 
 async function incrementScan(){
-  try{
-    const scanRef = ref(db, "customers/" + userId + "/scans");
+  const scanText = document.getElementById("scanText");
+  const scanRef = ref(db, "customers/" + userId + "/scans");
 
+  try{
+    // Mobile browser friendly transaction. This is the safest way when many phones scan together.
     const result = await runTransaction(scanRef, (currentValue) => {
       const currentCount = Number(currentValue || 0);
       return currentCount + 1;
     });
 
     if (result.committed) {
-      const newCount = result.snapshot.val() || 0;
+      const newCount = Number(result.snapshot.val() || 0);
       userData.scans = newCount;
-      document.getElementById("scanText").innerText = "Scans: " + newCount;
+      scanText.innerText = "Scans: " + newCount;
+      return;
     }
   }catch(e){
-    console.error("Scan count update failed:", e);
-    // Card open hona chahiye, isliye scan count fail hone par page ko block nahi karenge.
-    document.getElementById("scanText").innerText = "Scans: " + (userData.scans || 0);
+    console.warn("Transaction scan count failed, trying fallback:", e);
+  }
+
+  try{
+    // Fallback for mobile browsers where transaction fails due to network/cache/session issue.
+    const latestSnapshot = await get(scanRef);
+    const latestCount = Number(latestSnapshot.val() || 0) + 1;
+    await update(ref(db, "customers/" + userId), { scans: latestCount });
+    userData.scans = latestCount;
+    scanText.innerText = "Scans: " + latestCount;
+  }catch(e2){
+    console.error("Scan count update failed on mobile fallback:", e2);
+    scanText.innerText = "Scans: " + (userData.scans || 0);
   }
 }
 
