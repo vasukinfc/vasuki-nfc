@@ -359,6 +359,9 @@ function getCardId(){
 
 const userId = getCardId();
 
+  console.log("User ID:", userId);
+alert("User ID: " + userId);
+
 async function loadUser(){
   if (!userId) {
       document.getElementById("name").innerText = "Invalid Scan (No ID)";
@@ -420,10 +423,10 @@ async function incrementScan(){
       scanText.innerText = "Scans: " + newCount;
       return;
     }
-  }catch(e){
-    console.warn("Transaction scan count failed, trying fallback:", e);
-  }
-
+ }catch(e){
+  alert("Transaction Error: " + e.code + " - " + e.message);
+  console.error(e);
+}
   try{
     // Fallback for mobile browsers where transaction fails due to network/cache/session issue.
     const latestSnapshot = await get(scanRef);
@@ -431,10 +434,12 @@ async function incrementScan(){
     await update(ref(db, "customers/" + userId), { scans: latestCount });
     userData.scans = latestCount;
     scanText.innerText = "Scans: " + latestCount;
-  }catch(e2){
-    console.error("Scan count update failed on mobile fallback:", e2);
-    scanText.innerText = "Scans: " + (userData.scans || 0);
-  }
+ }catch(e2){
+  alert("Fallback Error: " + e2.code + " - " + e2.message);
+  console.error(e2);
+  scanText.innerText = "Scans: " + (userData.scans || 0);
+}
+  
 }
 
 function safeText(value){
