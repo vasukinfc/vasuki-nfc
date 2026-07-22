@@ -1,0 +1,12 @@
+{
+  "name": "Vasuki NFC Owner",
+  "short_name": "Vasuki Owner",
+  "id": "./owner.html",
+  "start_url": "./owner.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fbf8f1",
+  "theme_color": "#17130c",
+  "description": "Private Vasuki NFC owner control center",
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
