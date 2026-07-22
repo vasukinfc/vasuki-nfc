@@ -1,0 +1,47 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "roles": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('roles').child(auth.uid).val() === 'owner')",
+        ".write": "auth != null && root.child('roles').child(auth.uid).val() === 'owner'"
+      }
+    },
+    "customers": {
+      ".read": "auth != null && (root.child('roles').child(auth.uid).val() === 'owner' || root.child('roles').child(auth.uid).val() === 'admin' || root.child('roles').child(auth.uid).val() === 'support')",
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && (root.child('roles').child(auth.uid).val() === 'owner' || root.child('roles').child(auth.uid).val() === 'admin')",
+        "profile": { ".write": "auth != null && auth.uid === $uid && root.child('customers').child($uid).child('subscription').child('expiresAt').val() > now" }
+      }
+    },
+    "cardOwners": { ".read": "auth != null", ".write": "auth != null && (root.child('roles').child(auth.uid).val() === 'owner' || root.child('roles').child(auth.uid).val() === 'admin')" },
+    "publishedProfiles": {
+      "$cardId": {
+        ".read": true,
+        ".write": "auth != null && (root.child('cardOwners').child($cardId).val() === auth.uid || root.child('roles').child(auth.uid).val() === 'owner' || root.child('roles').child(auth.uid).val() === 'admin')"
+      }
+    },
+    "publicSubscriptions": {
+      "$cardId": { ".read": true, ".write": "auth != null && (root.child('roles').child(auth.uid).val() === 'owner' || root.child('roles').child(auth.uid).val() === 'admin')" }
+    },
+    "scanCounts": {
+      "$cardId": { ".read": true, ".write": "data.exists() && newData.isNumber() && newData.val() === data.val() + 1" }
+    },
+    "payments": {
+      ".read": "auth != null && (root.child('roles').child(auth.uid).val() === 'owner' || root.child('roles').child(auth.uid).val() === 'admin')",
+      "$id": {
+        ".write": "auth != null && ((!data.exists() && newData.child('uid').val() === auth.uid && newData.child('status').val() === 'pending') || root.child('roles').child(auth.uid).val() === 'owner' || root.child('roles').child(auth.uid).val() === 'admin')"
+      }
+    },
+    "supportTickets": {
+      ".read": "auth != null && (root.child('roles').child(auth.uid).val() === 'owner' || root.child('roles').child(auth.uid).val() === 'admin' || root.child('roles').child(auth.uid).val() === 'support')",
+      "$id": {
+        ".write": "auth != null && ((!data.exists() && newData.child('uid').val() === auth.uid && newData.child('status').val() === 'open') || root.child('roles').child(auth.uid).val() === 'owner' || root.child('roles').child(auth.uid).val() === 'admin' || root.child('roles').child(auth.uid).val() === 'support')"
+      }
+    },
+    "renewalHistory": { ".read": "auth != null", ".write": "auth != null && (root.child('roles').child(auth.uid).val() === 'owner' || root.child('roles').child(auth.uid).val() === 'admin')" }
+  }
+}
+
