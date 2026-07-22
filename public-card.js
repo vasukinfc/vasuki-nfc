@@ -8,18 +8,19 @@ $("#renewWa").href=`https://wa.me/${SETTINGS.supportPhone}?text=${encodeURICompo
 function show(which){["#loading","#cardWrap","#expired","#missing"].forEach(x=>$(x).classList.add("hidden"));$(which).classList.remove("hidden")}
 function url(v){if(!v)return "#";return /^https?:\/\//i.test(v)?v:`https://${v}`}
 function vcard(p){return `BEGIN:VCARD\nVERSION:3.0\nFN:${p.name||""}\nORG:${p.business||""}\nTEL:${p.phone||""}\nEMAIL:${p.email||""}\nURL:${p.website||""}\nADR:;;${p.address||""};;;;\nEND:VCARD`}
+async function safeRead(path){try{return await get(ref(db,path))}catch{return null}}
 async function boot(){
  if(demo){
   const p={name:"Hem Shankar Agarwal",business:"Vasuki NFC",tagline:"Smart Cards. Smart Future.",phone:"916377393721",whatsapp:"916377393721",website:"https://vasukinfc.in",location:"https://maps.google.com/?q=Jaipur",about:"Premium NFC business cards, smart digital profiles and modern printing solutions.",profileImage:""};
   renderCard(p,true);return;
  }
  if(!id){show("#missing");return}
- const [profileSnap,subSnap]=await Promise.all([get(ref(db,`publishedProfiles/${id}`)),get(ref(db,`publicSubscriptions/${id}`))]);
- let p=profileSnap.exists()?profileSnap.val():null;
- if(!p){try{let legacySnap=await get(ref(db,`customers/${id}`));if(!legacySnap.exists())legacySnap=await get(ref(db,id));if(legacySnap.exists()){const old=legacySnap.val();p=old.profile||{name:old.name||"",business:old.business||old.businessName||"",phone:old.phone||"",whatsapp:old.whatsapp||old.phone||"",publicEmail:old.email||"",website:old.website||"",location:old.location||"",profileImage:old.profileImage||"",tagline:old.tagline||"Digital Business Card",about:old.about||old.services||"",instagram:old.instagram||old.socialMedia||""}}catch{}}
+ const [profileSnap,subSnap]=await Promise.all([safeRead(`publishedProfiles/${id}`),safeRead(`publicSubscriptions/${id}`)]);
+ let p=profileSnap?.exists()?profileSnap.val():null;
+ if(!p){let legacySnap=await safeRead(`customers/${id}`);if(!legacySnap?.exists())legacySnap=await safeRead(id);if(legacySnap?.exists()){const old=legacySnap.val();p=old.profile||{name:old.name||"",business:old.business||old.businessName||"",phone:old.phone||"",whatsapp:old.whatsapp||old.phone||"",publicEmail:old.email||"",website:old.website||"",location:old.location||"",profileImage:old.profileImage||"",tagline:old.tagline||"Digital Business Card",about:old.about||old.services||"",instagram:old.instagram||old.socialMedia||""}}}
  if(!p){show("#missing");return}
  let sub;
- try{const response=await fetch(`${SETTINGS.apiBase}/api/card-subscription/${encodeURIComponent(id)}`,{cache:"no-store"});if(!response.ok)throw new Error();sub=await response.json();}catch{sub=subSnap.val()||{plan:"legacy_lifetime",status:"active",lifetime:true}}
+ try{const response=await fetch(`${SETTINGS.apiBase}/api/card-subscription/${encodeURIComponent(id)}`,{cache:"no-store"});if(!response.ok)throw new Error();sub=await response.json();}catch{sub=(subSnap?.exists()?subSnap.val():null)||{plan:"legacy_lifetime",status:"active",lifetime:true}}
  if(!sub.lifetime && (sub.status!=="active" || Number(sub.expiresAt||0)<now())){show("#expired");return}
  renderCard(p,false);
 }
