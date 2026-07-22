@@ -52,7 +52,7 @@ The demo mode shows a sample flip card without requiring a Firebase customer rec
 
 Customer pays ₹499 from the customer panel using Razorpay. The Vasuki NFC backend verifies the signature and activates 365 days automatically. The owner can also use **+365 days** as a manual backup after checking payment.
 
-Cards created before the subscription system have no backend subscription record and are automatically treated as **Legacy Lifetime**. Their existing URL stays active and they never see a recharge requirement.
+Cards created before the subscription system have no backend subscription record and are automatically treated as **Legacy Lifetime**. Both old Firebase formats (`/customers/CARD_ID` and root-level `/CARD_ID`) are supported, so their existing URL stays active without moving or deleting data.
 
 ## Important
 

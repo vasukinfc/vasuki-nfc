@@ -16,7 +16,7 @@ async function boot(){
  if(!id){show("#missing");return}
  const [profileSnap,subSnap]=await Promise.all([get(ref(db,`publishedProfiles/${id}`)),get(ref(db,`publicSubscriptions/${id}`))]);
  let p=profileSnap.exists()?profileSnap.val():null;
- if(!p){try{const legacySnap=await get(ref(db,`customers/${id}`));if(legacySnap.exists()){const old=legacySnap.val();p=old.profile||{name:old.name||"",business:old.business||old.businessName||"",phone:old.phone||"",whatsapp:old.whatsapp||old.phone||"",publicEmail:old.email||"",website:old.website||"",location:old.location||"",profileImage:old.profileImage||"",tagline:old.tagline||"Digital Business Card",about:old.about||old.services||""}}catch{}}
+ if(!p){try{let legacySnap=await get(ref(db,`customers/${id}`));if(!legacySnap.exists())legacySnap=await get(ref(db,id));if(legacySnap.exists()){const old=legacySnap.val();p=old.profile||{name:old.name||"",business:old.business||old.businessName||"",phone:old.phone||"",whatsapp:old.whatsapp||old.phone||"",publicEmail:old.email||"",website:old.website||"",location:old.location||"",profileImage:old.profileImage||"",tagline:old.tagline||"Digital Business Card",about:old.about||old.services||"",instagram:old.instagram||old.socialMedia||""}}catch{}}
  if(!p){show("#missing");return}
  let sub;
  try{const response=await fetch(`${SETTINGS.apiBase}/api/card-subscription/${encodeURIComponent(id)}`,{cache:"no-store"});if(!response.ok)throw new Error();sub=await response.json();}catch{sub=subSnap.val()||{plan:"legacy_lifetime",status:"active",lifetime:true}}
