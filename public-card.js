@@ -26,8 +26,7 @@ async function boot(){
 }
 async function renderCard(p,isDemo){
  $("#avatar").src=p.profileImage||"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect width='100%25' height='100%25' fill='%23d5b269'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' font-size='80' fill='%23fff'%3EV%3C/text%3E%3C/svg%3E";
- $("#name").textContent=p.name||"Smart Card"; $("#backName").textContent=p.name||"Smart Card"; $("#business").textContent=p.business||""; $("#tagline").textContent=p.tagline||""; $("#about").textContent=p.about||"";
- $("#backWebsite").textContent=p.website||"Website not added"; $("#backPhone").textContent=p.whatsapp||p.phone||"Number not added";
+ $("#name").textContent=p.name||"Smart Card"; $("#business").textContent=p.business||""; $("#tagline").textContent=p.tagline||"";
  $("#call").href=`tel:+${cleanPhone(p.phone)}`; $("#wa").href=`https://wa.me/${cleanPhone(p.whatsapp||p.phone)}`; $("#web").href=url(p.website); $("#map").href=url(p.location);
  $("#save").onclick=()=>{const blob=new Blob([vcard(p)],{type:"text/vcard"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`${p.name||"contact"}.vcf`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
  const scene=$("#scene");let startX=0;const flip=()=>scene.classList.toggle("flipped");scene.onclick=e=>{if(!e.target.closest("a,button"))flip()};scene.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flip()}};scene.addEventListener("touchstart",e=>startX=e.touches[0].clientX,{passive:true});scene.addEventListener("touchend",e=>{if(Math.abs(e.changedTouches[0].clientX-startX)>45)flip()},{passive:true});$("#flipBtn").onclick=flip;
