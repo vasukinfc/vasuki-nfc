@@ -67,3 +67,10 @@ Cards created before the subscription system have no backend subscription record
 - `firebase-config.js` is safe to serve publicly; security comes from Authentication and Database Rules.
 - Automated AI chat and WhatsApp reminders require third-party APIs/backend. This version includes FAQ assistance, WhatsApp support and support tickets without paid APIs.
 - Google Photos share pages are not direct image files. Prefer a direct HTTPS image URL ending in JPG/PNG/WEBP, or add Firebase Storage upload later.
+
+## Official customer links
+
+- Website: `https://www.vasukinfc.in`
+- WhatsApp support: `https://wa.me/916377393721`
+- Instagram: `https://www.instagram.com/_vasuki_nfc_99`
+- WhatsApp Channel: `https://whatsapp.com/channel/0029VbDbbVhFCCoZmN2BYV1j`
