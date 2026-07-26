@@ -3,7 +3,7 @@
 This is a new, separate Firebase-based smart-card system. It includes:
 
 - Permanent public NFC/QR card URL
-- First-year free subscription and ₹499 annual renewal
+- ₹699 new-card offer with first year included and ₹499 annual renewal
 - Customer login and self-edit panel
 - Owner/team dashboard with active, expiring and expired filters
 - Manual payment approval and 365-day activation

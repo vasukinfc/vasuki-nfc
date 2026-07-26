@@ -19,6 +19,7 @@ export const db = getDatabase(app);
 
 export const SETTINGS = {
   brand: "Vasuki NFC",
+  cardPrice: 699,
   annualPrice: 499,
   supportPhone: "916377393721",
   supportEmail: "support@vasukinfc.in",

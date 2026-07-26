@@ -4,3 +4,8 @@
 .back-contact i{color:#d4af6a;font-style:normal}
 .company-order-btn{display:block;margin-top:12px;padding:12px;border-radius:12px;background:linear-gradient(135deg,#d4af6a,#a67c2e);color:#17110b;text-decoration:none;font-size:12px;font-weight:800;letter-spacing:.4px}
 @media(max-width:480px){.smart-card-face{min-height:720px}}
+/* V4 premium profile links and selectable themes */
+.social-links{display:flex;justify-content:center;gap:9px;padding:0 20px 17px}.social-links a{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:#1a1510;color:#d4af6a;text-decoration:none;font-weight:800;font-size:13px}
+body[data-card-theme="midnight"] .smart-card-front{background:#171717;color:#fff}body[data-card-theme="midnight"] .vertical-head h1,body[data-card-theme="midnight"] .vertical-btn{color:#f8f5ee}body[data-card-theme="midnight"] .vertical-btn{background:#222;border-color:#3d3d3d}body[data-card-theme="midnight"] .vertical-btn span{background:#34302a}
+body[data-card-theme="royal"] .smart-card-front{background:#f4f7ff}body[data-card-theme="royal"] .smart-card-face:before{background:linear-gradient(90deg,transparent,#315efb,#83a0ff,#315efb,transparent)}body[data-card-theme="royal"] .vertical-business,body[data-card-theme="royal"] .vertical-footer strong{color:#315efb}body[data-card-theme="royal"] .vertical-btn span{background:#e6ecff}
+body[data-card-theme="emerald"] .smart-card-front{background:#f2fbf6}body[data-card-theme="emerald"] .smart-card-face:before{background:linear-gradient(90deg,transparent,#198754,#67c68c,#198754,transparent)}body[data-card-theme="emerald"] .vertical-business,body[data-card-theme="emerald"] .vertical-footer strong{color:#198754}body[data-card-theme="emerald"] .vertical-btn span{background:#dff4e7}

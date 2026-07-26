@@ -1,7 +1,7 @@
 import { auth,db,SETTINGS,ref,get,update,push,requireUser,signOut,$,dateText,statusOf,now,registerSW } from "./shared.js";
 registerSW();
 let ctx,record,deferred;
-const fields=["name","business","phone","whatsapp","publicEmail","website","location","profileImage","tagline","about"];
+const fields=["name","business","phone","whatsapp","publicEmail","website","location","profileImage","tagline","about","instagram","facebook","linkedin","youtube","googleReview","theme"];
 
 async function fetchSubscription(){
   try{
