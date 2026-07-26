@@ -3,16 +3,11 @@ registerSW();
 const params=new URLSearchParams(location.search);
 const id=params.get("id")?.trim().toLowerCase();
 const demo=params.get("demo")==="1";
-$("#support").href=`https://wa.me/${SETTINGS.supportPhone}?text=${encodeURIComponent("Hello Vasuki NFC, I need smart card support.")}`;
+$("#backSupport").href=`https://wa.me/${SETTINGS.supportPhone}?text=${encodeURIComponent("Hello Vasuki NFC, I need smart card support.")}`;
 $("#renewWa").href=`https://wa.me/${SETTINGS.supportPhone}?text=${encodeURIComponent(`Hello Vasuki NFC, I want to recharge card ${id||""} for ₹${SETTINGS.annualPrice}.`)}`;
 function show(which){["#loading","#cardWrap","#expired","#missing"].forEach(x=>$(x).classList.add("hidden"));$(which).classList.remove("hidden")}
 function url(v){if(!v)return "#";return /^https?:\/\//i.test(v)?v:`https://${v}`}
 function vcard(p){return `BEGIN:VCARD\nVERSION:3.0\nFN:${p.name||""}\nORG:${p.business||""}\nTEL:${p.phone||""}\nEMAIL:${p.publicEmail||p.email||""}\nURL:${p.website||""}\nADR:;;${p.location||p.address||""};;;;\nEND:VCARD`}
-function bindOptional(selector,value){
- const element=$(selector);
- if(!value){element.classList.add("hidden");element.removeAttribute("href");return false}
- element.href=url(value);element.classList.remove("hidden");return true;
-}
 async function safeRead(path){try{return await get(ref(db,path))}catch{return null}}
 async function apiSubscription(cardId,timeoutMs=8000){
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeoutMs);
@@ -50,12 +45,10 @@ async function renderCard(p,isDemo){
  $("#avatar").src=p.profileImage||"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect width='100%25' height='100%25' fill='%23d5b269'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' font-size='80' fill='%23fff'%3EV%3C/text%3E%3C/svg%3E";
  $("#name").textContent=p.name||"Smart Card"; $("#business").textContent=p.business||""; $("#tagline").textContent=p.tagline||"";
  $("#call").href=`tel:+${cleanPhone(p.phone)}`; $("#wa").href=`https://wa.me/${cleanPhone(p.whatsapp||p.phone)}`; $("#web").href=url(p.website); $("#map").href=url(p.location);
- bindOptional("#review",p.googleReview);
- const socialStates=[["#instagram",p.instagram],["#facebook",p.facebook],["#linkedin",p.linkedin],["#youtube",p.youtube]].map(([selector,value])=>bindOptional(selector,value));
- const hasSocial=socialStates.some(Boolean);
- $("#socialLinks").classList.toggle("hidden",!hasSocial);
  $("#save").onclick=()=>{const blob=new Blob([vcard(p)],{type:"text/vcard"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`${p.name||"contact"}.vcf`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
- const scene=$("#scene");let startX=0;const flip=()=>scene.classList.toggle("flipped");scene.onclick=e=>{if(!e.target.closest("a,button"))flip()};scene.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flip()}};scene.addEventListener("touchstart",e=>startX=e.touches[0].clientX,{passive:true});scene.addEventListener("touchend",e=>{if(Math.abs(e.changedTouches[0].clientX-startX)>45)flip()},{passive:true});$("#flipBtn").onclick=flip;
+ const scene=$("#scene"),dots=[...document.querySelectorAll(".flip-dots span")];let startX=0;
+ const flip=()=>{const flipped=scene.classList.toggle("flipped");dots.forEach((dot,index)=>dot.classList.toggle("active",index===(flipped?1:0)))};
+ scene.onclick=e=>{if(!e.target.closest("a,button"))flip()};scene.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flip()}};scene.addEventListener("touchstart",e=>startX=e.touches[0].clientX,{passive:true});scene.addEventListener("touchend",e=>{if(Math.abs(e.changedTouches[0].clientX-startX)>45)flip()},{passive:true});$("#flipBtn").onclick=flip;
  $("#share").onclick=async()=>{const data={title:`${p.name||"Smart"} Visiting Card`,text:`Connect with ${p.name||"me"}`,url:location.href};if(navigator.share)await navigator.share(data);else{await navigator.clipboard.writeText(location.href);$("#share").textContent="Link Copied ✓"}};
  if(isDemo){$("#scans").textContent="Demo Preview • Tap or swipe to test the card";}else{try{const result=await runTransaction(ref(db,`scanCounts/${id}`),v=>Number(v||0)+1);$("#scans").textContent=`Card views: ${result.snapshot.val()}`;}catch{$("#scans").textContent=""}}
  show("#cardWrap");

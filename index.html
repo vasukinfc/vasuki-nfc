@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="smart-card.css?v=safe-upgrade-v4">
   <title>Smart Card | Vasuki NFC</title>
 </head>
-<body>
+<body class="public-card-page">
   <header class="topbar"><div class="shell nav"><div class="brand">VASUKI <span>NFC</span></div><div class="navlinks"><a class="btn light" href="login.html">Customer Login</a></div></div></header>
   <main class="shell page">
     <div id="loading" class="panel">Loading smart card…</div>
@@ -21,8 +21,7 @@
           <article class="smart-card-face smart-card-front">
             <div class="vertical-head"><div class="vertical-avatar"><img id="avatar" alt="Profile"></div><h1 id="name"></h1><div id="business" class="vertical-business"></div><p id="tagline" class="vertical-title"></p><div id="scans" class="scan-badge">Card views: 0</div></div>
             <div class="vertical-divider"></div>
-            <div class="vertical-buttons"><a id="call" class="vertical-btn"><span>📞</span><b>Call</b><i>›</i></a><a id="wa" class="vertical-btn" target="_blank" rel="noopener"><span>💬</span><b>WhatsApp</b><i>›</i></a><a id="web" class="vertical-btn" target="_blank" rel="noopener"><span>🌐</span><b>Website</b><i>›</i></a><a id="map" class="vertical-btn" target="_blank" rel="noopener"><span>📍</span><b>Location</b><i>›</i></a><a id="review" class="vertical-btn hidden" target="_blank" rel="noopener"><span>⭐</span><b>Google Review</b><i>›</i></a><button id="save" class="vertical-btn"><span>💾</span><b>Save Contact</b><i>›</i></button><button id="share" class="vertical-btn"><span>🔗</span><b>Share Card</b><i>›</i></button></div>
-            <div id="socialLinks" class="social-links hidden"><a id="instagram" target="_blank" rel="noopener" aria-label="Instagram">◎</a><a id="facebook" target="_blank" rel="noopener" aria-label="Facebook">f</a><a id="linkedin" target="_blank" rel="noopener" aria-label="LinkedIn">in</a><a id="youtube" target="_blank" rel="noopener" aria-label="YouTube">▶</a></div>
+            <div class="vertical-buttons"><a id="call" class="vertical-btn"><span>📞</span><b>Call</b><i>›</i></a><a id="wa" class="vertical-btn" target="_blank" rel="noopener"><span>💬</span><b>WhatsApp</b><i>›</i></a><a id="web" class="vertical-btn" target="_blank" rel="noopener"><span>🌐</span><b>Website</b><i>›</i></a><a id="map" class="vertical-btn" target="_blank" rel="noopener"><span>📍</span><b>Location</b><i>›</i></a><button id="save" class="vertical-btn"><span>💾</span><b>Save Contact</b><i>›</i></button><button id="share" class="vertical-btn"><span>🔗</span><b>Share Card</b><i>›</i></button></div>
             <div class="vertical-footer">Powered by <strong>VASUKI NFC</strong></div>
           </article>
           <article class="smart-card-face smart-card-back">
@@ -37,7 +36,9 @@
               <a class="back-contact" href="mailto:vasukinfc@gmail.com">✉️ <span>Email</span><b>vasukinfc@gmail.com</b><i>↗</i></a>
               <a class="back-contact" href="https://www.instagram.com/_vasuki_99" target="_blank" rel="noopener">📷 <span>Instagram</span><b>@_vasuki_99</b><i>↗</i></a>
               <a class="company-order-btn" href="https://wa.me/916377393721?text=Hello%20VASUKI%20NFC%2C%20I%20want%20to%20order%20a%20smart%20card." target="_blank" rel="noopener">Order Your Smart Card →</a>
+              <a class="company-channel-btn" href="https://whatsapp.com/channel/0029VbDbbVhFCCoZmN2BYV1j" target="_blank" rel="noopener">📢 Join Our WhatsApp Channel</a>
               <div class="vertical-footer dark">© 2026 VASUKI NFC</div>
+              <a id="backSupport" class="back-support-fab" aria-label="Vasuki NFC Help and Support">💬<span>Help &amp; Support</span></a>
             </div>
           </article>
         </div>
@@ -48,7 +49,6 @@
     <section id="expired" class="expired-box panel hidden"><span class="pill">Subscription expired</span><h1>Recharge your smart card</h1><p>Your details are safely preserved. Recharge for ₹499 to reactivate this card for one year.</p><div class="actions" style="justify-content:center"><a id="renewWa" class="btn gold">Recharge on WhatsApp</a><a class="btn light" href="login.html">Customer Login</a></div></section>
     <section id="missing" class="expired-box panel hidden"><h1>Card not found</h1><p>Please check the NFC/QR link or contact Vasuki NFC support.</p></section>
   </main>
-  <a id="support" class="support-fab" aria-label="Support">💬</a>
-  <script type="module" src="public-card.js?v=safe-upgrade-v4"></script>
+  <script type="module" src="public-card.js?v=clean-front-v6"></script>
 </body>
 </html>

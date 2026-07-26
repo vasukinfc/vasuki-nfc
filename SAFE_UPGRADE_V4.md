@@ -16,6 +16,9 @@
 - ₹499 renewal text throughout the smart-card app
 - ₹1,499 one-time Paid Lifetime checkout option
 - Separate `LEGACY LIFETIME` and `PAID LIFETIME` labels
+- Clean public-card front with customer details only
+- Help & Support shown only on the company back side
+- Vasuki NFC WhatsApp Channel button on the back side
 - Legacy Lifetime filter in the owner dashboard
 - Existing permanent card URLs and Firebase formats remain supported
 
