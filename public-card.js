@@ -46,8 +46,11 @@ async function renderCard(p,isDemo){
  $("#name").textContent=p.name||"Smart Card"; $("#business").textContent=p.business||""; $("#tagline").textContent=p.tagline||"";
  $("#call").href=`tel:+${cleanPhone(p.phone)}`; $("#wa").href=`https://wa.me/${cleanPhone(p.whatsapp||p.phone)}`; $("#web").href=url(p.website); $("#map").href=url(p.location);
  $("#save").onclick=()=>{const blob=new Blob([vcard(p)],{type:"text/vcard"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`${p.name||"contact"}.vcf`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
- const scene=$("#scene"),dots=[...document.querySelectorAll(".flip-dots span")];let startX=0;
- const flip=()=>{const flipped=scene.classList.toggle("flipped");dots.forEach((dot,index)=>dot.classList.toggle("active",index===(flipped?1:0)))};
+ const scene=$("#scene"),dots=[...document.querySelectorAll(".flip-dots span")],supportFab=$("#supportFab"),supportPopup=$("#supportPopup");let startX=0;
+ const closeSupport=()=>{supportPopup.classList.add("hidden");supportFab.setAttribute("aria-expanded","false")};
+ const flip=()=>{const flipped=scene.classList.toggle("flipped");dots.forEach((dot,index)=>dot.classList.toggle("active",index===(flipped?1:0)));supportFab.classList.toggle("hidden",!flipped);if(!flipped)closeSupport()};
+ supportFab.onclick=()=>{const opening=supportPopup.classList.contains("hidden");supportPopup.classList.toggle("hidden",!opening);supportFab.setAttribute("aria-expanded",String(opening))};
+ $("#closeSupport").onclick=closeSupport;
  scene.onclick=e=>{if(!e.target.closest("a,button"))flip()};scene.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flip()}};scene.addEventListener("touchstart",e=>startX=e.touches[0].clientX,{passive:true});scene.addEventListener("touchend",e=>{if(Math.abs(e.changedTouches[0].clientX-startX)>45)flip()},{passive:true});$("#flipBtn").onclick=flip;
  $("#share").onclick=async()=>{const data={title:`${p.name||"Smart"} Visiting Card`,text:`Connect with ${p.name||"me"}`,url:location.href};if(navigator.share)await navigator.share(data);else{await navigator.clipboard.writeText(location.href);$("#share").textContent="Link Copied ✓"}};
  if(isDemo){$("#scans").textContent="Demo Preview • Tap or swipe to test the card";}else{try{const result=await runTransaction(ref(db,`scanCounts/${id}`),v=>Number(v||0)+1);$("#scans").textContent=`Card views: ${result.snapshot.val()}`;}catch{$("#scans").textContent=""}}

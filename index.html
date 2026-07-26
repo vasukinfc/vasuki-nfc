@@ -38,7 +38,6 @@
               <a class="company-order-btn" href="https://wa.me/916377393721?text=Hello%20VASUKI%20NFC%2C%20I%20want%20to%20order%20a%20smart%20card." target="_blank" rel="noopener">Order Your Smart Card →</a>
               <a class="company-channel-btn" href="https://whatsapp.com/channel/0029VbDbbVhFCCoZmN2BYV1j" target="_blank" rel="noopener">📢 Join Our WhatsApp Channel</a>
               <div class="vertical-footer dark">© 2026 VASUKI NFC</div>
-              <a id="backSupport" class="back-support-fab" aria-label="Vasuki NFC Help and Support">💬<span>Help &amp; Support</span></a>
             </div>
           </article>
         </div>
@@ -49,6 +48,14 @@
     <section id="expired" class="expired-box panel hidden"><span class="pill">Subscription expired</span><h1>Recharge your smart card</h1><p>Your details are safely preserved. Recharge for ₹499 to reactivate this card for one year.</p><div class="actions" style="justify-content:center"><a id="renewWa" class="btn gold">Recharge on WhatsApp</a><a class="btn light" href="login.html">Customer Login</a></div></section>
     <section id="missing" class="expired-box panel hidden"><h1>Card not found</h1><p>Please check the NFC/QR link or contact Vasuki NFC support.</p></section>
   </main>
-  <script type="module" src="public-card.js?v=clean-front-v6"></script>
+  <div id="supportPopup" class="support-popup hidden" role="dialog" aria-label="Help and Support">
+    <button id="closeSupport" class="support-popup-close" aria-label="Close support">×</button>
+    <strong>VASUKI NFC Support</strong>
+    <p>How can we help you?</p>
+    <a id="backSupport" class="support-popup-action support-whatsapp" target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
+    <a class="support-popup-action support-channel" href="https://whatsapp.com/channel/0029VbDbbVhFCCoZmN2BYV1j" target="_blank" rel="noopener">📢 Join WhatsApp Channel</a>
+  </div>
+  <button id="supportFab" class="support-floating hidden" aria-label="Open Help and Support" aria-expanded="false">💬<span>Help &amp; Support</span></button>
+  <script type="module" src="public-card.js?v=support-popup-v7"></script>
 </body>
 </html>
