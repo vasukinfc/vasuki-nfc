@@ -1,4 +1,4 @@
-const CACHE="vasuki-smart-v4";
+const CACHE="vasuki-smart-v5-lifetime";
 const ASSETS=["./","./index.html","./login.html","./customer.html","./owner.html","./styles.css","./smart-card.css","./manifest.webmanifest","./owner-manifest.webmanifest","./icon.svg"];
 self.addEventListener("install",event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS))));
 self.addEventListener("activate",event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key))))));

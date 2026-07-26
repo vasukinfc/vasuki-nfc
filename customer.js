@@ -18,9 +18,11 @@ async function fetchSubscription(){
 async function renderSubscription(){
   record.apiSubscription=await fetchSubscription();
   const state=record.apiSubscription.lifetime?"active":record.apiSubscription.status==="active"?statusOf(record.apiSubscription.expiresAt):"expired";
-  $("#subStatus").innerHTML=`<span class="badge ${state}">${record.apiSubscription.lifetime?"LEGACY LIFETIME":state==="active"?"ACTIVE":state==="soon"?"EXPIRING SOON":"EXPIRED"}</span>`;
+  const paidLifetime=record.apiSubscription.lifetime&&record.apiSubscription.plan!=="legacy_lifetime";
+  $("#subStatus").innerHTML=`<span class="badge ${state}">${paidLifetime?"PAID LIFETIME":record.apiSubscription.lifetime?"LEGACY LIFETIME":state==="active"?"ACTIVE":state==="soon"?"EXPIRING SOON":"EXPIRED"}</span>`;
   $("#expiry").textContent=record.apiSubscription.lifetime?"No recharge required":`Valid until: ${dateText(record.apiSubscription.expiresAt)}`;
-  $("#recharge").classList.toggle("hidden",record.apiSubscription.lifetime===true);
+  $("#planChoices").classList.toggle("hidden",record.apiSubscription.lifetime===true);
+  if(paidLifetime)$("#expiry").innerHTML='<div class="paid-lifetime">✓ Lifetime access active<br><small>No future recharge required</small></div>';
 }
 
 async function boot(){
@@ -42,6 +44,7 @@ $("#profileForm").onsubmit=async event=>{
 };
 
 $("#recharge").onclick=()=>$("#rechargeDialog").showModal();
+$("#lifetime").onclick=()=>$("#lifetimeDialog").showModal();
 $("#payRecharge").onclick=async()=>{
   try{
     const response=await fetch(`${SETTINGS.apiBase}/api/card-renewal/create-order`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({cardId:record.cardId})});
@@ -51,6 +54,19 @@ $("#payRecharge").onclick=async()=>{
       const result=await verify.json();if(!verify.ok)throw new Error(result.error||"Payment verification failed");
       await renderSubscription();show("Payment successful. Smart card activated for 365 days ✅");
     },theme:{color:"#b88b32"}});
+    checkout.open();
+  }catch(error){alert(error.message)}
+};
+
+$("#payLifetime").onclick=async()=>{
+  try{
+    const response=await fetch(`${SETTINGS.apiBase}/api/card-lifetime/create-order`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({cardId:record.cardId})});
+    const order=await response.json();if(!response.ok)throw new Error(order.error||"Unable to start lifetime payment");
+    const checkout=new Razorpay({key:order.keyId,amount:order.amount,currency:order.currency,name:"Vasuki NFC",description:"Smart Card Lifetime Access — One-Time Payment",order_id:order.razorpayOrderId,prefill:{email:ctx.user.email||"",contact:record.profile?.phone||""},handler:async payment=>{
+      const verify=await fetch(`${SETTINGS.apiBase}/api/card-lifetime/verify-payment`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({localLifetimeId:order.localLifetimeId,...payment})});
+      const result=await verify.json();if(!verify.ok)throw new Error(result.error||"Lifetime payment verification failed");
+      await renderSubscription();show("Payment successful. Lifetime access activated permanently ✅");
+    },theme:{color:"#6b46b5"}});
     checkout.open();
   }catch(error){alert(error.message)}
 };

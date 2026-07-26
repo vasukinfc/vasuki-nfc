@@ -4,6 +4,7 @@ This is a new, separate Firebase-based smart-card system. It includes:
 
 - Permanent public NFC/QR card URL
 - ₹699 new-card offer with first year included and ₹499 annual renewal
+- Optional ₹1,499 one-time paid lifetime upgrade
 - Customer login and self-edit panel
 - Owner/team dashboard with active, expiring and expired filters
 - Manual payment approval and 365-day activation
@@ -51,6 +52,12 @@ The demo mode shows a sample flip card without requiring a Firebase customer rec
 ## Payment flow
 
 Customer pays ₹499 from the customer panel using Razorpay. The Vasuki NFC backend verifies the signature and activates 365 days automatically. The owner can also use **+365 days** as a manual backup after checking payment.
+
+The customer can alternatively pay ₹1,499 once for **Paid Lifetime** access.
+The backend must create and verify this order using the
+`/api/card-lifetime/create-order` and `/api/card-lifetime/verify-payment`
+routes. After verification it stores `lifetime: true` and `plan:
+"paid_lifetime"`; no renewal is required afterward.
 
 Cards created before the subscription system have no backend subscription record and are automatically treated as **Legacy Lifetime**. Both old Firebase formats (`/customers/CARD_ID` and root-level `/CARD_ID`) are supported, so their existing URL stays active without moving or deleting data.
 

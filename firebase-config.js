@@ -21,6 +21,7 @@ export const SETTINGS = {
   brand: "Vasuki NFC",
   cardPrice: 699,
   annualPrice: 499,
+  lifetimePrice: 1499,
   supportPhone: "916377393721",
   supportEmail: "support@vasukinfc.in",
   website: "https://vasukinfc.in",
