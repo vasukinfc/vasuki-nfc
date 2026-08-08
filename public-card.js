@@ -105,12 +105,23 @@ async function boot() {
     return;
   }
 
-  const [profileSnap, subscriptionSnap] = await Promise.all([
+  const [profileSnap, subscriptionSnap, legacyCustomerSnap] = await Promise.all([
     safeRead(`publishedProfiles/${id}`),
-    safeRead(`publicSubscriptions/${id}`)
+    safeRead(`publicSubscriptions/${id}`),
+    safeRead(`customers/${id}`)
   ]);
   let profile = profileSnap?.exists() ? profileSnap.val() : null;
   let subscription = subscriptionSnap?.exists() ? subscriptionSnap.val() : null;
+  const legacyCustomer = legacyCustomerSnap?.exists() ? legacyCustomerSnap.val() : null;
+  const isRootKeyLegacyCustomer = legacyCustomer && typeof legacyCustomer === "object" && !legacyCustomer.cardId;
+
+  // The oldest Vasuki cards (for example ?id=002) are stored directly under
+  // customers/{cardId}. They were sold with lifetime access and predate the
+  // annual subscription system.
+  if (!profile && isRootKeyLegacyCustomer) profile = legacyCustomer.profile || legacyCustomer;
+  if (!subscriptionIsActive(subscription) && isRootKeyLegacyCustomer) {
+    subscription = { status: "active", lifetime: true, plan: "legacy_lifetime", amount: 0, verified: true };
+  }
 
   if (!profile) {
     try {
