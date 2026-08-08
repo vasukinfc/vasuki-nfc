@@ -1,24 +1,26 @@
-# Vasuki NFC Smart Card — Subscription Edition
+# Vasuki NFC 360° Smart Card
 
-This is a new, separate Firebase-based smart-card system. It includes:
+Separate static frontend for Vasuki digital cards. Keep this repository separate from the main shopping website because both projects have their own `index.html`, login and service worker.
 
-- Permanent public NFC/QR card URL
-- ₹699 new-card offer with first year included and ₹499 annual renewal
-- Optional ₹1,499 one-time paid lifetime upgrade
-- Customer login and self-edit panel
-- Owner/team dashboard with active, expiring and expired filters
-- Manual payment approval and 365-day activation
-- PWA installation on phone
-- Scan counting, renewal history and support tickets
-- Secure role-based Firebase Realtime Database rules
+## Features
 
-## Setup
+- Permanent NFC/QR URL: `index.html?id=PERMANENT_CARD_ID`
+- Firebase-first public profile loading, with secure backend fallback for legacy IDs
+- 360° front/back flip card, contact sharing, social links and scan count
+- Expandable Social Media button with Instagram, Facebook, LinkedIn and YouTube support, including legacy field names
+- Verified badge only for an active backend-confirmed subscription
+- Existing customers remain Legacy Lifetime without changing IDs or URLs
+- New cards include the first 365 days; renewal is ₹499/year
+- Optional Paid Lifetime upgrade is ₹1,499 once
+- No customer-review feature in the smart-card app
 
-1. Create/choose a Firebase project and enable **Email/Password** in Authentication.
-2. Copy your Firebase web configuration into `firebase-config.js`.
-3. Paste `database.rules.json` into Realtime Database → Rules and publish.
-4. In Firebase Authentication create the owner account and each customer account.
-5. Copy the owner's Firebase UID and create this database value once:
+## Deploy
+
+1. Deploy this folder to its own static host, preferably `https://card.vasukinfc.in` or the existing GitHub Pages repository.
+2. Do not merge these files into the main website repository root.
+3. In Firebase Realtime Database, replace the Rules with `database.rules.json` and publish.
+4. In Firebase Authentication, create the first owner account.
+5. Set its database role once:
 
 ```json
 {
@@ -28,49 +30,20 @@ This is a new, separate Firebase-based smart-card system. It includes:
 }
 ```
 
-6. Open `owner.html`, sign in as owner and add a customer using the customer's Firebase UID.
-7. Host all files together on Firebase Hosting, GitHub Pages or another HTTPS static host.
+6. Open `owner.html`, log in, enter the backend admin PIN when prompted, then create customers using email, temporary password and permanent Card ID. The backend creates Firebase Authentication, profile mapping and the free first-year subscription together.
 
-## Permanent card link
+The backend is `https://vasukinfc.in`. It must have MongoDB, Firebase Admin, Razorpay and smart-card CORS environment variables configured as documented in the website project.
 
-Use this in the NFC chip and QR code:
+## Safe legacy behavior
 
-`https://your-domain.com/index.html?id=CARD_ID`
+The public card reads `publishedProfiles/{cardId}` and `publicSubscriptions/{cardId}` first. If an older ID is not available there, the backend resolves the existing Firebase legacy path and marks only that confirmed legacy record as `legacy_lifetime`. Missing or unverified records fail closed and show the renewal/not-found screen; they are never silently granted lifetime access.
 
-The URL never changes after recharge. Only its subscription status changes.
+## Local preview
 
-## Instant design preview
+Run a static server instead of double-clicking the HTML file:
 
-For the easiest offline preview, double-click `DEMO-SMART-CARD.html`. It works without Firebase or a local server.
+```bash
+python3 -m http.server 8000
+```
 
-Alternatively, run the folder through a local web server and open:
-
-`http://localhost:8000/index.html?demo=1`
-
-The demo mode shows a sample flip card without requiring a Firebase customer record.
-
-## Payment flow
-
-Customer pays ₹499 from the customer panel using Razorpay. The Vasuki NFC backend verifies the signature and activates 365 days automatically. The owner can also use **+365 days** as a manual backup after checking payment.
-
-The customer can alternatively pay ₹1,499 once for **Paid Lifetime** access.
-The backend must create and verify this order using the
-`/api/card-lifetime/create-order` and `/api/card-lifetime/verify-payment`
-routes. After verification it stores `lifetime: true` and `plan:
-"paid_lifetime"`; no renewal is required afterward.
-
-Cards created before the subscription system have no backend subscription record and are automatically treated as **Legacy Lifetime**. Both old Firebase formats (`/customers/CARD_ID` and root-level `/CARD_ID`) are supported, so their existing URL stays active without moving or deleting data.
-
-## Important
-
-- Never store customer passwords in Realtime Database.
-- `firebase-config.js` is safe to serve publicly; security comes from Authentication and Database Rules.
-- Automated AI chat and WhatsApp reminders require third-party APIs/backend. This version includes FAQ assistance, WhatsApp support and support tickets without paid APIs.
-- Google Photos share pages are not direct image files. Prefer a direct HTTPS image URL ending in JPG/PNG/WEBP, or add Firebase Storage upload later.
-
-## Official customer links
-
-- Website: `https://www.vasukinfc.in`
-- WhatsApp support: `https://wa.me/916377393721`
-- Instagram: `https://www.instagram.com/_vasuki_nfc_99`
-- WhatsApp Channel: `https://whatsapp.com/channel/0029VbDbbVhFCCoZmN2BYV1j`
+Then open `http://localhost:8000/index.html?demo=1`. Real Firebase and backend flows still require network access and production configuration.

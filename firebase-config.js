@@ -25,5 +25,5 @@ export const SETTINGS = {
   supportPhone: "916377393721",
   supportEmail: "support@vasukinfc.in",
   website: "https://vasukinfc.in",
-  apiBase: "https://vasuki-nfc-website.onrender.com"
+  apiBase: "https://vasukinfc.in"
 };
