@@ -14,6 +14,21 @@ function legacyCardId() {
 }
 const id = legacyCardId();
 const demo = params.get("demo") === "1";
+const FAST_CACHE_MS = 15 * 60 * 1000;
+
+function fastCacheKey() { return `vasuki-fast-card-v13:${id}`; }
+function readFastLifetimeCard() {
+  try {
+    const cached = JSON.parse(localStorage.getItem(fastCacheKey()) || "null");
+    if (!cached || now() - Number(cached.savedAt || 0) > FAST_CACHE_MS) return null;
+    if (!cached.subscription?.verified || cached.subscription?.lifetime !== true) return null;
+    return cached;
+  } catch { return null; }
+}
+function saveFastLifetimeCard(profile, subscription) {
+  if (!subscription?.verified || subscription?.lifetime !== true) return;
+  try { localStorage.setItem(fastCacheKey(), JSON.stringify({ profile, subscription, savedAt: now() })); } catch {}
+}
 
 $("#backSupport").href = `https://wa.me/${SETTINGS.supportPhone}?text=${encodeURIComponent("Hello Vasuki NFC, I need smart card support.")}`;
 $("#renewWa").href = `https://wa.me/${SETTINGS.supportPhone}?text=${encodeURIComponent(`Hello Vasuki NFC, I want to recharge card ${id || ""} for ₹${SETTINGS.annualPrice}.`)}`;
@@ -84,6 +99,12 @@ async function boot() {
   }
   if (!id) { show("#missing"); return; }
 
+  const cached = readFastLifetimeCard();
+  if (cached) {
+    renderCard(cached.profile, cached.subscription, false);
+    return;
+  }
+
   const [profileSnap, subscriptionSnap] = await Promise.all([
     safeRead(`publishedProfiles/${id}`),
     safeRead(`publicSubscriptions/${id}`)
@@ -103,6 +124,7 @@ async function boot() {
     catch { subscription = null; }
   }
   if (!subscriptionIsActive(subscription)) { show("#expired"); return; }
+  saveFastLifetimeCard(profile, subscription);
   renderCard(profile, subscription, false);
 }
 

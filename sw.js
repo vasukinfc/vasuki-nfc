@@ -1,4 +1,4 @@
-const CACHE = "vasuki-smart-v12-secure";
+const CACHE = "vasuki-smart-v13-fast";
 const ASSETS = [
   "./", "./index.html", "./login.html", "./customer.html", "./owner.html",
   "./styles.css", "./smart-card.css", "./shared.js", "./firebase-config.js",
