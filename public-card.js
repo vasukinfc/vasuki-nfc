@@ -2,7 +2,17 @@ import { db, SETTINGS, ref, get, runTransaction, $, cleanPhone, now, registerSW 
 
 registerSW();
 const params = new URLSearchParams(location.search);
-const id = params.get("id")?.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "");
+function legacyCardId() {
+  let value = params.get("id") || params.get("card") || params.get("customer") || "";
+  if (!value && location.hash.length > 1) value = location.hash.slice(1);
+  if (!value) {
+    const segment = location.pathname.split("/").filter(Boolean).pop() || "";
+    if (segment && !/^(?:index\.html|vasuki-nfc)$/i.test(segment) && !segment.includes(".")) value = segment;
+  }
+  try { value = decodeURIComponent(value); } catch {}
+  return String(value).trim().toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, 80);
+}
+const id = legacyCardId();
 const demo = params.get("demo") === "1";
 
 $("#backSupport").href = `https://wa.me/${SETTINGS.supportPhone}?text=${encodeURIComponent("Hello Vasuki NFC, I need smart card support.")}`;

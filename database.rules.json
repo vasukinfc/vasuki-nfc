@@ -9,6 +9,7 @@
       }
     },
     "customers": {
+      ".indexOn": ["cardId"],
       ".read": "auth != null && (root.child('roles').child(auth.uid).val() === 'owner' || root.child('roles').child(auth.uid).val() === 'admin' || root.child('roles').child(auth.uid).val() === 'support')",
       "$uid": {
         ".read": "auth != null && auth.uid === $uid",

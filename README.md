@@ -5,10 +5,12 @@ Separate static frontend for Vasuki digital cards. Keep this repository separate
 ## Features
 
 - Permanent NFC/QR URL: `index.html?id=PERMANENT_CARD_ID`
+- Existing legacy URLs using `?card=`, `?customer=`, `#CARD_ID` or a path Card ID remain supported
 - Firebase-first public profile loading, with secure backend fallback for legacy IDs
 - 360° front/back flip card, contact sharing, social links and scan count
 - Expandable Social Media button with Instagram, Facebook, LinkedIn and YouTube support, including legacy field names
 - Verified badge only for an active backend-confirmed subscription
+- The blue verified badge is placed on the customer profile photo
 - Existing customers remain Legacy Lifetime without changing IDs or URLs
 - New cards include the first 365 days; renewal is ₹499/year
 - Optional Paid Lifetime upgrade is ₹1,499 once
